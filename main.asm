@@ -6,6 +6,8 @@ CHAR_COUNT  EQU   96
 
         INCLUDE blit.asm
         INCLUDE surface.asm
+        INCLUDE palette.asm
+        INCLUDE color.asm
 
 screenSurface:
         Surface { tileMap, 80, 32 }
@@ -32,12 +34,12 @@ main:
 
         ld      hl, $0000       ; col / row
         ld      bc, $5020       ; width / height
-        ld      de, $020e       ; value
+        ld      de, $040e       ; value
         call    Surface.FillRect
 
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
-        ld      de, $0403       ; tile
+        ld      de, $1003       ; tile
         call    Surface.FillRect
 
         ld      hl, $0402       ; dst col / row
@@ -49,6 +51,10 @@ main:
         jp      .loop
 
 InitTilemapPalette:
+        ld      hl, textPalette
+        ld      de, tilemapPalette
+        call    Palette.LoadText
+
         nextreg $43, %00110000  ; tilemap 1-st palette for write, auto-increment
         nextreg $40, 0          ; start palette index = 0
         ld      hl, tilemapPalette
@@ -56,8 +62,14 @@ InitTilemapPalette:
 .loop:
         ld      a, (hl)
         inc     hl
-        nextreg $41, a          ; write palette color
+        nextreg $44, a
+
+        ld      a, (hl)
+        inc     hl
+        nextreg $44, a
+
         djnz    .loop
+
         ret
 
         ORG $4000
@@ -96,8 +108,18 @@ fontBitmap:
 backTileMap:
         DUP   CHAR_COUNT, i
         DB    (i % CHAR_COUNT) & $ff
-        DB    $0e | (((i % CHAR_COUNT) & $100) >> 8)
+        DB    $1c | (((i % CHAR_COUNT) & $100) >> 8)
         EDUP
+
+textPalette
+        RGB_333         0, 0, 0
+        RGB_333         0, 0, 4
+        RGB_333         0, 4, 0
+        RGB_333         0, 4, 4
+        RGB_333         4, 0, 0
+        RGB_333         4, 0, 4
+        RGB_333         4, 4, 0
+        RGB_333         4, 4, 4
 
         SAVENEX OPEN "main.nex", main, $FFFE
         SAVENEX AUTO
