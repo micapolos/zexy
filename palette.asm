@@ -22,8 +22,8 @@ Load9Bit
         ret
 
 ; Input:
-;   HL - src palette (8 * 2 DW colors)
-;   DE - dst palette (256 DW colors)
+;   HL - src text palette (2 arrays of 8 RGB_333 colors)
+;   DE - dst palette (256 RGB_333 colors)
 ; Output:
 ;   HL - advanced
 ;   DE - advanced
