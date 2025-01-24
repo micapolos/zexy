@@ -29,13 +29,13 @@ main:
 
         ld      hl, $0000       ; col / row
         ld      bc, $5020       ; width / height
-        ld      de, $0001       ; value
+        ld      de, $000e       ; value
         call    Surface.FillRect
 
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
-        ld      de, $0010       ; tile
-        ;call    Surface.FillRect
+        ld      de, $0003       ; tile
+        call    Surface.FillRect
 
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
