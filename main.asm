@@ -8,7 +8,7 @@ CHAR_COUNT  EQU   96
         INCLUDE surface.asm
 
 screenSurface   Surface { 80, tileMap }
-backSurface     Surface { 80, backTileMap }
+backSurface     Surface { 32, backTileMap }
 
 main:
         di
@@ -39,7 +39,7 @@ main:
 
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
-        ld      bc, $1008       ; width / height
+        ld      bc, $2003       ; width / height
         call    Surface.CopyRect
 
 .loop:
@@ -91,7 +91,7 @@ tilemapPalette:
         EDUP
 
 backTileMap:
-        DUP   80*32, i
+        DUP   CHAR_COUNT, i
         DB    (i % CHAR_COUNT) & $ff
         DB    ((i % CHAR_COUNT) & $100) >> 8
         EDUP
