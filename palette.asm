@@ -4,6 +4,25 @@
         MODULE  Palette
 
 ; Input:
+;   HL - palette addr
+;   B - count
+; Output:
+;   HL, BC, DE, AF - undefined
+Load9Bit
+.loop:
+        ld      a, (hl)
+        inc     hl
+        nextreg $44, a
+
+        ld      a, (hl)
+        inc     hl
+        nextreg $44, a
+
+        djnz    .loop
+
+        ret
+
+; Input:
 ;   HL - src palette (8 DW colors)
 ;   DE - dst palette (256 DW colors)
 ; Output:

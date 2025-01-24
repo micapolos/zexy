@@ -57,19 +57,10 @@ InitTilemapPalette:
 
         nextreg $43, %00110000  ; tilemap 1-st palette for write, auto-increment
         nextreg $40, 0          ; start palette index = 0
+
         ld      hl, tilemapPalette
         ld      b, 0
-.loop:
-        ld      a, (hl)
-        inc     hl
-        nextreg $44, a
-
-        ld      a, (hl)
-        inc     hl
-        nextreg $44, a
-
-        djnz    .loop
-
+        call    Palette.Load9Bit
         ret
 
         ORG $4000
