@@ -4,6 +4,18 @@
 				MODULE 	Blit
 
 ; Input:
+;   hl - addr
+;   de - value
+; Output:
+;   hl - advanced addr
+Put16:
+        ld      (hl), e
+        inc     hl
+        ld      (hl), d
+        inc     hl
+        ret
+
+; Input:
 ;	  hl - address
 ;		bc - width, height
 ;   de - value

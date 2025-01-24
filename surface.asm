@@ -115,6 +115,7 @@ CopyRect:
         pop     ix
         ret
 
+
         ENDMODULE
 
-        ENDIF
+        ENDIF   SURFACE_LIB
