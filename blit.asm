@@ -22,6 +22,7 @@ Fill16:
 				djnz	.rowLoop
 
 				add		hl, a
+				add		hl, a
 
 				pop   bc
 				dec		c

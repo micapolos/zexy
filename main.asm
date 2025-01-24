@@ -9,7 +9,8 @@ CHAR_COUNT  EQU   96
   INCLUDE blit.asm
   INCLUDE surface.asm
 
-screen:   Surface { $5020, tileMap }
+screenSurface   Surface { 32, 80, tileMap }
+backSurface     Surface { 32, 80, backTileMap }
 
 main:
   di
@@ -23,21 +24,25 @@ main:
   nextreg $6f, (tileDefs - $4000) >> 8
   nextreg $68, %10000000  ; Disable ULA output
 
-  ld    ix, screen
-  ld    bc, $0001
-  call  Surface.Fill
-
   call  copyTilemapPalette
 
-  ld hl, backBuffer
-  ld de, tileMap
-.srcCols  EQU 16
-.dstCols  EQU 80
-.cols     EQU   16
-.rows     EQU   6
-  ld bc, ((.cols * 2) << 8) | .rows
-  ld ix, (((.srcCols - .cols) * 2) << 8) | ((.dstCols - .cols) * 2)
-  call    Blit.Copy8x8
+  ld    ix, screenSurface
+  ld    iy, backSurface
+
+  ld    hl, $0000     ; col / row
+  ld    bc, $5020     ; width / height
+  ld    de, $0001     ; value
+  call  Surface.FillRect
+
+  ld    hl, $1008     ; col / row
+  ld    bc, $2008     ; width / height
+  ld    de, $0010     ; tile
+  call  Surface.FillRect
+
+  ld    hl, $0000     ; src col / row
+  ld    de, $0000     ; dst col / row
+  ld    bc, $1004     ; width / height
+  call  Surface.CopyRect
 
   ; start with yellow bar
   ld a,6
@@ -106,7 +111,7 @@ tilemapPalette:
   DB %11111111
   EDUP
 
-backBuffer:
+backTileMap:
         DUP   80*32, i
         DB    (i % CHAR_COUNT) & $ff
         DB    ((i % CHAR_COUNT) & $100) >> 8
