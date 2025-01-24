@@ -22,7 +22,7 @@ Load9Bit
         ret
 
 ; Input:
-;   HL - src palette (8 DW colors)
+;   HL - src palette (8 * 2 DW colors)
 ;   DE - dst palette (256 DW colors)
 ; Output:
 ;   HL - advanced
@@ -32,16 +32,18 @@ InitText
 .outerLoop
         ld      b, 0
 .innerLoop
-        ld      a, c
-        call    CopyColor
-
-        ld      a, b
-        call    CopyColor
-
         ld      a, b
         call    CopyColor
 
         ld      a, c
+        call    CopyColor
+
+        ld      a, b
+        add     a, 8
+        call    CopyColor
+
+        ld      a, c
+        add     a, 8
         call    CopyColor
 
         ld      a, b

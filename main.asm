@@ -34,12 +34,12 @@ main:
 
         ld      hl, $0000       ; col / row
         ld      bc, $5020       ; width / height
-        ld      de, $040e       ; value
+        ld      de, $200e       ; color / value
         call    Surface.FillRect
 
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
-        ld      de, $1203       ; tile
+        ld      de, $1203       ; color / value
         call    Surface.FillRect
 
         ld      hl, $0402       ; dst col / row
@@ -84,18 +84,29 @@ fontBitmap:
 backTileMap:
         DUP   CHAR_COUNT, i
         DB    (i % CHAR_COUNT) & $ff
-        DB    $1c | (((i % CHAR_COUNT) & $100) >> 8)
+        DB    %11100010 | (((i % CHAR_COUNT) & $100) >> 8)
         EDUP
 
 textPalette
+        ; normal palette
         RGB_333         0, 0, 0
-        RGB_333         0, 0, 4
-        RGB_333         0, 4, 0
-        RGB_333         0, 4, 4
-        RGB_333         4, 0, 0
-        RGB_333         4, 0, 4
-        RGB_333         4, 4, 0
-        RGB_333         4, 4, 4
+        RGB_333         0, 0, 3
+        RGB_333         0, 3, 0
+        RGB_333         0, 3, 3
+        RGB_333         3, 0, 0
+        RGB_333         3, 0, 3
+        RGB_333         3, 3, 0
+        RGB_333         3, 3, 3
+
+        ; bright palette
+        RGB_333         0, 0, 0
+        RGB_333         0, 0, 7
+        RGB_333         0, 7, 0
+        RGB_333         0, 7, 7
+        RGB_333         7, 0, 0
+        RGB_333         7, 0, 7
+        RGB_333         7, 7, 0
+        RGB_333         7, 7, 7
 
         SAVENEX OPEN "main.nex", main, $FFFE
         SAVENEX AUTO
