@@ -16,7 +16,7 @@ backSurface:
 main:
         di
 
-        nextreg $07, 3  ; 28MHz clock
+        nextreg $07, 3   ; 28MHz clock
         nextreg $54, 34  ; MMU 4, 34
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
@@ -32,12 +32,12 @@ main:
 
         ld      hl, $0000       ; col / row
         ld      bc, $5020       ; width / height
-        ld      de, $000e       ; value
+        ld      de, $020e       ; value
         call    Surface.FillRect
 
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
-        ld      de, $0003       ; tile
+        ld      de, $0403       ; tile
         call    Surface.FillRect
 
         ld      hl, $0402       ; dst col / row
@@ -73,10 +73,22 @@ tileDefs:
         ORG     $8000
 
 tilemapPalette:
-        DUP 128
+        DB %00000000
+        DB %00000000
+        DB %00000000
+        DB %00000010
         DB %00000000
         DB %00010000
-        EDUP
+        DB %00000000
+        DB %00010010
+        DB %00000000
+        DB %10000000
+        DB %00000000
+        DB %10000010
+        DB %00000000
+        DB %10010000
+        DB %00000000
+        DB %10010010
 
 fontBitmap:
         INCLUDE topaz-8.asm
@@ -84,7 +96,7 @@ fontBitmap:
 backTileMap:
         DUP   CHAR_COUNT, i
         DB    (i % CHAR_COUNT) & $ff
-        DB    $30 | (((i % CHAR_COUNT) & $100) >> 8)
+        DB    $0e | (((i % CHAR_COUNT) & $100) >> 8)
         EDUP
 
         SAVENEX OPEN "main.nex", main, $FFFE
