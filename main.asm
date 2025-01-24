@@ -7,8 +7,11 @@ CHAR_COUNT  EQU   96
         INCLUDE blit.asm
         INCLUDE surface.asm
 
-screenSurface   Surface { 80, tileMap }
-backSurface     Surface { 32, backTileMap }
+screenSurface:
+        Surface { tileMap, 80, 32 }
+
+backSurface:
+        Surface { backTileMap, 32, 3 }
 
 main:
         di
