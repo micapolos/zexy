@@ -5,7 +5,6 @@
 
 ; Input:
 ;   HL - palette addr
-;   B - count
 ; Output:
 ;   HL, BC, DE, AF - undefined
 Load9Bit
@@ -28,7 +27,7 @@ Load9Bit
 ; Output:
 ;   HL - advanced
 ;   DE - advanced
-LoadText
+InitText
         ld      c, 0
 .outerLoop
         ld      b, 0

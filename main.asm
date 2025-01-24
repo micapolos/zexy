@@ -39,7 +39,7 @@ main:
 
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
-        ld      de, $1003       ; tile
+        ld      de, $1203       ; tile
         call    Surface.FillRect
 
         ld      hl, $0402       ; dst col / row
@@ -53,7 +53,7 @@ main:
 InitTilemapPalette:
         ld      hl, textPalette
         ld      de, tilemapPalette
-        call    Palette.LoadText
+        call    Palette.InitText
 
         nextreg $43, %00110000  ; tilemap 1-st palette for write, auto-increment
         nextreg $40, 0          ; start palette index = 0
