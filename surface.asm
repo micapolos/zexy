@@ -4,7 +4,7 @@
         INCLUDE blit.asm
 
         STRUCT  Surface
-width   DB
+width   DB      ; max = 128
 addr    DW
         ENDS
 
