@@ -1,5 +1,33 @@
-	IFNDEF  BLIT
-	DEFINE 	BLIT
+				IFNDEF  BLIT_LIB
+				DEFINE 	BLIT_LIB
+
+				MODULE 	Blit
+
+; Input:
+;	  hl - address
+;		bc - width, height
+;   de - value
+;   a - stride
+; Output:
+;   hl - end address
+;   bc - width, 0
+Fill16:
+.loop
+				push	bc
+.rowLoop
+				ld 		(hl), e
+				inc 	hl
+				ld    (hl), d
+				inc   hl
+				djnz	.rowLoop
+
+				add		hl, a
+
+				pop   bc
+				dec		c
+				jp		nz, .loop
+
+				ret
 
 ; Input:
 ;   HL - src start
@@ -11,27 +39,29 @@
 ;   HL - src end
 ;   DE - dst end
 ;   BC - ?
-Blit8x8:
-	push af
+Copy8x8:
+				push 	af
 .nextRow
-	push bc
-	ld a,b
+				push 	bc
+				ld 	 	a, b
 .nextCell
-	ldi
-	inc bc
-	djnz .nextCell
-	pop bc
-	ld b,a
+				ldi
+				inc  	bc
+				djnz 	.nextCell
+				pop	 	bc
+				ld 		b, a
 
-	ld a,ixh
-	add hl,a
-	ld a,ixl
-	add de,a
+				ld    a, ixh
+				add   hl, a
+				ld    a, ixl
+				add   de, a
 
-	dec c
-	jp nz, .nextRow
+				dec 	c
+	      jp 		nz, .nextRow
 
-	pop af
-	ret
+				pop 	af
+				ret
 
-	ENDIF
+				ENDMODULE
+
+				ENDIF
