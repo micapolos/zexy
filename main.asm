@@ -6,6 +6,7 @@ CHAR_COUNT  EQU   96
 
         INCLUDE blit.asm
         INCLUDE surface.asm
+        INCLUDE tiledef.asm
 
 screenSurface:
         Surface { tileMap, 80, 32 }
@@ -25,7 +26,8 @@ main:
         nextreg $6f, (tileDefs - $4000) >> 8
         nextreg $68, %10000000  ; Disable ULA output
 
-        call    copyTilemapPalette
+        call    InitTilemapPalette
+        call    InitTileDefs
 
         ld      ix, screenSurface
         ld      iy, backSurface
@@ -48,7 +50,7 @@ main:
 .loop:
         jp      .loop
 
-copyTilemapPalette:
+InitTilemapPalette:
         nextreg $43, %00110000  ; tilemap 1-st palette for write, auto-increment
         nextreg $40, 0          ; start palette index = 0
         ld      hl, tilemapPalette
@@ -60,13 +62,21 @@ copyTilemapPalette:
         djnz    .loop
         ret
 
+InitTileDefs
+        ld      hl, tileDefs
+        ld      de, fontBitmap
+        ld      bc, $6020  ; count / color (foreground/background)
+.loop
+        call    Tiledef.ConvertBitmap
+        djnz    .loop
+
         ORG $4000
 
 tileMap:
         ds      80 * 32 * 2
 
 tileDefs:
-        INCLUDE topaz.asm
+        ds      96 * 32
 
         MMU     4, 34
         ORG     $8000
@@ -94,10 +104,13 @@ tilemapPalette:
         DB %11111111
         EDUP
 
+fontBitmap:
+        INCLUDE topaz-8.asm
+
 backTileMap:
         DUP   CHAR_COUNT, i
         DB    (i % CHAR_COUNT) & $ff
-        DB    ((i % CHAR_COUNT) & $100) >> 8
+        DB    $30 | (((i % CHAR_COUNT) & $100) >> 8)
         EDUP
 
         SAVENEX OPEN "main.nex", main, $FFFE
