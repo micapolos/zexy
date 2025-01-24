@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 sjasmplus --lst --zxnext=cspect main.asm
 cspect main.nex
