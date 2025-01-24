@@ -59,7 +59,7 @@ FillRect:
         ld      a, (ix + Surface.width)
         sub     b
 
-        call    Blit.Fill16
+        call    Blit.FillRect16
 
         pop     af
         pop     hl
@@ -104,7 +104,7 @@ CopyRect:
         pop     ix
         ld      ixh, a
 
-        call    Blit.Copy8x8
+        call    Blit.CopyRect8
 
         pop     af
         pop     bc

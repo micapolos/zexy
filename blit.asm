@@ -11,7 +11,7 @@
 ; Output:
 ;   hl - end address
 ;   bc - width, 0
-Fill16:
+FillRect16:
 .loop
 				push	bc
 .rowLoop
@@ -40,7 +40,7 @@ Fill16:
 ;   HL - src end
 ;   DE - dst end
 ;   BC - ?
-Copy8x8:
+CopyRect8:
 				push 	af
 .nextRow
 				push 	bc
