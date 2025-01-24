@@ -60,12 +60,13 @@ copyTilemapPalette:
         ORG $4000
 
 tileMap:
-        ds      80*32*2
+        ds      80 * 32 * 2
 
 tileDefs:
         INCLUDE topaz.asm
 
-        MMU     4, 34, $8000
+        MMU     4, 34
+        ORG     $8000
 
 tilemapPalette:
         DUP 32
