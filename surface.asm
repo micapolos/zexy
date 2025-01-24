@@ -4,7 +4,6 @@
         INCLUDE blit.asm
 
         STRUCT  Surface
-height  DB
 width   DB
 addr    DW
         ENDS
@@ -20,20 +19,22 @@ GetAddr:
         push    de
         push    bc
 
+        ; bc = col / row
         ld      bc, hl
 
+        ; hl = surface addr
         ld      l, (ix + Surface.addr)
         ld      h, (ix + Surface.addr + 1)
 
         ; hl += col offset
         ld      d, 0
         ld      e, b
-        sla     e
+        rlc     e
         add     hl, de
 
         ; hl += row offset
         ld      e, (ix + Surface.width)
-        sla     e
+        rlc     e
         ld      d, c
         mul     d, e
         add     hl, de
@@ -65,10 +66,10 @@ FillRect:
         ret
 
 ; Input:
-;   ix - src Surface*
-;   iy - dst Surface*
-;   hl - src col, row
-;   de - dst col, row
+;   ix - dst Surface*
+;   hl - dst col, row
+;   iy - src Surface*
+;   de - src col, row
 ;   bc - width, height
 CopyRect:
         push    ix
@@ -78,36 +79,39 @@ CopyRect:
         push    bc
         push    af
 
-        ; hl = src addr
+        ; bc = blit width / height
+        rlc     b
+
+        ; hl = dst addr
+        call    GetAddr
+
+        ; ixl = dst stride
+        ld      a, (ix + Surface.width)
+        rlca
+        sub     b
+        ld      ixl, a
+        push    ix
+
+        ; de = src address
+        ld      ix, iy
+        ex      de, hl
         call    GetAddr
 
         ; ixh = src stride
         ld      a, (ix + Surface.width)
+        rlca
         sub     b
-        rla
+        pop     ix
         ld      ixh, a
-
-        ; de = dst address
-        ld      ix, iy
-        ex      de, hl
-        call    GetAddr
-        ex      de, hl
-
-        ; ixl = dst stride
-        ld      a, (ix + Surface.width)
-        sub     b
-        rla
-        ld      ixl, a
 
         call    Blit.Copy8x8
 
-        push    af
+        pop     af
         pop     bc
         pop     de
         pop     hl
         pop     iy
         pop     ix
-
         ret
 
         ENDMODULE

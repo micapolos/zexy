@@ -7,8 +7,8 @@ CHAR_COUNT  EQU   96
         INCLUDE blit.asm
         INCLUDE surface.asm
 
-screenSurface   Surface { 32, 80, tileMap }
-backSurface     Surface { 32, 80, backTileMap }
+screenSurface   Surface { 80, tileMap }
+backSurface     Surface { 80, backTileMap }
 
 main:
         di
@@ -27,32 +27,33 @@ main:
         ld      ix, screenSurface
         ld      iy, backSurface
 
-        ld      hl, $0000     ; col / row
-        ld      bc, $5020     ; width / height
-        ld      de, $0001     ; value
+        ld      hl, $0000       ; col / row
+        ld      bc, $5020       ; width / height
+        ld      de, $0001       ; value
         call    Surface.FillRect
 
-        ld      hl, $1008     ; col / row
-        ld      bc, $2008     ; width / height
-        ld      de, $0010     ; tile
-        call    Surface.FillRect
+        ld      hl, $1008       ; col / row
+        ld      bc, $2008       ; width / height
+        ld      de, $0010       ; tile
+        ;call    Surface.FillRect
 
-        ld      hl, $0000     ; src col / row
-        ld      de, $0000     ; dst col / row
-        ld      bc, $1004     ; width / height
+        ld      hl, $0402       ; dst col / row
+        ld      de, $0000       ; src col / row
+        ld      bc, $1008       ; width / height
         call    Surface.CopyRect
 
-.loop:  jp      .loop
+.loop:
+        jp      .loop
 
 copyTilemapPalette:
-        nextreg $43, %00110000 ; tilemap 1-st palette for write, auto-increment
-        nextreg $40, 0  ; start palette index = 0
+        nextreg $43, %00110000  ; tilemap 1-st palette for write, auto-increment
+        nextreg $40, 0          ; start palette index = 0
         ld      hl, tilemapPalette
         ld      b, 0
 .loop:
         ld      a, (hl)
         inc     hl
-        nextreg $41, a  ; write palette color
+        nextreg $41, a          ; write palette color
         djnz    .loop
         ret
 
@@ -63,6 +64,8 @@ tileMap:
 
 tileDefs:
         INCLUDE topaz.asm
+
+        MMU     4, 34, $8000
 
 tilemapPalette:
         DUP 32
