@@ -85,22 +85,7 @@ tileDefs:
         ORG     $8000
 
 tilemapPalette:
-        DB %00000000
-        DB %00000000
-        DB %00000000
-        DB %00000010
-        DB %00000000
-        DB %00010000
-        DB %00000000
-        DB %00010010
-        DB %00000000
-        DB %10000000
-        DB %00000000
-        DB %10000010
-        DB %00000000
-        DB %10010000
-        DB %00000000
-        DB %10010010
+        ds      256 * 2
 
 fontBitmap:
         INCLUDE topaz-8.asm
