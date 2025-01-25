@@ -55,14 +55,14 @@ main:
         ld      a, (hl)
         inc     a
         cp      $60
-        jp      nz, .loopReset
+        jp      nz, .nextCnt8
         ld      a, 0
 
-.loopReset
+.nextCnt8
         ld      (hl), a
         ld      (tileMap), a
 
-        ld      a, %11100010
+        ld      a, %11100010        ; bright white on black
         ld      (tileMap+1), a
 
         call    Raster.WaitFrameOut
