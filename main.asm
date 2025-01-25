@@ -32,9 +32,6 @@ main:
 
         call    InitTilemapPalette
 
-        ld      ix, screenPrinter
-        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
-
         ld      ix, screenSurface
         ld      iy, backSurface
 
@@ -53,6 +50,15 @@ main:
         ld      bc, $2003       ; width / height
         call    Surface.CopyRect
 
+        ld      ix, screenPrinter
+        ld      (ix + Printer.row), 1
+        ld      (ix + Printer.col), 1
+        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
+        call    Printer.Init
+
+        ld      a, 'F'
+        call    Printer.PutChar
+
 .loop:
         ld      hl, cnt8
         ld      a, (hl)
@@ -63,17 +69,13 @@ main:
 
 .nextCnt8
         ld      (hl), a
-        ld      (tileMap), a
 
         ; Put char on printer
         ld      ix, screenPrinter
-        ld      hl, $0201       ; col / row
+        ld      hl, $4001
         call    Printer.MoveTo
         add     $20
         call    Printer.PutChar
-
-        ld      a, %11100010        ; bright white on black
-        ld      (tileMap+1), a
 
         ; scroll Y
         ld      hl, scrollY

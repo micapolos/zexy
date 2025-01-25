@@ -16,6 +16,11 @@ addr            DW      0               ; address at row / col
 
 ; Input:
 ;   ix - printer ptr
+Init
+        jp    UpdateAddr
+
+; Input:
+;   ix - printer ptr
 ; Output:
 ;   ix - surface ptr
 GetSurfacePtr
@@ -30,12 +35,23 @@ GetSurfacePtr
 ;   ix - Printer ptr
 ;   hl - col / row
 MoveTo
-        push    hl
+        ld      (ix + Printer.row), l
+        ld      (ix + Printer.col), h
 
-        push    ix
-        call    GetSurfacePtr
-        call    Surface.GetAddrAt
-        pop     ix
+; Input:
+;   ix - Printer ptr
+@UpdateAddr
+        push    hl
+        push    ix                      ; printer ptr
+
+        ld      l, (ix + Printer.row)
+        ld      h, (ix + Printer.col)
+        push    hl                      ; col / row
+
+        call    GetSurfacePtr           ; ix = surface ptr
+        pop     hl                      ; col / row
+        call    Surface.GetAddrAt       ; hl = addr
+        pop     ix                      ; printer ptr
 
         ld      (ix + Printer.addr), l
         ld      (ix + Printer.addr + 1), h
