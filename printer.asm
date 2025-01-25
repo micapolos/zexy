@@ -106,10 +106,9 @@ ScrollUp
         jp      z, .clearBottomLine
 
 .moveUp
-        ld      hl, $0000
+        ld      hl, $0001
 
-        ld      iy, ix
-        ld      de, $0001
+        ld      de, $0000
         call    Surface.CopyRect
 
 .clearBottomLine

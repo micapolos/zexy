@@ -48,7 +48,7 @@ main:
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
         ld      bc, $2003       ; width / height
-        call    Surface.CopyRect
+        call    Surface.XCopyRect
 
         ld      ix, screenPrinter
         ld      (ix + Printer.row), 1

@@ -76,12 +76,40 @@ FillRect:
         ret
 
 ; Input:
+;   ix - Surface*
+;   hl - src col, row
+;   de - dst col, row
+;   bc - width, height
+; Output:
+;   AFBCDEHL/.... - corrupted
+;   ......../IXIY - same
+CopyRect:
+        ; hl = src addr
+        ; de = dst addr
+        call    GetAddrAt
+        ex      de, hl
+        call    GetAddrAt
+        ex      de, hl
+
+        ; bc = blit width / height
+        rlc     b
+
+        ; ixl,ixh = stride
+        ld      a, (ix + Surface.width)
+        rlca
+        sub     b
+        ld      ixl, a
+        ld      ixh, a
+
+        jp      Blit.CopyRect8Inc
+
+; Input:
 ;   ix - dst Surface*
 ;   hl - dst col, row
 ;   iy - src Surface*
 ;   de - src col, row
 ;   bc - width, height
-CopyRect:
+XCopyRect:
         push    ix
         push    iy
         push    hl
