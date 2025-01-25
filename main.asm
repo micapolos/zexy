@@ -22,8 +22,8 @@ scrollY db      0
 main:
         di
 
-        nextreg $07, 3   ; 28MHz clock
-        nextreg $54, 34  ; MMU 4, 34
+        nextreg NextReg.CPU_SPEED, 3   ; 28MHz
+        nextreg NextReg.MMU_4, 34
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
         nextreg $6c, %00000000  ; Default tilemap attribute
@@ -71,7 +71,7 @@ main:
         ld      a, (hl)
         inc     a
         ld      (hl), a
-        nextreg $31, a
+        nextreg NextReg.TILEMAP_OFFSET_Y, a
 
         call    Raster.FrameWait
 
