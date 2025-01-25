@@ -4,26 +4,21 @@
         INCLUDE blit.asm
         INCLUDE surface.asm
 
-        MODULE  PRINTER
-
         STRUCT  Printer
 surfacePtr      DW
-attr            DB      %00000001
+row             DB      0
+col             DB      0
+attr            DB      %11100010       ; bright white on black
+addr            DW      0               ; address at row / col
         ENDS
 
-; Input:
-;   ix - Printer*
-;   hl - col / row
-;   a - char
-Put
-        push    af
-        push    de
+        MODULE  Printer
 
-        sub     $20
-        jp      nc, .char
-.control
-        xor     a       ; TODO: select fallback char
-.char
+; Input:
+;   ix - Printer ptr
+;   hl - col / row
+MoveTo
+        push    hl
         push    ix      ; printer ptr
         push    hl      ; col / row
 
@@ -37,12 +32,31 @@ Put
         call    Surface.GetAddr
 
         pop     ix      ; printer ptr
-        ld      d, (ix + Printer.attr)
-        ld      e, a
-        call    Blit.Put16
+        ld      (ix + Printer.addr), l
+        ld      (ix + Printer.addr + 1), h
 
-        pop     de
+        pop     hl
+        ret
+
+; Input:
+;   IX - Printer ptr
+;   A - char
+PutChar
+        push    hl
+        push    af
+
+        ld      l, (ix + Printer.addr)
+        ld      h, (ix + Printer.addr + 1)
+
+        sub     $20
+        ld      (hl), a
+        inc     hl
+
+        ld      a, (ix + Printer.attr)
+        ld      (hl), a
+
         pop     af
+        pop     hl
         ret
 
         ENDMODULE

@@ -8,13 +8,12 @@ CHAR_COUNT  EQU   96
         INCLUDE surface.asm
         INCLUDE palette.asm
         INCLUDE color.asm
-        include raster.asm
+        INCLUDE raster.asm
+        INCLUDE printer.asm
 
-screenSurface:
-        Surface { tileMap, 80, 32 }
-
-backSurface:
-        Surface { backTileMap, 32, 3 }
+screenSurface   Surface { tileMap, 80, 32 }
+backSurface     Surface { backTileMap, 32, 3 }
+screenPrinter   Printer { screenSurface }
 
 cnt8    db      0
 scrollY db      0
@@ -32,6 +31,9 @@ main:
         nextreg $68, %10000000  ; Disable ULA output
 
         call    InitTilemapPalette
+
+        ld      ix, screenPrinter
+        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
 
         ld      ix, screenSurface
         ld      iy, backSurface
@@ -62,6 +64,13 @@ main:
 .nextCnt8
         ld      (hl), a
         ld      (tileMap), a
+
+        ; Put char on printer
+        ld      ix, screenPrinter
+        ld      hl, $0201       ; col / row
+        call    Printer.MoveTo
+        add     $20
+        call    Printer.PutChar
 
         ld      a, %11100010        ; bright white on black
         ld      (tileMap+1), a
