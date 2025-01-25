@@ -8,12 +8,15 @@ CHAR_COUNT  EQU   96
         INCLUDE surface.asm
         INCLUDE palette.asm
         INCLUDE color.asm
+        include raster.asm
 
 screenSurface:
         Surface { tileMap, 80, 32 }
 
 backSurface:
         Surface { backTileMap, 32, 3 }
+
+cnt8    db      0
 
 main:
         di
@@ -48,6 +51,26 @@ main:
         call    Surface.CopyRect
 
 .loop:
+        ld      hl, cnt8
+        ld      a, (hl)
+        inc     a
+        cp      $60
+        jp      nz, .loopReset
+        ld      a, 0
+
+.loopReset
+        ld      (hl), a
+        ld      (tileMap), a
+
+        ld      a, %11100010
+        ld      (tileMap+1), a
+
+        call    Raster.WaitFrameOut
+        call    Raster.WaitFrameOut
+        call    Raster.WaitFrameOut
+        call    Raster.WaitFrameOut
+        call    Raster.WaitFrameOut
+
         jp      .loop
 
 InitTilemapPalette:
