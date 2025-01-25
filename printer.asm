@@ -36,7 +36,7 @@ MoveTo
         push    hl      ; col / row
         call    GetSurfacePtr
         pop     hl      ; col / row
-        call    Surface.GetAddr
+        call    Surface.GetAddrAt
 
         pop     ix      ; printer ptr
         ld      (ix + Printer.addr), l

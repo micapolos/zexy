@@ -12,11 +12,20 @@ height  DB
         MODULE  Surface
 
 ; Input:
+;   IX - Surface ptr
+; Output:
+;   HL - width / height
+GetWidthHeight
+        ld      h, (ix + Surface.width)
+        ld      l, (ix + Surface.height)
+        ret
+
+; Input:
 ;   ix - Surface*
 ;   hl - col / row
 ; Output:
 ;   hl - addr
-GetAddr:
+GetAddrAt:
         push    de
         push    bc
 
@@ -54,7 +63,7 @@ FillRect:
         push    af
 
         ; hl = addr
-        call    GetAddr
+        call    GetAddrAt
 
         ; a = stride
         ld      a, (ix + Surface.width)
@@ -84,7 +93,7 @@ CopyRect:
         rlc     b
 
         ; hl = dst addr
-        call    GetAddr
+        call    GetAddrAt
 
         ; ixl = dst stride
         ld      a, (ix + Surface.width)
@@ -96,7 +105,7 @@ CopyRect:
         ; de = src address
         ld      ix, iy
         ex      de, hl
-        call    GetAddr
+        call    GetAddrAt
 
         ; ixh = src stride
         ld      a, (ix + Surface.width)
