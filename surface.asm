@@ -58,10 +58,9 @@ GetAddrAt:
 ;   hl - col, row
 ;   bc - width, height
 ;   de - value
+; Output:
+;   afbcdehl/ixiy - corrupt
 FillRect:
-        push    hl
-        push    af
-
         ; hl = addr
         call    GetAddrAt
 
@@ -69,11 +68,7 @@ FillRect:
         ld      a, (ix + Surface.width)
         sub     b
 
-        call    Blit.FillRect16
-
-        pop     af
-        pop     hl
-        ret
+        jp    Blit.FillRect16
 
 ; Input:
 ;   ix - Surface*
@@ -81,8 +76,7 @@ FillRect:
 ;   de - dst col, row
 ;   bc - width, height
 ; Output:
-;   AFBCDEHL/.... - corrupted
-;   ......../IXIY - same
+;   AFBCDEHL/IXIY - corrupt
 CopyRect:
         ; hl = src addr
         ; de = dst addr
@@ -105,18 +99,13 @@ CopyRect:
 
 ; Input:
 ;   ix - dst Surface*
-;   hl - dst col, row
 ;   iy - src Surface*
+;   hl - dst col, row
 ;   de - src col, row
 ;   bc - width, height
+; Output:
+;   agbcdehl/ixiy - corrupt
 XCopyRect:
-        push    ix
-        push    iy
-        push    hl
-        push    de
-        push    bc
-        push    af
-
         ; bc = blit width / height
         rlc     b
 
@@ -142,15 +131,7 @@ XCopyRect:
         pop     ix
         ld      ixh, a
 
-        call    Blit.CopyRect8Inc
-
-        pop     af
-        pop     bc
-        pop     de
-        pop     hl
-        pop     iy
-        pop     ix
-        ret
+        jp      Blit.CopyRect8Inc
 
         ENDMODULE
 

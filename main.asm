@@ -33,18 +33,19 @@ main:
         call    InitTilemapPalette
 
         ld      ix, screenSurface
-        ld      iy, backSurface
-
         ld      hl, $0000       ; col / row
         ld      bc, $5020       ; width / height
         ld      de, $200e       ; color / value
         call    Surface.FillRect
 
+        ld      ix, screenSurface
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
         ld      de, $1203       ; color / value
         call    Surface.FillRect
 
+        ld      ix, screenSurface
+        ld      iy, backSurface
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
         ld      bc, $2003       ; width / height
