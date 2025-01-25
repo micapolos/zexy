@@ -17,6 +17,7 @@ backSurface:
         Surface { backTileMap, 32, 3 }
 
 cnt8    db      0
+scrollY db      0
 
 main:
         di
@@ -65,10 +66,13 @@ main:
         ld      a, %11100010        ; bright white on black
         ld      (tileMap+1), a
 
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-        call    Raster.FrameWait
+        ; scroll Y
+        ld      hl, scrollY
+        ld      a, (hl)
+        inc     a
+        ld      (hl), a
+        nextreg $31, a
+
         call    Raster.FrameWait
 
         jp      .loop
