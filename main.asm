@@ -65,11 +65,11 @@ main:
         ld      a, %11100010        ; bright white on black
         ld      (tileMap+1), a
 
-        call    Raster.WaitFrameOut
-        call    Raster.WaitFrameOut
-        call    Raster.WaitFrameOut
-        call    Raster.WaitFrameOut
-        call    Raster.WaitFrameOut
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
 
         jp      .loop
 

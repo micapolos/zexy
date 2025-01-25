@@ -29,7 +29,7 @@ Line:
 
 ; Input:
 ;   DE - raster line (0..311)
-WaitUntilLine
+LineWait
         push    hl
 .loop
         call    Line
@@ -45,12 +45,12 @@ WaitUntilLine
         pop     hl
         ret
 
-WaitFrameOut
+FrameWait
         push    de
         ld      de, 223
-        call    WaitUntilLine
+        call    LineWait
         inc     de
-        call    WaitUntilLine
+        call    LineWait
         pop     de
         ret
 
