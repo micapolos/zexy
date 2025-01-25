@@ -42,6 +42,7 @@ FillRect16:
 
         ret
 
+        MACRO   MAKE_COPY_RECT_8  name, ldi_instr, add_instr
 ; Input:
 ;   HL - src start
 ;   DE - dst start
@@ -52,7 +53,7 @@ FillRect16:
 ;   HL - src end
 ;   DE - dst end
 ;   BC - ?
-CopyRect8:
+name
         push    af
 .nextRow
         push    bc
@@ -74,6 +75,25 @@ CopyRect8:
 
         pop     af
         ret
+        ENDM
+
+        MAKE_COPY_RECT_8 CopyRect8Inc, ldi, add
+        MAKE_COPY_RECT_8 CopyRect8Dec, ldd, sub
+
+; Input:
+;   HL - src start
+;   DE - dst start
+;   BC - width / height
+;   IXh - src stride
+;   IXl - dst stride
+;   FC - 0 = inc, 1 = dec
+; Output:
+;   HL - src end
+;   DE - dst end
+;   BC - ?
+CopyRect8
+        jp      nc, CopyRect8Inc
+        jp      CopyRect8Dec
 
         ENDMODULE
 

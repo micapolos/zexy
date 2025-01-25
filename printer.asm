@@ -9,6 +9,7 @@ surfacePtr      DW                      ; TODO: Should we inline the surface?
 row             DB      0
 col             DB      0
 attr            DB      %11100010       ; bright white on black
+state           DB      0
 addr            DW      0               ; address at row / col
         ENDS
 
@@ -17,7 +18,7 @@ addr            DW      0               ; address at row / col
 ; Input:
 ;   ix - printer ptr
 Init
-        jp    UpdateAddr
+        jp      UpdateAddr
 
 ; Input:
 ;   ix - printer ptr
@@ -81,6 +82,42 @@ PutChar
         pop     af
         pop     hl
         ret
+
+; Input
+;   IX - Printer ptr
+; Output
+;   AF, BC, DE, HL - corrupt
+Advance
+        ret
+
+; Input
+;   IX - Printer ptr
+; Output
+;   AF, BC, DE, HL, IX, IY - corrupt
+ScrollUp
+        ld      d, (ix + Printer.attr)
+        ld      e, 0
+        push    de
+
+        call    GetSurfacePtr
+        ld      b, (ix + Surface.width)
+        ld      c, (ix + Surface.height)
+        dec     c
+        jp      z, .clearBottomLine
+
+.moveUp
+        ld      hl, $0000
+
+        ld      iy, ix
+        ld      de, $0001
+        call    Surface.CopyRect
+
+.clearBottomLine
+        ld      h, 0
+        ld      l, c
+        ld      c, 1
+        pop     de
+        jp      Surface.FillRect
 
         ENDMODULE
         ENDIF

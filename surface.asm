@@ -114,7 +114,7 @@ CopyRect:
         pop     ix
         ld      ixh, a
 
-        call    Blit.CopyRect8
+        call    Blit.CopyRect8Inc
 
         pop     af
         pop     bc
@@ -123,7 +123,6 @@ CopyRect:
         pop     iy
         pop     ix
         ret
-
 
         ENDMODULE
 

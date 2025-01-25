@@ -73,17 +73,26 @@ main:
         ; Put char on printer
         ld      ix, screenPrinter
         ld      hl, $4001
+        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
         call    Printer.MoveTo
         add     $20
         call    Printer.PutChar
+        ld      (ix + Printer.attr), %11100010 ; bright white on black
 
         ; scroll Y
         ld      hl, scrollY
         ld      a, (hl)
-        inc     a
+        ;inc     a
         ld      (hl), a
         nextreg NextReg.TILEMAP_OFFSET_Y, a
 
+        ld      ix, screenPrinter
+        call    Printer.ScrollUp
+
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
         call    Raster.FrameWait
 
         jp      .loop
