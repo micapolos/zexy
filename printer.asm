@@ -15,19 +15,26 @@ addr            DW      0               ; address at row / col
         MODULE  Printer
 
 ; Input:
+;   ix - printer ptr
+; Output:
+;   ix - surface ptr
+GetSurfacePtr
+        push    hl
+        ld      l, (ix + Printer.surfacePtr)
+        ld      h, (ix + Printer.surfacePtr + 1)
+        ld      ix, hl
+        pop     hl
+        ret
+
+; Input:
 ;   ix - Printer ptr
 ;   hl - col / row
 MoveTo
         push    hl
         push    ix      ; printer ptr
+
         push    hl      ; col / row
-
-        ; hl = surface ptr
-        ld      l, (ix + Printer.surfacePtr)
-        ld      h, (ix + Printer.surfacePtr + 1)
-
-        ; hl = surface addr
-        ld      ix, hl  ; surface ptr
+        call    GetSurfacePtr
         pop     hl      ; col / row
         call    Surface.GetAddr
 
