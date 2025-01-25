@@ -1,4 +1,4 @@
-        IFNDEF  NEXTEG_LIB
+        IFNDEF  NEXTREG_LIB
         DEFINE  NEXTREG_LIB
         MODULE  NextReg
 
