@@ -5,7 +5,7 @@
         INCLUDE surface.asm
 
         STRUCT  Printer
-surfacePtr      DW
+surfacePtr      DW                      ; TODO: Should we inline the surface?
 row             DB      0
 col             DB      0
 attr            DB      %11100010       ; bright white on black
@@ -38,6 +38,8 @@ MoveTo
         pop     hl
         ret
 
+; Put char at current col / row.
+;
 ; Input:
 ;   IX - Printer ptr
 ;   A - char
