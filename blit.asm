@@ -1,19 +1,7 @@
-        ifndef  BLIT_LIB
-        define  BLIT_LIB
+        ifndef  Blit_asm
+        define  Blit_asm
 
         module  Blit
-
-; Input:
-;   hl - addr
-;   de - value
-; Output:
-;   hl - advanced addr
-Put16:
-        ld      (hl), e
-        inc     hl
-        ld      (hl), d
-        inc     hl
-        ret
 
 ; Input:
 ;   hl - address
@@ -46,12 +34,7 @@ FillRect16:
 ;   BC - width / height
 ;   ixh - src stride
 ;   ixl - dst stride
-; Output:
-;   HL - src end
-;   DE - dst end
-;   BC - ?
 name
-        push    af
 .nextRow
         push    bc
         ld      a, b
@@ -70,27 +53,11 @@ name
         dec     c
         jp      nz, .nextRow
 
-        pop     af
         ret
         endm
 
         MakeCopyRect8 CopyRect8Inc, ldi, add
         MakeCopyRect8 CopyRect8Dec, ldd, sub
-
-; Input:
-;   HL - src start
-;   DE - dst start
-;   BC - width / height
-;   ixh - src stride
-;   ixl - dst stride
-;   FC - 0 = inc, 1 = dec
-; Output:
-;   HL - src end
-;   DE - dst end
-;   BC - ?
-CopyRect8
-        jp      nc, CopyRect8Inc
-        jp      CopyRect8Dec
 
         endmodule
 
