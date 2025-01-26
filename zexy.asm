@@ -19,7 +19,7 @@ screenPrinter   Printer { screenSurface }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
 screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }
-windowTilebuffer        Tilebuffer { tileMap + $40*2 , { 2, 8 }, 72 }
+windowTilebuffer        Tilebuffer { tileMap + $40*2 + $50*2*2, { 2, 8 }, 72 }
 subTilebuffer           Tilebuffer
 
 cnt8            db      0
@@ -49,20 +49,24 @@ zexy:
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
-        ld      de, $4103       ; col / row
+        ld      de, $4105       ; col / row
         ld      bc, $0602       ; width / height
         ld      hl, $7011       ; attr / char
         call    Tilebuffer.FillRect
 
         ld      ix, screenTilebuffer
         ld      iy, subTilebuffer
-        ld      de, $4206       ; col / row
+        ld      de, $4208       ; col / row
         ld      bc, $0402       ; width / height
         call    Tilebuffer.LoadSubFrame
 
         ld      ix, subTilebuffer
-        ld      de, $3012       ; col / row
+        ld      de, $3012       ; attr / value
         call    Tilebuffer.Fill
+
+        ld      ix, screenTilebuffer
+        ld      hl, $8013       ; clear attr / value
+        call    Tilebuffer.ScrollUp
 
         ld      ix, screenSurface
         ld      iy, backSurface

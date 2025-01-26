@@ -15,7 +15,7 @@ stride  db
 
 ; Input
 ;   ix - Tilebuffer ptr
-;   de - tile
+;   de - attr / value
 Fill
         ld      l, (ix + Tilebuffer.addr)
         ld      h, (ix + Tilebuffer.addr + 1)
@@ -31,7 +31,7 @@ Fill
 ;   ix - Tilebuffer ptr
 ;   de - col / row
 ;   bc - width / height
-;   hl - attr / char
+;   hl - attr / value
 FillRect
         push    hl
         call    CoordAddr
@@ -45,7 +45,7 @@ FillRect
 
 ; Input:
 ;   ix - Tilebuffer ptr
-;   de - Coord
+;   de - col / row
 ; Output:
 ;   hl - addr
 ;   bc - preserved
@@ -68,10 +68,11 @@ CoordAddr
         add     hl, de
         ret
 
-; Input:
+; Input
 ;   ix - src Tilebuffer ptr
 ;   iy - dst Tilebuffer ptr
-;   debc - Frame (col, row, width, height)
+;   de - col / row
+;   bc - width / height
 LoadSubFrame
         ; hl = src->addr
         call    CoordAddr
@@ -91,6 +92,56 @@ LoadSubFrame
         ld      (iy + Tilebuffer.stride), a
 
         ret
+
+; Input
+;   ix - Tilebuffer ptr
+;   hl - attr / value
+ScrollUp
+        push    hl
+        call    MoveUp
+        pop     hl
+
+        jp      FillBottomRow
+
+; Input
+;   ix - Tilebuffer ptr
+MoveUp
+        push    ix
+
+        ld      e, (ix + Tilebuffer.addr)
+        ld      d, (ix + Tilebuffer.addr + 1)
+
+        ld      c, (ix + Tilebuffer.size.height)
+        ld      b, (ix + Tilebuffer.size.width)
+        rlc     b
+
+        ld      hl, de
+        ld      a, (ix + Tilebuffer.size.width)
+        add     (ix + Tilebuffer.stride)
+        rlca
+        add     hl, a
+
+        ld      a, (ix + Tilebuffer.stride)
+        rlca
+        ld      ixh, a
+        ld      ixl, a
+        call    Blit.CopyRect8Inc
+
+        pop     ix
+        ret
+
+; Input
+;   ix - Tilebuffer ptr
+;   hl - attr / value
+FillBottomRow
+        ld      d, 0
+        ld      e, (ix + Tilebuffer.size.height)
+        dec     e
+
+        ld      b, (ix + Tilebuffer.size.width)
+        ld      c, 1
+
+        jp      FillRect
 
         endmodule
 
