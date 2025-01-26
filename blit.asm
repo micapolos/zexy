@@ -29,9 +29,9 @@ FillRect16:
 
         macro   MakeCopyRect8  name, ldi_instr, add_instr
 ; Input:
-;   HL - src start
-;   DE - dst start
-;   BC - width / height
+;   hl - src start
+;   de - dst start
+;   bc - width / height
 ;   ixh - src stride
 ;   ixl - dst stride
 name
