@@ -2,7 +2,7 @@
 
 CHAR_COUNT  equ   96
 
-        org $c000
+        org $8000
 
         include blit.asm
         include surface.asm
@@ -12,6 +12,7 @@ CHAR_COUNT  equ   96
         include printer.asm
         include string.asm
         include tilebuffer.asm
+        include dos.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
@@ -31,7 +32,7 @@ zexy:
 
         nextreg NextReg.CPU_SPEED, 3   ; 28MHz
         nextreg NextReg.MMU_0, 35
-        nextreg NextReg.MMU_4, 34
+        nextreg NextReg.MMU_6, 34
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
         nextreg $6c, %00000000  ; Default tilemap attribute
@@ -82,6 +83,11 @@ zexy:
         ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
         call    Printer.Init
 
+        call    PutOsVersion
+        call    Printer.NewLine
+        call    Printer.NewLine
+
+        ld      ix, screenPrinter
         ld      hl, helloText
         ld      iy, Printer.Put
         call    String.ForEach
@@ -129,6 +135,55 @@ InitTilemapPalette:
         call    Palette.Load9Bit
         ret
 
+; Input
+;   A - char
+PutChar
+        push    af, bc, de, hl, ix
+        ld      ix, screenPrinter
+        call    Printer.Put
+        pop     ix, hl, de, bc, af
+        ret
+
+PutOsVersion
+        rst     $08
+        db      $88
+
+        ld      a, b
+        rst     $10
+
+        ld      a, c
+        rst     $10
+
+        ld      a, d
+        swapnib
+        and     $0f
+        add     $30
+        rst     $10
+
+        ld      a, d
+        and     $0f
+        add     $30
+        rst     $10
+
+        ld      a, e
+        swapnib
+        and     $0f
+        add     $30
+        rst     $10
+
+        ld      a, e
+        and     $0f
+        add     $30
+        rst     $10
+
+        ld      a, l
+        rst     $10
+
+        ld      a, h
+        rst     $10
+
+        ret
+
         org $4000
 
 tileMap:
@@ -138,8 +193,8 @@ tileDefs:
         include topaz-8.asm
         ds      96 * 32
 
-        MMU     4, 34
-        org     $8000
+        MMU     6, 34
+        org     $c000
 
 tilemapPalette:
         ds      256 * 2
@@ -176,9 +231,11 @@ textPalette
 
 ; Zexy ROM
         mmu     0, 35
+        org     $0008
+        jp      Dos.Call
         org     $0010
-        jp      Printer.Put
+        jp      PutChar
 
-        SAVENEX OPEN "zexy.nex", zexy, $FFFE
+        SAVENEX OPEN "zexy.nex", zexy, $bfe0
         SAVENEX AUTO
         SAVENEX CLOSE
