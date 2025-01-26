@@ -39,13 +39,11 @@ main:
         ld      de, $200e       ; color / value
         call    Surface.FillRect
 
-        ld      ix, screenSurface
         ld      hl, $1008       ; col / row
         ld      bc, $2008       ; width / height
         ld      de, $1203       ; color / value
         call    Surface.FillRect
 
-        ld      ix, screenSurface
         ld      iy, backSurface
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
@@ -55,7 +53,7 @@ main:
         ld      ix, screenPrinter
         ld      (ix + Printer.row), 30
         ld      (ix + Printer.col), 0
-        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
+        ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
         call    Printer.Init
 
         ld      a, 'F'

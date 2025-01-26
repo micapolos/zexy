@@ -26,18 +26,6 @@ Init
         ENDM
 
 ; Input:
-;   ix - printer ptr
-; Output:
-;   ix - surface ptr
-GetSurfacePtr
-        push    hl
-        ld      l, (ix + Printer.surfacePtr)
-        ld      h, (ix + Printer.surfacePtr + 1)
-        ld      ix, hl
-        pop     hl
-        ret
-
-; Input:
 ;   ix - Printer ptr
 ;   hl - col / row
 MoveTo
@@ -47,7 +35,6 @@ MoveTo
 ; Input:
 ;   ix - Printer ptr
 @UpdateAddr
-        push    hl
         push    ix                      ; printer ptr
 
         ld      l, (ix + Printer.row)
@@ -65,7 +52,6 @@ MoveTo
         ld      (ix + Printer.addr), l
         ld      (ix + Printer.addr + 1), h
 
-        pop     hl
         ret
 
 ; Put char at current col / row.
@@ -74,9 +60,6 @@ MoveTo
 ;   IX - Printer ptr
 ;   A - char
 PutChar
-        push    hl
-        push    af
-
         ld      l, (ix + Printer.addr)
         ld      h, (ix + Printer.addr + 1)
 
@@ -86,16 +69,11 @@ PutChar
 
         ld      a, (ix + Printer.attr)
         ld      (hl), a
-
-        pop     af
-        pop     hl
         ret
 
 ; Input:
 ;   ix - Printer ptr
 ;   a - byte
-; Output:
-;   afbcdehl/iy - corrupt
 Put
         call    PutChar
         jp      Advance
@@ -103,7 +81,6 @@ Put
 ; Input
 ;   IX - Printer ptr
 ; Output
-;   AF, BC, DE, HL - corrupt
 ;   C - on scroll up
 Advance
         push    ix
@@ -135,9 +112,7 @@ Advance
         or      a       ; clear carry flag
         jp      .done
 .scrollUp
-        push    ix
         call    ScrollUp
-        pop     ix
         scf
 .done
         push    af             ; preserve carry flag
@@ -147,9 +122,9 @@ Advance
 
 ; Input
 ;   IX - Printer ptr
-; Output
-;   AF, BC, DE, HL, IX, IY - corrupt
 ScrollUp
+        push    ix
+
         Printer_GetSurfacePtr    ix, h, l
         ld      ix, hl
 
@@ -160,18 +135,19 @@ ScrollUp
 .moveUp
         ld      hl, $0001
         ld      de, $0000
-        push    ix
         push    bc
         call    Surface.CopyRect
         pop     bc
-        pop     ix
 
 .clearBottomLine
         ld      h, 0
         ld      l, c
         ld      c, 1
         ld      de, 0
-        jp      Surface.FillRect
+        call    Surface.FillRect
+
+        pop     ix
+        ret
 
         ENDMODULE
         ENDIF

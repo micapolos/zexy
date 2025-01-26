@@ -22,9 +22,6 @@ height  DB
 ; Output:
 ;   hl - addr
 GetAddrAt:
-        push    de
-        push    bc
-
         ; bc = col / row
         ld      bc, hl
 
@@ -45,8 +42,6 @@ GetAddrAt:
         mul     d, e
         add     hl, de
 
-        pop     bc
-        pop     de
         ret
 
 ; Input:
@@ -54,11 +49,13 @@ GetAddrAt:
 ;   hl - col, row
 ;   bc - width, height
 ;   de - value
-; Output:
-;   afbcdehl/ixiy - corrupt
 FillRect:
         ; hl = addr
+        push    bc
+        push    de
         call    GetAddrAt
+        pop     de
+        pop     bc
 
         ; a = stride
         ld      a, (ix + Surface.width)
@@ -71,15 +68,26 @@ FillRect:
 ;   hl - src col, row
 ;   de - dst col, row
 ;   bc - width, height
-; Output:
-;   AFBCDEHL/IXIY - corrupt
 CopyRect:
+        push    ix
+
         ; hl = src addr
         ; de = dst addr
+        push    bc
+
+        push    de
         call    GetAddrAt
+        pop     de
+
         ex      de, hl
+
+        push    de
         call    GetAddrAt
+        pop     de
+
         ex      de, hl
+
+        pop     bc
 
         ; bc = blit width / height
         rlc     b
@@ -91,7 +99,9 @@ CopyRect:
         ld      ixl, a
         ld      ixh, a
 
-        jp      Blit.CopyRect8Inc
+        call    Blit.CopyRect8Inc
+        pop     ix
+        ret
 
 ; Input:
 ;   ix - dst Surface*
@@ -99,14 +109,18 @@ CopyRect:
 ;   hl - dst col, row
 ;   de - src col, row
 ;   bc - width, height
-; Output:
-;   agbcdehl/ixiy - corrupt
 XCopyRect:
+        push    ix
+
         ; bc = blit width / height
         rlc     b
 
         ; hl = dst addr
+        push    bc
+        push    de
         call    GetAddrAt
+        pop     de
+        pop     bc
 
         ; ixl = dst stride
         ld      a, (ix + Surface.width)
@@ -118,7 +132,11 @@ XCopyRect:
         ; de = src address
         ld      ix, iy
         ex      de, hl
+        push    bc
+        push    de
         call    GetAddrAt
+        pop     de
+        pop     bc
 
         ; ixh = src stride
         ld      a, (ix + Surface.width)
@@ -127,7 +145,10 @@ XCopyRect:
         pop     ix
         ld      ixh, a
 
-        jp      Blit.CopyRect8Inc
+        call    Blit.CopyRect8Inc
+
+        pop     ix
+        ret
 
         ENDMODULE
 
