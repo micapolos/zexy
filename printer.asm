@@ -27,6 +27,18 @@ Init
 
 ; Input:
 ;   ix - Printer ptr
+; Output:
+;   hl - width / height
+GetWidthHeight
+        push    ix
+        Printer_GetSurfacePtr    ix, h, l
+        ld      ix, hl
+        Surface_GetWidthHeight   ix, h, l
+        pop ix
+        ret
+
+; Input:
+;   ix - Printer ptr
 ;   hl - col / row
 MoveTo
         ld      (ix + Printer.row), l
@@ -58,6 +70,19 @@ MoveTo
 ;   ix - Printer ptr
 ;   a - byte
 Put
+        cp      $20
+        jp      nc, .char
+
+        ld      hl, .jumpTable
+        rlca
+        add     hl, a
+        ld      e, (hl)
+        inc     hl
+        ld      d, (hl)
+        ex      de, hl
+        jp      (hl)
+
+.char
         ld      l, (ix + Printer.addr)
         ld      h, (ix + Printer.addr + 1)
 
@@ -70,22 +95,48 @@ Put
 
         jp      Advance
 
+.jumpTable
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+        dw      .ret
+.ret
+        ret
+
 ; Input
 ;   IX - Printer ptr
 ; Output
 ;   C - on scroll up
 Advance
-        push    ix
-
-        ; ix - surface ptr
-        Printer_GetSurfacePtr    ix, h, l
-        ld      ix, hl
-
-        ; hl = width / height
-        Surface_GetWidthHeight   ix, h, l
-
-        ; ix - printer ptr
-        pop     ix
+        call    GetWidthHeight
 
         ld      a, (ix + Printer.col)
         inc     a
