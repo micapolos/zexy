@@ -13,7 +13,9 @@ CHAR_COUNT  equ   96
         include string.asm
         include tilebuffer.asm
         include dos.asm
+        include put.asm
         include cmd-ls.asm
+        include cmd-pwd.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
@@ -86,7 +88,7 @@ zexy:
         call    Printer.NewLine
         call    Printer.NewLine
 
-        ;call    CmdLs.Exec
+        ;call    CmdPwd.Exec
 
         ld      ix, screenPrinter
         ld      hl, helloText
@@ -118,6 +120,19 @@ zexy:
         ld      a, (cnt8)
         add     $20
         rst     $10
+
+        ld      ix, screenPrinter
+
+        ld      h, (ix + Printer.col)
+        ld      l, (ix + Printer.row)
+        push    hl
+
+        ld      hl, $4400
+        call    Printer.MoveTo
+        call    PutDate
+
+        pop     hl
+        call    Printer.MoveTo
 
         call    Raster.FrameWait
 
@@ -156,26 +171,10 @@ PutOsVersion
         rst     $10
 
         ld      a, d
-        swapnib
-        and     $0f
-        add     $30
-        rst     $10
-
-        ld      a, d
-        and     $0f
-        add     $30
-        rst     $10
+        call    Put.DigitsHiLo
 
         ld      a, e
-        swapnib
-        and     $0f
-        add     $30
-        rst     $10
-
-        ld      a, e
-        and     $0f
-        add     $30
-        rst     $10
+        call    Put.DigitsHiLo
 
         ld      a, l
         rst     $10
@@ -184,6 +183,31 @@ PutOsVersion
         rst     $10
 
         ret
+
+PutDate
+        rst     $08
+        db      $8e
+
+        ld      a, b
+        call    Put.DigitsHiLo
+
+        ld      a, c
+        call    Put.DigitsHiLo
+
+        ld      a, d
+        call    Put.DigitsHiLo
+
+        ld      a, e
+        call    Put.DigitsHiLo
+
+        ld      a, h
+        call    Put.DigitsHiLo
+
+        ld      a, l
+        call    Put.DigitsHiLo
+
+        ret
+
 
 ; =============================================================================
 
