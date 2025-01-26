@@ -18,7 +18,6 @@ CHAR_COUNT  equ   96
         include cmd/pwd.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
-backSurface     Surface { backTileMap, 32, 3 }
 screenPrinter   Printer { screenSurface }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
@@ -70,13 +69,6 @@ zexy:
         ld      ix, screenTilebuffer
         ld      hl, $8013       ; clear attr / value
         call    Tilebuffer.ScrollUp
-
-        ld      ix, screenSurface
-        ld      iy, backSurface
-        ld      hl, $0402       ; dst col / row
-        ld      de, $0000       ; src col / row
-        ld      bc, $2003       ; width / height
-        call    Surface.XCopyRect
 
         ld      ix, screenPrinter
         ld      (ix + Printer.cursor.row), 1
@@ -223,12 +215,6 @@ tilemapPalette:
 
 fontBitmap:
         include topaz-8.asm
-
-backTileMap:
-        DUP   CHAR_COUNT, i
-        db    (i % CHAR_COUNT) & $ff
-        db    %11100010 | (((i % CHAR_COUNT) & $100) >> 8)
-        EDUP
 
 textPalette
         ; normal palette
