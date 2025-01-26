@@ -54,12 +54,10 @@ MoveTo
 
         ret
 
-; Put char at current col / row.
-;
 ; Input:
-;   IX - Printer ptr
-;   A - char
-PutChar
+;   ix - Printer ptr
+;   a - byte
+Put
         ld      l, (ix + Printer.addr)
         ld      h, (ix + Printer.addr + 1)
 
@@ -69,13 +67,7 @@ PutChar
 
         ld      a, (ix + Printer.attr)
         ld      (hl), a
-        ret
 
-; Input:
-;   ix - Printer ptr
-;   a - byte
-Put
-        call    PutChar
         jp      Advance
 
 ; Input
