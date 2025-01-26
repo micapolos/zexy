@@ -30,6 +30,7 @@ zexy:
         di
 
         nextreg NextReg.CPU_SPEED, 3   ; 28MHz
+        nextreg NextReg.MMU_0, 35
         nextreg NextReg.MMU_4, 34
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
@@ -109,7 +110,7 @@ zexy:
         ld      ix, screenPrinter
         ld      a, (cnt8)
         add     $20
-        call    Printer.Put
+        rst     $10
 
         call    Raster.FrameWait
 
@@ -172,6 +173,11 @@ textPalette
         RGB_333         7, 0, 7
         RGB_333         7, 7, 0
         RGB_333         7, 7, 7
+
+; Zexy ROM
+        mmu     0, 35
+        org     $0010
+        jp      Printer.Put
 
         SAVENEX OPEN "zexy.nex", zexy, $FFFE
         SAVENEX AUTO
