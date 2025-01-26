@@ -121,18 +121,13 @@ zexy:
         add     $20
         rst     $10
 
-        ld      ix, screenPrinter
-
-        ld      h, (ix + Printer.col)
-        ld      l, (ix + Printer.row)
-        push    hl
+        call    Printer.PushCursor
 
         ld      hl, $4400
         call    Printer.MoveTo
         call    PutDate
 
-        pop     hl
-        call    Printer.MoveTo
+        call    Printer.PopCursor
 
         call    Raster.FrameWait
 

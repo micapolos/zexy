@@ -68,6 +68,39 @@ MoveTo
 
 ; Input:
 ;   ix - Printer ptr
+PushCursor
+        pop     hl
+        ld      d, (ix + Printer.col)
+        ld      e, (ix + Printer.row)
+        push    de
+        jp      (hl)
+
+; Input:
+;   ix - Printer ptr
+PopCursor
+        pop     de      ; ret addr
+        pop     hl      ; col / row
+        push    de      ; ret addr
+        jp      MoveTo
+
+; Input:
+;   ix - Printer ptr
+PushAttr
+        pop     hl
+        ld      d, (ix + Printer.attr)
+        push    de
+        jp      (hl)
+
+; Input:
+;   ix - Printer ptr
+PopAttr
+        pop     hl      ; ret addr
+        pop     de      ; attr / value
+        ld      (ix + Printer.attr), d
+        jp      (hl)
+
+; Input:
+;   ix - Printer ptr
 ;   a - byte
 Put
         cp      $20
