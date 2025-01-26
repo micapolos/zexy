@@ -51,12 +51,12 @@ zexy:
         ld      ix, screenTilebuffer
         ld      iy, subTilebuffer
         ld      de, $4003
-        ld      bc, $0802
+        ld      bc, $0803
         call    Tilebuffer.LoadSubFrame
 
         ld      ix, subTilebuffer
         ld      de, $3010
-        ;call    Tilebuffer.Fill
+        call    Tilebuffer.Fill
 
         ld      ix, screenSurface
         ld      iy, backSurface

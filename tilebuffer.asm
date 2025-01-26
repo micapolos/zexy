@@ -83,19 +83,14 @@ LoadSubFrame
         ld      (iy + Tilebuffer.addr), l
         ld      (iy + Tilebuffer.addr + 1), h
 
-        ; src->size.height = dst->size.height
-        ld      a, (ix + Tilebuffer.size.height)
-        ld      (iy + Tilebuffer.size.height), a
+        ; dst->size = size
+        ld      (iy + Tilebuffer.size.height), c
+        ld      (iy + Tilebuffer.size.width), b
 
-        ; src->size.width = dst->size.width
-        ld      a, (ix + Tilebuffer.size.width)
-        ld      (iy + Tilebuffer.size.width), a
-
-        ; src->stride += (src->width - width) * 2
+        ; dst->stride = src->stride + (src->width - width) * 2
         ld      a, (ix + Tilebuffer.stride)
         add     (ix + Tilebuffer.size.width)
         sub     b
-        rlca
         ld      (iy + Tilebuffer.stride), a
 
         ret
