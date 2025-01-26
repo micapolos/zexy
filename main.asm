@@ -15,7 +15,7 @@ CHAR_COUNT  EQU   96
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
 screenPrinter   Printer { screenSurface }
-helloText       dz      "Hello, my friend. How are you doing? I hope you're fine."
+helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
 cnt8            db      0
 scrollY         db      0

@@ -106,7 +106,7 @@ Put
         dw      .ret
         dw      .ret
         dw      .ret
-        dw      .ret
+        dw      NewLine
         dw      .ret
         dw      .ret
         dw      .ret
@@ -133,8 +133,6 @@ Put
 
 ; Input
 ;   IX - Printer ptr
-; Output
-;   C - on scroll up
 Advance
         call    GetWidthHeight
 
@@ -143,7 +141,6 @@ Advance
         cp      h
         jp      nc, .nextLine
         ld      (ix + Printer.col), a
-        or      a       ; clear carry flag
         jp      .done
 .nextLine
         ld      (ix + Printer.col), 0
@@ -152,16 +149,27 @@ Advance
         cp      l
         jp      nc, .scrollUp
         ld      (ix + Printer.row), a
-        or      a       ; clear carry flag
         jp      .done
 .scrollUp
         call    ScrollUp
-        scf
 .done
-        push    af             ; preserve carry flag
-        call    UpdateAddr
-        pop     af
-        ret
+        jp    UpdateAddr
+
+; Input:
+;   ix - printer ptr
+NewLine
+        call    GetWidthHeight         ; hl
+        ld      (ix + Printer.col), 0
+        ld      a, (ix + Printer.row)
+        inc     a
+        cp      l
+        jp      nc, .scrollUp
+        ld      (ix + Printer.row), a
+        jp      .done
+.scrollUp
+        call    ScrollUp
+.done
+        jp      UpdateAddr
 
 ; Input
 ;   IX - Printer ptr
