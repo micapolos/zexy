@@ -3,11 +3,11 @@
 
         include blit.asm
         include surface.asm
+        include coord.asm
 
         struct  Printer
-surfacePtr      dw                      ; TODO: Should we inline the surface?
-row             db      0
-col             db      0
+surfacePtr      dw
+cursor          Coord
 attr            db      %11100010       ; bright white on black
 state           db      0
 addr            dw      0               ; address at row / col
@@ -41,16 +41,16 @@ GetWidthHeight
 ;   ix - Printer ptr
 ;   hl - col / row
 MoveTo
-        ld      (ix + Printer.row), l
-        ld      (ix + Printer.col), h
+        ld      (ix + Printer.cursor.row), l
+        ld      (ix + Printer.cursor.col), h
 
 ; Input:
 ;   ix - Printer ptr
 @UpdateAddr
         push    ix                      ; printer ptr
 
-        ld      l, (ix + Printer.row)
-        ld      h, (ix + Printer.col)
+        ld      l, (ix + Printer.cursor.row)
+        ld      h, (ix + Printer.cursor.col)
         push    hl                      ; col / row
 
         Printer_GetSurfacePtr    ix, h, l
@@ -70,8 +70,8 @@ MoveTo
 ;   ix - Printer ptr
 PushCursor
         pop     hl
-        ld      d, (ix + Printer.col)
-        ld      e, (ix + Printer.row)
+        ld      d, (ix + Printer.cursor.col)
+        ld      e, (ix + Printer.cursor.row)
         push    de
         jp      (hl)
 
@@ -169,19 +169,19 @@ Put
 Advance
         call    GetWidthHeight
 
-        ld      a, (ix + Printer.col)
+        ld      a, (ix + Printer.cursor.col)
         inc     a
         cp      h
         jp      nc, .nextLine
-        ld      (ix + Printer.col), a
+        ld      (ix + Printer.cursor.col), a
         jp      .done
 .nextLine
-        ld      (ix + Printer.col), 0
-        ld      a, (ix + Printer.row)
+        ld      (ix + Printer.cursor.col), 0
+        ld      a, (ix + Printer.cursor.row)
         inc     a
         cp      l
         jp      nc, .scrollUp
-        ld      (ix + Printer.row), a
+        ld      (ix + Printer.cursor.row), a
         jp      .done
 .scrollUp
         call    ScrollUp
@@ -192,12 +192,12 @@ Advance
 ;   ix - printer ptr
 NewLine
         call    GetWidthHeight         ; hl
-        ld      (ix + Printer.col), 0
-        ld      a, (ix + Printer.row)
+        ld      (ix + Printer.cursor.col), 0
+        ld      a, (ix + Printer.cursor.row)
         inc     a
         cp      l
         jp      nc, .scrollUp
-        ld      (ix + Printer.row), a
+        ld      (ix + Printer.cursor.row), a
         jp      .done
 .scrollUp
         call    ScrollUp
