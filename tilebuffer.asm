@@ -93,6 +93,7 @@ LoadSubFrame
 
         ret
 
+; TODO: Replace with CopyRect
 ; Input
 ;   ix - Tilebuffer ptr
 ;   hl - attr / value
@@ -105,7 +106,7 @@ ScrollUp
 
 ; Input
 ;   ix - Tilebuffer ptr
-MoveUp
+@MoveUp
         push    ix
 
         ld      e, (ix + Tilebuffer.addr)
@@ -133,7 +134,7 @@ MoveUp
 ; Input
 ;   ix - Tilebuffer ptr
 ;   hl - attr / value
-FillBottomRow
+@FillBottomRow
         ld      d, 0
         ld      e, (ix + Tilebuffer.size.height)
         dec     e
