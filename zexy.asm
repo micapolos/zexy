@@ -14,8 +14,8 @@ CHAR_COUNT  equ   96
         include tilebuffer.asm
         include dos.asm
         include put.asm
-        include cmd-ls.asm
-        include cmd-pwd.asm
+        include cmd/ls.asm
+        include cmd/pwd.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
