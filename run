@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-sjasmplus --lst --zxnext=cspect main.asm
-cp main.nex ~/Documents/nextsync12/apps/zexy.nex
-cspect main.nex
+sjasmplus --lst --zxnext=cspect $1.asm
+cp $1.nex ~/Documents/nextsync12/apps/$1.nex
+cspect $1.nex

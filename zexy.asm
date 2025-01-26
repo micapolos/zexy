@@ -11,17 +11,21 @@ CHAR_COUNT  EQU   96
         INCLUDE raster.asm
         INCLUDE printer.asm
         INCLUDE string.asm
+        INCLUDE tilebuffer.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
 screenPrinter   Printer { screenSurface }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
+screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }
+subframeTilebuffer      Tilebuffer
+
 cnt8            db      0
 scrollY         db      0
 scrollDelta     db      0
 
-main:
+zexy:
         di
 
         nextreg NextReg.CPU_SPEED, 3   ; 28MHz
@@ -143,6 +147,6 @@ textPalette
         RGB_333         7, 7, 0
         RGB_333         7, 7, 7
 
-        SAVENEX OPEN "main.nex", main, $FFFE
+        SAVENEX OPEN "zexy.nex", zexy, $FFFE
         SAVENEX AUTO
         SAVENEX CLOSE
