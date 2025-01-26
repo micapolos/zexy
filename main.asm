@@ -58,8 +58,8 @@ main:
         ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
         call    Printer.Init
 
-        ld      de, helloText
-        ld      hl, Printer.Put
+        ld      hl, helloText
+        ld      iy, Printer.Put
         call    String.ForEach
 
         ld      hl, $001e

@@ -4,23 +4,21 @@
         MODULE  String
 
 ; Input
-;   DE - string addr
-;   HL - callback with each byte in A
+;   HL - string addr
+;   IY - callback with each byte in A
 ; Output
-;   DE - advanced string addr
+;   HL - advanced string addr
 ForEach
 .loop
-        ld      a, (de)
-        inc     de
+        ld      a, (hl)
+        inc     hl
         and     a
         ret     z
-        push    de
         push    hl
         push    .continue
-        jp      (hl)
+        jp      (IY)
 .continue
         pop     hl
-        pop     de
         jp      .loop
 
         ENDMODULE
