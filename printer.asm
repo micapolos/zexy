@@ -7,18 +7,11 @@
 
         struct  Printer
 surfacePtr      dw
-cursor          Coord
+cursor          Coord   0, 0
 attr            db      %11100010       ; bright white on black
-state           db      0
-addr            dw      0               ; address at row / col
         ends
 
         module  Printer
-
-; Input:
-;   ix - printer ptr
-Init
-        jp      UpdateAddr
 
         macro   Printer_GetSurfacePtr idx, hi, lo
         ld      lo, (idx + surfacePtr)
@@ -43,10 +36,13 @@ GetWidthHeight
 MoveTo
         ld      (ix + Printer.cursor.row), l
         ld      (ix + Printer.cursor.col), h
+        ret
 
 ; Input:
 ;   ix - Printer ptr
-@UpdateAddr
+; Output:
+;   hl - addr
+@GetCursorAddr
         push    ix                      ; printer ptr
 
         ld      l, (ix + Printer.cursor.row)
@@ -60,9 +56,6 @@ MoveTo
         pop     hl                      ; col / row
         call    Surface.GetAddrAt       ; hl = addr
         pop     ix                      ; printer ptr
-
-        ld      (ix + Printer.addr), l
-        ld      (ix + Printer.addr + 1), h
 
         ret
 
@@ -116,8 +109,9 @@ Put
         jp      (hl)
 
 .char
-        ld      l, (ix + Printer.addr)
-        ld      h, (ix + Printer.addr + 1)
+        push    af
+        call    GetCursorAddr
+        pop     af
 
         sub     $20
         ld      (hl), a
@@ -186,7 +180,7 @@ Advance
 .scrollUp
         call    ScrollUp
 .done
-        jp    UpdateAddr
+        ret
 
 ; Input:
 ;   ix - printer ptr
@@ -202,7 +196,7 @@ NewLine
 .scrollUp
         call    ScrollUp
 .done
-        jp      UpdateAddr
+        ret
 
 ; Input
 ;   ix - Printer ptr

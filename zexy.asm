@@ -82,7 +82,6 @@ zexy:
         ld      (ix + Printer.cursor.row), 1
         ld      (ix + Printer.cursor.col), 2
         ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
-        call    Printer.Init
 
         call    PutOsVersion
         call    Printer.NewLine
