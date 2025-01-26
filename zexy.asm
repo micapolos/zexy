@@ -122,11 +122,12 @@ zexy:
         rst     $10
 
         call    Printer.PushCursor
-
+        call    Printer.PushAttr
+        ld      (ix + Printer.attr), %11000010
         ld      hl, $4400
         call    Printer.MoveTo
         call    PutDate
-
+        call    Printer.PopAttr
         call    Printer.PopCursor
 
         call    Raster.FrameWait
