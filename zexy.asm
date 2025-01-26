@@ -43,7 +43,7 @@ zexy:
         call    InitTilemapPalette
 
         ld      ix, screenTilebuffer
-        ld      de, $200e       ; attr / char
+        ld      de, $203f       ; dark blue underscore
         call    Tilebuffer.Fill
 
         ld      ix, windowTilebuffer
@@ -73,7 +73,7 @@ zexy:
         ld      ix, screenPrinter
         ld      (ix + Printer.cursor.row), 1
         ld      (ix + Printer.cursor.col), 2
-        ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
+        ld      (ix + Printer.attr), %01000010  ; bright green
 
         call    PutOsVersion
         call    Printer.NewLine
@@ -114,7 +114,7 @@ zexy:
 
         call    Printer.PushCursor
         call    Printer.PushAttr
-        ld      (ix + Printer.attr), %11000010
+        ld      (ix + Printer.attr), %00011010
         ld      hl, $4400
         call    Printer.MoveTo
         call    PutDate
