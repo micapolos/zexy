@@ -20,9 +20,6 @@ Put16:
 ;   bc - width, height
 ;   de - value
 ;   a - stride
-; Output:
-;   hl - end address
-;   bc - width, 0
 FillRect16:
 .loop
         push    bc

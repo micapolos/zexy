@@ -3,6 +3,7 @@
 
         include size.asm
         include coord.asm
+        include blit.asm
 
         struct  Tilebuffer
 addr    dw
@@ -16,35 +17,15 @@ stride  db
 ;   ix - Tilebuffer ptr
 ;   de - tile
 Fill
-        ; hl = addr
         ld      l, (ix + Tilebuffer.addr)
         ld      h, (ix + Tilebuffer.addr + 1)
 
-        ; c = stride * 2
-        ld      c, (ix + Tilebuffer.stride)
-        rlc     c
-
-        ; b = height
-        ld      b, (ix + Tilebuffer.size.height)
-.rowLoop
-        push    bc
-
-        ; b = width * 2
+        ld      c, (ix + Tilebuffer.size.height)
         ld      b, (ix + Tilebuffer.size.width)
-.tileLoop
-        ld      (hl), e
-        inc     hl
-        ld      (hl), d
-        inc     hl
-        djnz    .tileLoop
 
-        ; hl += stride * 2
-        ld      a, c
-        add     hl, a
+        ld      a, (ix + Tilebuffer.stride)
 
-        pop     bc
-        djnz    .rowLoop
-        ret
+        jp      Blit.FillRect16
 
 ; Input:
 ;   ix - Tilebuffer ptr
