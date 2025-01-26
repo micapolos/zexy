@@ -20,6 +20,11 @@ addr            DW      0               ; address at row / col
 Init
         jp      UpdateAddr
 
+        MACRO   Printer_GetSurfacePtr idx, hi, lo
+        ld      lo, (idx + surfacePtr)
+        ld      hi, (idx + surfacePtr + 1)
+        ENDM
+
 ; Input:
 ;   ix - printer ptr
 ; Output:
@@ -49,7 +54,10 @@ MoveTo
         ld      h, (ix + Printer.col)
         push    hl                      ; col / row
 
-        call    GetSurfacePtr           ; ix = surface ptr
+        Printer_GetSurfacePtr    ix, h, l
+        ld      ix, hl
+
+        Surface_GetWidthHeight   ix, h, l
         pop     hl                      ; col / row
         call    Surface.GetAddrAt       ; hl = addr
         pop     ix                      ; printer ptr
@@ -83,11 +91,58 @@ PutChar
         pop     hl
         ret
 
+; Input:
+;   ix - Printer ptr
+;   a - byte
+; Output:
+;   afbcdehl/iy - corrupt
+Put
+        call    PutChar
+        jp      Advance
+
 ; Input
 ;   IX - Printer ptr
 ; Output
 ;   AF, BC, DE, HL - corrupt
+;   C - on scroll up
 Advance
+        push    ix
+
+        ; ix - surface ptr
+        Printer_GetSurfacePtr    ix, h, l
+        ld      ix, hl
+
+        ; hl = width / height
+        Surface_GetWidthHeight   ix, h, l
+
+        ; ix - printer ptr
+        pop     ix
+
+        ld      a, (ix + Printer.col)
+        inc     a
+        cp      h
+        jp      nc, .nextLine
+        ld      (ix + Printer.col), a
+        or      a       ; clear carry flag
+        jp      .done
+.nextLine
+        ld      (ix + Printer.col), 0
+        ld      a, (ix + Printer.row)
+        inc     a
+        cp      l
+        jp      nc, .scrollUp
+        ld      (ix + Printer.row), a
+        or      a       ; clear carry flag
+        jp      .done
+.scrollUp
+        push    ix
+        call    ScrollUp
+        pop     ix
+        scf
+.done
+        push    af             ; preserve carry flag
+        call    UpdateAddr
+        pop     af
         ret
 
 ; Input
@@ -95,27 +150,27 @@ Advance
 ; Output
 ;   AF, BC, DE, HL, IX, IY - corrupt
 ScrollUp
-        ld      d, (ix + Printer.attr)
-        ld      e, 0
-        push    de
+        Printer_GetSurfacePtr    ix, h, l
+        ld      ix, hl
 
-        call    GetSurfacePtr
-        ld      b, (ix + Surface.width)
-        ld      c, (ix + Surface.height)
+        Surface_GetWidthHeight   ix, b, c
         dec     c
         jp      z, .clearBottomLine
 
 .moveUp
         ld      hl, $0001
-
         ld      de, $0000
+        push    ix
+        push    bc
         call    Surface.CopyRect
+        pop     bc
+        pop     ix
 
 .clearBottomLine
         ld      h, 0
         ld      l, c
         ld      c, 1
-        pop     de
+        ld      de, 0
         jp      Surface.FillRect
 
         ENDMODULE

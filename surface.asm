@@ -11,6 +11,11 @@ height  DB
 
         MODULE  Surface
 
+        MACRO   Surface_GetWidthHeight idx, hi, lo
+        ld      hi, (idx + Surface.width)
+        ld      lo, (idx + Surface.height)
+        ENDM
+
 ; Input:
 ;   IX - Surface ptr
 ; Output:

@@ -15,8 +15,9 @@ screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
 screenPrinter   Printer { screenSurface }
 
-cnt8    db      0
-scrollY db      0
+cnt8            db      0
+scrollY         db      0
+scrollDelta     db      0
 
 main:
         di
@@ -52,8 +53,8 @@ main:
         call    Surface.XCopyRect
 
         ld      ix, screenPrinter
-        ld      (ix + Printer.row), 1
-        ld      (ix + Printer.col), 1
+        ld      (ix + Printer.row), 30
+        ld      (ix + Printer.col), 0
         ld      (ix + Printer.attr), %00011010  ; bright black on yellow
         call    Printer.Init
 
@@ -61,39 +62,21 @@ main:
         call    Printer.PutChar
 
 .loop:
-        ld      hl, cnt8
-        ld      a, (hl)
+        ; Increment counter
+        ld      a, (cnt8)
         inc     a
         cp      $60
         jp      nz, .nextCnt8
         ld      a, 0
-
 .nextCnt8
-        ld      (hl), a
+        ld      (cnt8), a
 
-        ; Put char on printer
+        ; Print some char
         ld      ix, screenPrinter
-        ld      hl, $4001
-        ld      (ix + Printer.attr), %00011010  ; bright black on yellow
-        call    Printer.MoveTo
+        ld      a, (cnt8)
         add     $20
-        call    Printer.PutChar
-        ld      (ix + Printer.attr), %11100010 ; bright white on black
+        call    Printer.Put
 
-        ; scroll Y
-        ld      hl, scrollY
-        ld      a, (hl)
-        ;inc     a
-        ld      (hl), a
-        nextreg NextReg.TILEMAP_OFFSET_Y, a
-
-        ld      ix, screenPrinter
-        call    Printer.ScrollUp
-
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-        call    Raster.FrameWait
         call    Raster.FrameWait
 
         jp      .loop
