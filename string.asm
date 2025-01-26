@@ -4,10 +4,10 @@
         module  String
 
 ; Input
-;   HL - string addr
+;   hl - string addr
 ;   iy - callback with each byte in A
 ; Output
-;   HL - advanced string addr
+;   hl - advanced string addr
 ForEach
 .loop
         ld      a, (hl)

@@ -13,6 +13,7 @@ CHAR_COUNT  equ   96
         include string.asm
         include tilebuffer.asm
         include dos.asm
+        include cmd-ls.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
@@ -28,8 +29,6 @@ scrollY         db      0
 scrollDelta     db      0
 
 zexy:
-        di
-
         nextreg NextReg.CPU_SPEED, 3   ; 28MHz
         nextreg NextReg.MMU_0, 35
         nextreg NextReg.MMU_6, 34
@@ -86,6 +85,8 @@ zexy:
         call    PutOsVersion
         call    Printer.NewLine
         call    Printer.NewLine
+
+        ;call    CmdLs.Exec
 
         ld      ix, screenPrinter
         ld      hl, helloText
@@ -236,7 +237,7 @@ textPalette
         mmu     0, 35
 
         org     $00
-        ret
+        jp      Dos.Reset
 
         org     $08
         jp      Dos.Call
