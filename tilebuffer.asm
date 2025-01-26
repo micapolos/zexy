@@ -126,7 +126,7 @@ ScrollUp
         rlca
         ld      ixh, a
         ld      ixl, a
-        call    Blit.CopyRect8Inc
+        call    Blit.CopyRect8
 
         pop     ix
         ret

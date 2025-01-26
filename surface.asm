@@ -99,7 +99,7 @@ CopyRect:
         ld      ixl, a
         ld      ixh, a
 
-        call    Blit.CopyRect8Inc
+        call    Blit.CopyRect8
         pop     ix
         ret
 
@@ -145,7 +145,7 @@ XCopyRect:
         pop     ix
         ld      ixh, a
 
-        call    Blit.CopyRect8Inc
+        call    Blit.CopyRect8
 
         pop     ix
         ret

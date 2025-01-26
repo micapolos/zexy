@@ -33,7 +33,7 @@ FillRect16:
 ;   bc - width / height
 ;   ixh - src stride
 ;   ixl - dst stride
-CopyRect8Inc
+CopyRect8
 .nextRow
         push    bc
         ld      a, b
