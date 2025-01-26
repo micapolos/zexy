@@ -1,20 +1,20 @@
-        IFNDEF  SURFACE_LIB
-        DEFINE  SURFACE_LIB
+        ifndef  Surface_asm
+        define  Surface_asm
 
-        INCLUDE blit.asm
+        include blit.asm
 
-        STRUCT  Surface
-addr    DW
-width   DB      ; max = 128
-height  DB
-        ENDS
+        struct  Surface
+addr    dw
+width   db      ; max = 128
+height  db
+        ends
 
-        MODULE  Surface
+        module  Surface
 
-        MACRO   Surface_GetWidthHeight idx, hi, lo
+        macro   Surface_GetWidthHeight idx, hi, lo
         ld      hi, (idx + Surface.width)
         ld      lo, (idx + Surface.height)
-        ENDM
+        endm
 
 ; Input:
 ;   ix - Surface*
@@ -150,6 +150,6 @@ XCopyRect:
         pop     ix
         ret
 
-        ENDMODULE
+        endmodule
 
-        ENDIF   SURFACE_LIB
+        endif

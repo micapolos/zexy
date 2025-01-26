@@ -1,7 +1,7 @@
-        IFNDEF  PALETTE_LIB
-        DEFINE  PALETTE_LIB
+        ifndef  Palette_asm
+        define  Palette_asm
 
-        MODULE  Palette
+        module  Palette
 
 ; Input:
 ;   HL - palette addr
@@ -80,6 +80,6 @@ CopyColor
 
         ret
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

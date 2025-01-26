@@ -1,7 +1,7 @@
-        IFNDEF  TILEDEF_LIB
-        DEFINE  TILEDEF_LIB
+        ifndef  Tiledef_asm
+        define  Tiledef_asm
 
-        MODULE  Tiledef
+        module  Tiledef
 
 ; Input:
 ;   HL = tiledef ptr
@@ -63,6 +63,6 @@ ConvertBit
         pop     af
         ret
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

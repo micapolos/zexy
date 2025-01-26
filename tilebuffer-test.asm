@@ -1,4 +1,4 @@
-        INCLUDE tilebuffer.asm
+        include tilebuffer.asm
 
 tilebuffer        Tilebuffer { $4000, { 32, 80 }, 0 }
 subTilebuffer     Tilebuffer

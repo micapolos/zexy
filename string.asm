@@ -1,11 +1,11 @@
-        IFNDEF  String_asm
-        DEFINE  String_asm
+        ifndef  String_asm
+        define  String_asm
 
-        MODULE  String
+        module  String
 
 ; Input
 ;   HL - string addr
-;   IY - callback with each byte in A
+;   iy - callback with each byte in A
 ; Output
 ;   HL - advanced string addr
 ForEach
@@ -16,11 +16,11 @@ ForEach
         ret     z
         push    hl
         push    .continue
-        jp      (IY)
+        jp      (iy)
 .continue
         pop     hl
         jp      .loop
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

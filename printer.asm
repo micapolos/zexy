@@ -1,29 +1,29 @@
-        IFNDEF  PRINTER_LIB
-        DEFINE  PRINTER_LIB
+        ifndef  Printer_asm
+        define  Printer_asm
 
-        INCLUDE blit.asm
-        INCLUDE surface.asm
+        include blit.asm
+        include surface.asm
 
-        STRUCT  Printer
-surfacePtr      DW                      ; TODO: Should we inline the surface?
-row             DB      0
-col             DB      0
-attr            DB      %11100010       ; bright white on black
-state           DB      0
-addr            DW      0               ; address at row / col
-        ENDS
+        struct  Printer
+surfacePtr      dw                      ; TODO: Should we inline the surface?
+row             db      0
+col             db      0
+attr            db      %11100010       ; bright white on black
+state           db      0
+addr            dw      0               ; address at row / col
+        ends
 
-        MODULE  Printer
+        module  Printer
 
 ; Input:
 ;   ix - printer ptr
 Init
         jp      UpdateAddr
 
-        MACRO   Printer_GetSurfacePtr idx, hi, lo
+        macro   Printer_GetSurfacePtr idx, hi, lo
         ld      lo, (idx + surfacePtr)
         ld      hi, (idx + surfacePtr + 1)
-        ENDM
+        endm
 
 ; Input:
 ;   ix - Printer ptr
@@ -132,7 +132,7 @@ Put
         ret
 
 ; Input
-;   IX - Printer ptr
+;   ix - Printer ptr
 Advance
         call    GetWidthHeight
 
@@ -172,7 +172,7 @@ NewLine
         jp      UpdateAddr
 
 ; Input
-;   IX - Printer ptr
+;   ix - Printer ptr
 ScrollUp
         push    ix
 
@@ -200,5 +200,5 @@ ScrollUp
         pop     ix
         ret
 
-        ENDMODULE
-        ENDIF
+        endmodule
+        endif

@@ -1,21 +1,21 @@
-        IFNDEF  Base_asm
-        DEFINE  Base_asm
+        ifndef  Base_asm
+        define  Base_asm
 
-        MODULE  Base
+        module  Base
 
 ; Input:
 ;   B - count
-;   IY - callback
+;   iy - callback
 Repeat:
 .loop
         push    bc
         push    .continue
-        jp      (IY)
+        jp      (iy)
 .continue
         pop     bc
         djnz    .loop
         ret
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

@@ -1,17 +1,17 @@
-        IFNDEF  COLOR_LIB
-        DEFINE  COLOR_LIB
+        ifndef  Color_asm
+        define  Color_asm
 
-        MODULE  Color
+        module  Color
 
-        MACRO   RGB_333 r, g, b
-        DB      (r << 5) | (g << 2) | (b >> 1)
-        DB      b & 1
-        ENDM
+        macro   RGB_333 r, g, b
+        db      (r << 5) | (g << 2) | (b >> 1)
+        db      b & 1
+        endm
 
-        MACRO   RGB_332 r, g, b
-        DB      (r << 5) | (g << 2) | b
-        ENDM
+        macro   RGB_332 r, g, b
+        db      (r << 5) | (g << 2) | b
+        endm
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

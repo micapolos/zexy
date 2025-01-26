@@ -1,6 +1,6 @@
-        DEVICE ZXSPECTRUMNEXT
+        device ZXSPECTRUMNEXT
 
-        ORG $c000
+        org $c000
 
         include mem.asm
         include assert.asm

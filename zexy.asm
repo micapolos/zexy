@@ -1,17 +1,17 @@
-        DEVICE ZXSPECTRUMNEXT
+        device ZXSPECTRUMNEXT
 
-CHAR_COUNT  EQU   96
+CHAR_COUNT  equ   96
 
-        ORG $c000
+        org $c000
 
-        INCLUDE blit.asm
-        INCLUDE surface.asm
-        INCLUDE palette.asm
-        INCLUDE color.asm
-        INCLUDE raster.asm
-        INCLUDE printer.asm
-        INCLUDE string.asm
-        INCLUDE tilebuffer.asm
+        include blit.asm
+        include surface.asm
+        include palette.asm
+        include color.asm
+        include raster.asm
+        include printer.asm
+        include string.asm
+        include tilebuffer.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
@@ -128,28 +128,28 @@ InitTilemapPalette:
         call    Palette.Load9Bit
         ret
 
-        ORG $4000
+        org $4000
 
 tileMap:
         ds      80 * 32 * 2
 
 tileDefs:
-        INCLUDE topaz-8.asm
+        include topaz-8.asm
         ds      96 * 32
 
         MMU     4, 34
-        ORG     $8000
+        org     $8000
 
 tilemapPalette:
         ds      256 * 2
 
 fontBitmap:
-        INCLUDE topaz-8.asm
+        include topaz-8.asm
 
 backTileMap:
         DUP   CHAR_COUNT, i
-        DB    (i % CHAR_COUNT) & $ff
-        DB    %11100010 | (((i % CHAR_COUNT) & $100) >> 8)
+        db    (i % CHAR_COUNT) & $ff
+        db    %11100010 | (((i % CHAR_COUNT) & $100) >> 8)
         EDUP
 
 textPalette

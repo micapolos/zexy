@@ -1,9 +1,9 @@
-        IFNDEF  RASTER_LIB
-        DEFINE  RASTER_LIB
+        ifndef  Raster_asm
+        define  Raster_asm
 
-        INCLUDE nextreg.asm
+        include nextreg.asm
 
-        MODULE  Raster
+        module  Raster
 
 ; Output:
 ;   HL - current raster line (0..311)
@@ -54,5 +54,5 @@ FrameWait
         pop     de
         ret
 
-        ENDMODULE
-        ENDIF
+        endmodule
+        endif

@@ -1,7 +1,7 @@
-        IFNDEF  BLIT_LIB
-        DEFINE  BLIT_LIB
+        ifndef  BLIT_LIB
+        define  BLIT_LIB
 
-        MODULE  Blit
+        module  Blit
 
 ; Input:
 ;   hl - addr
@@ -39,13 +39,13 @@ FillRect16:
 
         ret
 
-        MACRO   MAKE_COPY_RECT_8  name, ldi_instr, add_instr
+        macro   MakeCopyRect8  name, ldi_instr, add_instr
 ; Input:
 ;   HL - src start
 ;   DE - dst start
 ;   BC - width / height
-;   IXh - src stride
-;   IXl - dst stride
+;   ixh - src stride
+;   ixl - dst stride
 ; Output:
 ;   HL - src end
 ;   DE - dst end
@@ -72,17 +72,17 @@ name
 
         pop     af
         ret
-        ENDM
+        endm
 
-        MAKE_COPY_RECT_8 CopyRect8Inc, ldi, add
-        MAKE_COPY_RECT_8 CopyRect8Dec, ldd, sub
+        MakeCopyRect8 CopyRect8Inc, ldi, add
+        MakeCopyRect8 CopyRect8Dec, ldd, sub
 
 ; Input:
 ;   HL - src start
 ;   DE - dst start
 ;   BC - width / height
-;   IXh - src stride
-;   IXl - dst stride
+;   ixh - src stride
+;   ixl - dst stride
 ;   FC - 0 = inc, 1 = dec
 ; Output:
 ;   HL - src end
@@ -92,6 +92,6 @@ CopyRect8
         jp      nc, CopyRect8Inc
         jp      CopyRect8Dec
 
-        ENDMODULE
+        endmodule
 
-        ENDIF
+        endif

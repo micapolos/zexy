@@ -1,17 +1,18 @@
-        IFNDEF  NEXTREG_LIB
-        DEFINE  NEXTREG_LIB
-        MODULE  NextReg
+        ifndef  NextReg_asm
+        define  NextReg_asm
 
-CPU_SPEED               EQU     $07
-TILEMAP_OFFSET_Y        EQU     $31
-MMU_0                   EQU     $50
-MMU_1                   EQU     $51
-MMU_2                   EQU     $52
-MMU_3                   EQU     $53
-MMU_4                   EQU     $54
-MMU_5                   EQU     $55
-MMU_6                   EQU     $56
-MMU_7                   EQU     $57
+        module  NextReg
+
+CPU_SPEED               equ     $07
+TILEMAP_OFFSET_Y        equ     $31
+MMU_0                   equ     $50
+MMU_1                   equ     $51
+MMU_2                   equ     $52
+MMU_3                   equ     $53
+MMU_4                   equ     $54
+MMU_5                   equ     $55
+MMU_6                   equ     $56
+MMU_7                   equ     $57
 
 ; Input:
 ;   A - register
@@ -26,5 +27,6 @@ Read:
         pop     bc
         ret
 
-        ENDMODULE
-        ENDIF
+        endmodule
+
+        endif
