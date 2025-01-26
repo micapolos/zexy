@@ -51,13 +51,26 @@ main:
         call    Surface.XCopyRect
 
         ld      ix, screenPrinter
-        ld      (ix + Printer.row), 30
-        ld      (ix + Printer.col), 0
+        ld      (ix + Printer.row), 1
+        ld      (ix + Printer.col), 2
         ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
         call    Printer.Init
 
-        ld      a, 'F'
-        call    Printer.PutChar
+        ld      a, 'H'
+        call    Printer.Put
+        ld      a, 'e'
+        call    Printer.Put
+        ld      a, 'l'
+        call    Printer.Put
+        ld      a, 'l'
+        call    Printer.Put
+        ld      a, 'o'
+        call    Printer.Put
+        ld      a, '!'
+        call    Printer.Put
+
+        ld      hl, $001e
+        call    Printer.MoveTo
 
 .loop:
         ; Increment counter
