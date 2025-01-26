@@ -10,10 +10,12 @@ CHAR_COUNT  EQU   96
         INCLUDE color.asm
         INCLUDE raster.asm
         INCLUDE printer.asm
+        INCLUDE string.asm
 
 screenSurface   Surface { tileMap, 80, 32 }
 backSurface     Surface { backTileMap, 32, 3 }
 screenPrinter   Printer { screenSurface }
+helloText       dz      "Hello, my friend. How are you doing? I hope you're fine."
 
 cnt8            db      0
 scrollY         db      0
@@ -56,18 +58,9 @@ main:
         ld      (ix + Printer.attr), %00011010  ; bright inverse yellow
         call    Printer.Init
 
-        ld      a, 'H'
-        call    Printer.Put
-        ld      a, 'e'
-        call    Printer.Put
-        ld      a, 'l'
-        call    Printer.Put
-        ld      a, 'l'
-        call    Printer.Put
-        ld      a, 'o'
-        call    Printer.Put
-        ld      a, '!'
-        call    Printer.Put
+        ld      de, helloText
+        ld      hl, Printer.Put
+        call    String.ForEach
 
         ld      hl, $001e
         call    Printer.MoveTo
