@@ -19,7 +19,8 @@ screenPrinter   Printer { screenSurface }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
 screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }
-subframeTilebuffer      Tilebuffer
+windowTilebuffer        Tilebuffer { tileMap + $40*2 , { 2, 8 }, 72 }
+subTilebuffer           Tilebuffer
 
 cnt8            db      0
 scrollY         db      0
@@ -39,17 +40,25 @@ zexy:
 
         call    InitTilemapPalette
 
-        ld      ix, screenSurface
-        ld      hl, $0000       ; col / row
-        ld      bc, $5020       ; width / height
+        ld      ix, screenTilebuffer
         ld      de, $200e       ; color / value
-        call    Surface.FillRect
+        call    Tilebuffer.Fill
 
-        ld      hl, $1008       ; col / row
-        ld      bc, $2008       ; width / height
-        ld      de, $1203       ; color / value
-        call    Surface.FillRect
+        ld      ix, windowTilebuffer
+        ld      de, $400f
+        call    Tilebuffer.Fill
 
+        ld      ix, screenTilebuffer
+        ld      iy, subTilebuffer
+        ld      de, $4003
+        ld      bc, $0802
+        call    Tilebuffer.LoadSubFrame
+
+        ld      ix, subTilebuffer
+        ld      de, $3010
+        ;call    Tilebuffer.Fill
+
+        ld      ix, screenSurface
         ld      iy, backSurface
         ld      hl, $0402       ; dst col / row
         ld      de, $0000       ; src col / row
@@ -68,6 +77,13 @@ zexy:
 
         ld      hl, $001e
         call    Printer.MoveTo
+
+        ld      ix, screenTilebuffer
+        ld      de, $4f02
+        call    Tilebuffer.CoordAddr
+        ld      (hl), 'A' - $20
+        inc     hl
+        ld      (hl), %11100010
 
 .loop:
         ; Increment counter

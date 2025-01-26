@@ -10,6 +10,42 @@ size    Size
 stride  db
         ends
 
+        module  Tilebuffer
+
+; Input
+;   ix - Tilebuffer ptr
+;   de - tile
+Fill
+        ; hl = addr
+        ld      l, (ix + Tilebuffer.addr)
+        ld      h, (ix + Tilebuffer.addr + 1)
+
+        ; c = stride * 2
+        ld      c, (ix + Tilebuffer.stride)
+        rlc     c
+
+        ; b = height
+        ld      b, (ix + Tilebuffer.size.height)
+.rowLoop
+        push    bc
+
+        ; b = width * 2
+        ld      b, (ix + Tilebuffer.size.width)
+.tileLoop
+        ld      (hl), e
+        inc     hl
+        ld      (hl), d
+        inc     hl
+        djnz    .tileLoop
+
+        ; hl += stride * 2
+        ld      a, c
+        add     hl, a
+
+        pop     bc
+        djnz    .rowLoop
+        ret
+
 ; Input:
 ;   ix - Tilebuffer ptr
 ;   de - Coord
@@ -34,8 +70,6 @@ CoordAddr
         mul     d, e
         add     hl, de
         ret
-
-        module  Tilebuffer
 
 ; Input:
 ;   ix - src Tilebuffer ptr
