@@ -41,27 +41,27 @@ zexy:
         call    InitTilemapPalette
 
         ld      ix, screenTilebuffer
-        ld      de, $200e       ; color / value
+        ld      de, $200e       ; attr / char
         call    Tilebuffer.Fill
 
         ld      ix, windowTilebuffer
-        ld      de, $4010
+        ld      de, $4010       ; col / row
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
-        ld      de, $4103  ;  col / row
-        ld      bc, $0602  ;  width / height
-        ld      hl, $7011  ;  attr / char
+        ld      de, $4103       ; col / row
+        ld      bc, $0602       ; width / height
+        ld      hl, $7011       ; attr / char
         call    Tilebuffer.FillRect
 
         ld      ix, screenTilebuffer
         ld      iy, subTilebuffer
-        ld      de, $4206
-        ld      bc, $0402
+        ld      de, $4206       ; col / row
+        ld      bc, $0402       ; width / height
         call    Tilebuffer.LoadSubFrame
 
         ld      ix, subTilebuffer
-        ld      de, $3012
+        ld      de, $3012       ; col / row
         call    Tilebuffer.Fill
 
         ld      ix, screenSurface
