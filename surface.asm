@@ -17,15 +17,6 @@ height  DB
         ENDM
 
 ; Input:
-;   IX - Surface ptr
-; Output:
-;   HL - width / height
-GetWidthHeight
-        ld      h, (ix + Surface.width)
-        ld      l, (ix + Surface.height)
-        ret
-
-; Input:
 ;   ix - Surface*
 ;   hl - col / row
 ; Output:
