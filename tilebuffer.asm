@@ -27,6 +27,22 @@ Fill
 
         jp      Blit.FillRect16
 
+; Input
+;   ix - Tilebuffer ptr
+;   de - col / row
+;   bc - width / height
+;   hl - attr / char
+FillRect
+        push    hl
+        call    CoordAddr
+        pop     de
+
+        ld      a, (ix + Tilebuffer.stride)
+        add     (ix + Tilebuffer.size.width)
+        sub     b
+
+        jp      Blit.FillRect16
+
 ; Input:
 ;   ix - Tilebuffer ptr
 ;   de - Coord

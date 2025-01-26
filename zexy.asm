@@ -45,17 +45,23 @@ zexy:
         call    Tilebuffer.Fill
 
         ld      ix, windowTilebuffer
-        ld      de, $400f
+        ld      de, $4010
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
+        ld      de, $4103  ;  col / row
+        ld      bc, $0602  ;  width / height
+        ld      hl, $7011  ;  attr / char
+        call    Tilebuffer.FillRect
+
+        ld      ix, screenTilebuffer
         ld      iy, subTilebuffer
-        ld      de, $4003
-        ld      bc, $0803
+        ld      de, $4206
+        ld      bc, $0402
         call    Tilebuffer.LoadSubFrame
 
         ld      ix, subTilebuffer
-        ld      de, $3010
+        ld      de, $3012
         call    Tilebuffer.Fill
 
         ld      ix, screenSurface
