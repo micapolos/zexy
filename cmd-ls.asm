@@ -9,7 +9,7 @@ errorString             dz      "Error opening directory\n"
 okString                dz      "Directory opened\n"
 dirEmptyString          dz      "Directory empty\n"
 dirEntryErrorString     dz      "Error reading directory entry\n"
-dirString           dz      "c:/apps"
+dirString               dz      "c:/apps"
 wildcardString          dz      "*"
 dirBuffer               ds      256
 
@@ -18,7 +18,7 @@ Exec
 
         ; open dir, A = dir handle
         ld      a, '*'
-        ld      ix, homeDirString
+        ld      ix, dirString
         ld      bc, $0000
         ld      de, wildcardString
         rst     $08
