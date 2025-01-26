@@ -5,7 +5,6 @@ CHAR_COUNT  equ   96
         org $8000
 
         include blit.asm
-        include surface.asm
         include palette.asm
         include color.asm
         include raster.asm
@@ -17,8 +16,7 @@ CHAR_COUNT  equ   96
         include cmd/ls.asm
         include cmd/pwd.asm
 
-screenSurface   Surface { tileMap, 80, 32 }
-screenPrinter   Printer { screenSurface }
+screenPrinter   Printer { { tileMap, 80, 32 }  }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
 screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }

@@ -6,29 +6,12 @@
         include coord.asm
 
         struct  Printer
-surfacePtr      dw
+surface         Surface
 cursor          Coord   0, 0
 attr            db      %11100010       ; bright white on black
         ends
 
         module  Printer
-
-        macro   Printer_GetSurfacePtr idx, hi, lo
-        ld      lo, (idx + surfacePtr)
-        ld      hi, (idx + surfacePtr + 1)
-        endm
-
-; Input:
-;   ix - Printer ptr
-; Output:
-;   hl - width / height
-GetWidthHeight
-        push    ix
-        Printer_GetSurfacePtr    ix, h, l
-        ld      ix, hl
-        Surface_GetWidthHeight   ix, h, l
-        pop ix
-        ret
 
 ; Input:
 ;   ix - Printer ptr
@@ -43,19 +26,9 @@ MoveTo
 ; Output:
 ;   hl - addr
 @GetCursorAddr
-        push    ix                      ; printer ptr
-
         ld      l, (ix + Printer.cursor.row)
         ld      h, (ix + Printer.cursor.col)
-        push    hl                      ; col / row
-
-        Printer_GetSurfacePtr    ix, h, l
-        ld      ix, hl
-
-        Surface_GetWidthHeight   ix, h, l
-        pop     hl                      ; col / row
         call    Surface.GetAddrAt       ; hl = addr
-        pop     ix                      ; printer ptr
 
         ret
 
@@ -161,7 +134,8 @@ Put
 ; Input
 ;   ix - Printer ptr
 Advance
-        call    GetWidthHeight
+        ld      h, (ix + Printer.surface.width)
+        ld      l, (ix + Printer.surface.height)
 
         ld      a, (ix + Printer.cursor.col)
         inc     a
@@ -185,7 +159,9 @@ Advance
 ; Input:
 ;   ix - printer ptr
 NewLine
-        call    GetWidthHeight         ; hl
+        ld      h, (ix + Printer.surface.width)
+        ld      l, (ix + Printer.surface.height)
+
         ld      (ix + Printer.cursor.col), 0
         ld      a, (ix + Printer.cursor.row)
         inc     a
@@ -201,12 +177,8 @@ NewLine
 ; Input
 ;   ix - Printer ptr
 ScrollUp
-        push    ix
-
-        Printer_GetSurfacePtr    ix, h, l
-        ld      ix, hl
-
-        Surface_GetWidthHeight   ix, b, c
+        ld      b, (ix + Printer.surface.width)
+        ld      c, (ix + Printer.surface.height)
         dec     c
         jp      z, .clearBottomLine
 
@@ -224,7 +196,6 @@ ScrollUp
         ld      de, 0
         call    Surface.FillRect
 
-        pop     ix
         ret
 
         endmodule
