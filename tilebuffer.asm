@@ -107,8 +107,6 @@ ScrollUp
 ; Input
 ;   ix - Tilebuffer ptr
 @MoveUp
-        push    ix
-
         ld      e, (ix + Tilebuffer.addr)
         ld      d, (ix + Tilebuffer.addr + 1)
 
@@ -124,12 +122,7 @@ ScrollUp
 
         ld      a, (ix + Tilebuffer.stride)
         rlca
-        ld      ixh, a
-        ld      ixl, a
-        call    Blit.CopyRect8
-
-        pop     ix
-        ret
+        jp      Blit.CopyRect8
 
 ; Input
 ;   ix - Tilebuffer ptr

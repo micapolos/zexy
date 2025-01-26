@@ -64,8 +64,6 @@ FillRect:
 ;   de - dst col, row
 ;   bc - width, height
 CopyRect:
-        push    ix
-
         ; hl = src addr
         ; de = dst addr
         push    bc
@@ -91,12 +89,8 @@ CopyRect:
         ld      a, (ix + Surface.width)
         rlca
         sub     b
-        ld      ixl, a
-        ld      ixh, a
 
-        call    Blit.CopyRect8
-        pop     ix
-        ret
+        jp      Blit.CopyRect8
 
 ; Input:
 ;   ix - dst Surface*
@@ -105,8 +99,6 @@ CopyRect:
 ;   de - src col, row
 ;   bc - width, height
 XCopyRect:
-        push    ix
-
         ; bc = blit width / height
         rlc     b
 
@@ -121,8 +113,6 @@ XCopyRect:
         ld      a, (ix + Surface.width)
         rlca
         sub     b
-        ld      ixl, a
-        push    ix
 
         ; de = src address
         ld      ix, iy
@@ -137,13 +127,8 @@ XCopyRect:
         ld      a, (ix + Surface.width)
         rlca
         sub     b
-        pop     ix
-        ld      ixh, a
 
-        call    Blit.CopyRect8
-
-        pop     ix
-        ret
+        jp      Blit.CopyRect8
 
         endmodule
 

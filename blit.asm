@@ -31,22 +31,19 @@ FillRect16:
 ;   hl - src start
 ;   de - dst start
 ;   bc - width / height
-;   ixh - src stride
-;   ixl - dst stride
+;   a - stride
 CopyRect8
 .nextRow
         push    bc
-        ld      a, b
 .nextCell
-        ldi
-        inc     bc
-        djnz    .nextCell
+        dec     b
+        ld      c, b
+        ld      b, 0
+        inc     c
+        ldir
         pop     bc
-        ld      b, a
 
-        ld      a, ixh
         add     hl, a
-        ld      a, ixl
         add     de, a
 
         dec     c
