@@ -27,14 +27,13 @@ FillRect16:
 
         ret
 
-        macro   MakeCopyRect8  name, ldi_instr, add_instr
 ; Input:
 ;   hl - src start
 ;   de - dst start
 ;   bc - width / height
 ;   ixh - src stride
 ;   ixl - dst stride
-name
+CopyRect8Inc
 .nextRow
         push    bc
         ld      a, b
@@ -54,10 +53,6 @@ name
         jp      nz, .nextRow
 
         ret
-        endm
-
-        MakeCopyRect8 CopyRect8Inc, ldi, add
-        MakeCopyRect8 CopyRect8Dec, ldd, sub
 
         endmodule
 
