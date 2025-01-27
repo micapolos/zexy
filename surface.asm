@@ -12,11 +12,25 @@ height  db
         module  Surface
 
 ; Input:
-;   ix - Surface*
+;   ix - Surface ptr
+;   hl - col / row
+;   de - attr / value
+Set
+        push    de
+        call    GetAddrAt
+        pop     de
+
+        ld      (hl), e
+        inc     hl
+        ld      (hl), d
+        ret
+
+; Input:
+;   ix - Surface ptr
 ;   hl - col / row
 ; Output:
 ;   hl - addr
-GetAddrAt:
+GetAddrAt
         ; bc = col / row
         ld      bc, hl
 
@@ -44,7 +58,7 @@ GetAddrAt:
 ;   hl - col, row
 ;   bc - width, height
 ;   de - value
-FillRect:
+FillRect
         ; hl = addr
         push    bc
         push    de
@@ -63,7 +77,7 @@ FillRect:
 ;   hl - src col, row
 ;   de - dst col, row
 ;   bc - width, height
-CopyRect:
+CopyRect
         ; hl = src addr
         ; de = dst addr
         push    bc

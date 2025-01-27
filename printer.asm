@@ -23,17 +23,6 @@ MoveTo
 
 ; Input:
 ;   ix - Printer ptr
-; Output:
-;   hl - addr
-@GetCursorAddr
-        ld      l, (ix + Printer.cursor.row)
-        ld      h, (ix + Printer.cursor.col)
-        call    Surface.GetAddrAt       ; hl = addr
-
-        ret
-
-; Input:
-;   ix - Printer ptr
 PushCursor
         pop     hl
         ld      d, (ix + Printer.cursor.col)
@@ -82,16 +71,13 @@ Put
         jp      (hl)
 
 .char
-        push    af
-        call    GetCursorAddr
-        pop     af
+        ld      l, (ix + Printer.cursor.row)
+        ld      h, (ix + Printer.cursor.col)
 
         sub     $20
-        ld      (hl), a
-        inc     hl
-
-        ld      a, (ix + Printer.attr)
-        ld      (hl), a
+        ld      e, a
+        ld      d, (ix + Printer.attr)
+        call    Surface.Set
 
         jp      Advance
 
