@@ -1,4 +1,4 @@
-# zexy
+# Zexy - ZX Spectrum Next goodies
 
 ## Calling convention
 
