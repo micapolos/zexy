@@ -65,8 +65,10 @@ zexy:
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
-        ld      hl, $8013       ; clear attr / value
-        call    Tilebuffer.ScrollUp
+        ld      hl, $0001
+        ld      de, $0000
+        ld      bc, $501f
+        call    Tilebuffer.CopyRectInc
 
         ld      ix, screenPrinter
         ld      (ix + Printer.cursor.row), 1

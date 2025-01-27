@@ -92,44 +92,6 @@ CopyRect:
 
         jp      Blit.CopyRect8Inc
 
-; Input:
-;   ix - dst Surface*
-;   iy - src Surface*
-;   hl - dst col, row
-;   de - src col, row
-;   bc - width, height
-XCopyRect:
-        ; bc = blit width / height
-        rlc     b
-
-        ; hl = dst addr
-        push    bc
-        push    de
-        call    GetAddrAt
-        pop     de
-        pop     bc
-
-        ; ixl = dst stride
-        ld      a, (ix + Surface.width)
-        rlca
-        sub     b
-
-        ; de = src address
-        ld      ix, iy
-        ex      de, hl
-        push    bc
-        push    de
-        call    GetAddrAt
-        pop     de
-        pop     bc
-
-        ; ixh = src stride
-        ld      a, (ix + Surface.width)
-        rlca
-        sub     b
-
-        jp      Blit.CopyRect8Inc
-
         endmodule
 
         endif

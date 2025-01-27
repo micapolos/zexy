@@ -167,41 +167,6 @@ CopyRectDec
 
         jp      nc, Blit.CopyRect8Dec
 
-; TODO: Replace with CopyRect
-; Input
-;   ix - Tilebuffer ptr
-;   hl - attr / value
-ScrollUp
-        push    hl
-        call    MoveUp
-        pop     hl
-
-        jp      FillBottomRow
-
-; Input
-;   ix - Tilebuffer ptr
-@MoveUp
-        ld      hl, $0001       ; src col / row
-        ld      de, $0000       ; dst col / row
-        ld      b, (ix + Tilebuffer.size.width)
-        ld      c, (ix + Tilebuffer.size.height)
-        dec     c
-        ret
-        jp      CopyRectInc
-
-; Input
-;   ix - Tilebuffer ptr
-;   hl - attr / value
-@FillBottomRow
-        ld      d, 0
-        ld      e, (ix + Tilebuffer.size.height)
-        dec     e
-
-        ld      b, (ix + Tilebuffer.size.width)
-        ld      c, 1
-
-        jp      FillRect
-
         endmodule
 
         endif
