@@ -274,7 +274,7 @@ StatFile
         pop     ix
         ret
 
-.filename               dz      "c:/tbblue.fw"
+.filename               dz      "/zexy.asm"
 .fileHandle             db      0
 .openingString          dz      "Opening file: "
 .openErrorString        dz      "Could not open."
@@ -302,9 +302,6 @@ tileDefs:
 
 tilemapPalette:
         ds      256 * 2
-
-fontBitmap:
-        include topaz-8.asm
 
 textPalette
         ; normal palette
