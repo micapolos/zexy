@@ -18,7 +18,7 @@
 ./run test
 ```
 
-## Cleaning all
+## Cleaning
 
 ```
 ./clean
