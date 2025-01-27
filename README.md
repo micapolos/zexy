@@ -12,6 +12,12 @@
 ./run zexy
 ```
 
+## Testing
+
+```
+./run test
+```
+
 ## Cleaning all
 
 ```
