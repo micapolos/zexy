@@ -13,11 +13,12 @@
         include put.asm
         include cmd/ls.asm
         include cmd/pwd.asm
+        include cmd/cat.asm
 
 screenTilebuffer
 screenPrinter   Printer { { tileMap, { 32, 80 }, 0 } }
-leftPrinter     Printer { { tileMap, { 32, 39 }, 41 } }
-rightPrinter    Printer { { tileMap + 80, { 32, 40 }, 40 } }
+leftPrinter     Printer { { tileMap, { 32, 29 }, 51 } }
+rightPrinter    Printer { { tileMap + 30 * 2, { 32, 50 }, 30 } }
 
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
@@ -106,6 +107,13 @@ zexy:
         call    Printer.MoveTo
         call    CmdLs.Exec
         call    StatFile
+
+        ld      hl, cattingString
+        call    Printer.Print
+        ld      hl, catFilename
+        call    Printer.Println
+        ld      hl, catFilename
+        ;call    CmdCat.Exec
 
         ld      ix, leftPrinter
         ld      hl, $001e
@@ -329,7 +337,8 @@ StatFile
 .okString               dz      "OK"
 .stat                   ds      11
 
-
+cattingString           dz      "Printing content of: "
+catFilename             dz      "zexy.asm"
 
 ; =============================================================================
 

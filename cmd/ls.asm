@@ -3,7 +3,6 @@
 
         include string.asm
         include printer.asm
-        include raster.asm   ; TODO: Remove
 
         module  CmdLs
 
@@ -60,11 +59,6 @@ Exec
         pop     hl
         call    Printer.Println
 
-        ; TODO: Remove
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-        call    Raster.FrameWait
-
         jp      .loop
 
 .dirDone
@@ -98,7 +92,7 @@ Exec
 .okString               dz      "Directory opened\n"
 .dirEmptyString         dz      "Directory empty\n"
 .dirEntryErrorString    dz      "Error reading directory entry\n"
-.dirString              dz      "/cmd"
+.dirString              dz      "/"
 .fileCountString        dz      "File count: "
 .dirCountString         dz      "Directory count: "
 .dirEntryString         dz      "<DIR> "
