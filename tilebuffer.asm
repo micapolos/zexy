@@ -100,16 +100,19 @@ LoadSubFrame
 ;   bc - width / height
 ;   de - dst col / row
 CopyRect:
-        ; compare src / dst col / row
-        push    hl
-        or      a       ; FC=0
-        sbc     hl, de
-        pop     hl
-
-        ret     z
+        ; compare rows
+        ld      a, l
+        cp      e
         jp      c, CopyRectDec
+        jp      nz, CopyRectInc
 
-        ; fallthrough to CopyRectInc
+        ; compare cols
+        ld      a, h
+        cp      d
+        jp      c, CopyRectDec
+        jp      nz, CopyRectInc
+
+        ret
 
 ; Input:
 ;   ix - Tilebuffer ptr
