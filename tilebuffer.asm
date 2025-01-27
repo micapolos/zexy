@@ -122,7 +122,7 @@ ScrollUp
 
         ld      a, (ix + Tilebuffer.stride)
         rlca
-        jp      Blit.CopyRect8
+        jp      Blit.CopyRect8Inc
 
 ; Input
 ;   ix - Tilebuffer ptr

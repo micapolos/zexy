@@ -90,7 +90,7 @@ CopyRect:
         rlca
         sub     b
 
-        jp      Blit.CopyRect8
+        jp      Blit.CopyRect8Inc
 
 ; Input:
 ;   ix - dst Surface*
@@ -128,7 +128,7 @@ XCopyRect:
         rlca
         sub     b
 
-        jp      Blit.CopyRect8
+        jp      Blit.CopyRect8Inc
 
         endmodule
 

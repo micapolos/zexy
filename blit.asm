@@ -32,7 +32,7 @@ FillRect16:
 ;   de - dst start
 ;   bc - width / height
 ;   a - stride
-CopyRect8
+CopyRect8Inc
 .nextRow
         push    bc
 .nextCell
@@ -41,11 +41,37 @@ CopyRect8
         ld      b, 0
         inc     c
         ldir
-        pop     bc
 
         add     hl, a
         add     de, a
 
+        pop     bc
+        dec     c
+        jp      nz, .nextRow
+
+        ret
+
+; Input:
+;   hl - src start
+;   de - dst start
+;   bc - width / height
+;   a - stride
+CopyRect8Dec
+.nextRow
+        push    bc
+.nextCell
+        dec     b
+        ld      c, b
+        ld      b, 0
+        inc     c
+        lddr
+        ; at this point, BC = 0
+
+        ld      c, a
+        sub     hl, bc
+        sub     de, bc
+
+        pop     bc
         dec     c
         jp      nz, .nextRow
 
