@@ -72,6 +72,42 @@ Println
         ld      a, $0a
         jp      Put
 
+; Input
+;   ix - Printer ptr
+;   a - value
+PrintHex4
+        cp      10
+        jp      c, .digit
+        add     'A' - '9' + 1
+.digit
+        add     '0'
+        jp      Put
+
+; Input
+;   ix - Printer ptr
+;   a - value
+PrintHex8
+        push    af
+        swapnib
+        and     $0f
+        call    PrintHex4
+        pop     af
+
+        and     $0f
+        jp      PrintHex4
+
+; Input
+;   ix - Printer ptr
+;   hl - value
+PrintHex16
+        push    hl
+        ld      a, h
+        call    PrintHex8
+        pop     hl
+
+        ld      a, l
+        jp      PrintHex8
+
 ; Input:
 ;   ix - Printer ptr
 ;   a - byte

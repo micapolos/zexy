@@ -2,59 +2,75 @@
         define  CmdLs_asm
 
         include string.asm
+        include printer.asm
+        include raster.asm   ; TODO: Remove
 
         module  CmdLs
 
-errorString             dz      "Error opening directory\n"
-okString                dz      "Directory opened\n"
-dirEmptyString          dz      "Directory empty\n"
-dirEntryErrorString     dz      "Error reading directory entry\n"
-dirString               dz      "c:/apps"
-wildcardString          dz      "*"
-dirBuffer               ds      256
-
+; Input
+;   ix - Printer ptr
 Exec
-        push    iy
-
         ; open dir, A = dir handle
-        ld      a, 0
-        ld      ix, dirString
-        ld      bc, $0000
-        ld      de, wildcardString
+        push    ix
+        ld      a, '$'          ; system dir
+        ld      ix, .dirString
+        ld      b, $01          ; ???
         rst     $08
         db      $a3
+        pop     ix
         jp      c, .error
+        ld      (.fileHandle), a
 
-        ld      ix, dirBuffer
+.loop
+        push    ix
+        ld      a, (.fileHandle)
+        ld      ix, .dirBuffer
         rst     $08
         db      $a4
+        pop     ix
         jp      c, .dirEntryError
 
         and     a
         jp      z, .dirEmpty
 
-        ld      hl, dirBuffer
-        jp      .print
+        ld      hl, .dirBuffer
+        push    hl
+
+        ld      a, (hl)
+        call    Printer.PrintHex8
+        ld      a, ' '
+        call    Printer.Put
+
+        pop     hl
+        inc     hl
+        call    Printer.Println
+
+        ; TODO: Remove
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+        call    Raster.FrameWait
+
+        jp      .loop
 
 .dirEntryError
-        ld      hl, dirEntryErrorString
-        jp      .print
+        ld      hl, .dirEntryErrorString
+        jp      Printer.Println
 
 .dirEmpty
-        ld      hl, dirEmptyString
-        jp      .print
+        ld      hl, .dirEmptyString
+        jp      Printer.Println
 
 .error
-        ld      hl, errorString
+        ld      hl, .errorString
+        jp      Printer.Println
 
-.print
-        ld      iy, $0010
-        call    String.ForEach
-        ld      a, $0a
-        rst     $10
-
-        pop     iy
-        ret
+.fileHandle             db      0
+.errorString            dz      "Error opening directory\n"
+.okString               dz      "Directory opened\n"
+.dirEmptyString         dz      "Directory empty\n"
+.dirEntryErrorString    dz      "Error reading directory entry\n"
+.dirString              dz      "/cmd"
+.dirBuffer              ds      260
 
         endmodule
 
