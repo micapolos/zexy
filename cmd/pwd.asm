@@ -2,6 +2,7 @@
         define  CmdPwd_asm
 
         include string.asm
+        include printer.asm
 
         module  CmdPwd
 
@@ -9,9 +10,9 @@ errorString             dz      "Error getting current directory\n"
 currentDirectoryString  dz      "Current directory: "
 dirBuffer               ds      256
 
+; Input:
+;   ix - printer ptr
 Exec
-        push    iy
-
         ; open dir, A = dir handle
         ld      a, '*'
         ld      ix, dirBuffer
@@ -20,27 +21,13 @@ Exec
         jp      c, .error
 
         ld      hl, currentDirectoryString
-        ld      iy, $0010
-        call    String.ForEach
+        call    Printer.Print
 
         ld      hl, dirBuffer
-        ld      iy, $0010
-        call    String.ForEach
-
-        ld      a, $0a
-        rst     $10
-        jp      .end
-
+        jp      Printer.Println
 .error
         ld      hl, errorString
-
-.print
-        ld      iy, $0010
-        call    String.ForEach
-
-.end
-        pop     iy
-        ret
+        jp      Printer.Println
 
         endmodule
 

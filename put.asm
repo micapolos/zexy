@@ -1,10 +1,13 @@
         ifndef Put_asm
         define Put_asm
 
+        include printer.asm
+
         module Put
 
 ; Input
-;   A - 2 digits
+;   ix - printer ptr
+;   a - 2 digits
 DigitsHiLo
         push    af
         call    DigitHi
@@ -12,17 +15,18 @@ DigitsHiLo
         jp      DigitLo
 
 ; Input
-;   A - digit in MSB 4 bits
+;   ix - printer ptr
+;   a - digit in MSB 4 bits
 DigitHi
         swapnib
 
 ; Input
-;   A - digit in LSB 4 bits
+;   ix - printer ptr
+;   a - digit in LSB 4 bits
 DigitLo
         and     $0f
         add     $30
-        rst     $10
-        ret
+        jp      Printer.Put
 
         endmodule
 

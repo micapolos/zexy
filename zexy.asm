@@ -16,6 +16,8 @@
 
 screenTilebuffer
 screenPrinter   Printer { { tileMap, { 32, 80 }, 0 } }
+leftPrinter     Printer { { tileMap, { 32, 40 }, 40 } }
+rightPrinter    Printer { { tileMap + 80, { 32, 40 }, 40 } }
 
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
@@ -94,13 +96,13 @@ zexy:
         ld      bc, $0803
         call    Tilebuffer.CopyRect
 
-        ld      ix, screenPrinter
-        ld      hl, $0010
+        ld      ix, rightPrinter
+        ld      hl, $0000
         call    Printer.MoveTo
         call    CmdLs.Exec
         call    StatFile
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      hl, $001e
         call    Printer.MoveTo
 
@@ -122,15 +124,16 @@ zexy:
         ld      (cnt8), a
 
         ; Print some char
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      a, (cnt8)
         add     $20
-        rst     $10
+        call    Printer.Put
 
+        ld      ix, rightPrinter
         call    Printer.PushCursor
         call    Printer.PushAttr
         ld      (ix + Printer.attr), %00011010
-        ld      hl, $4400
+        ld      hl, $1c00
         call    Printer.MoveTo
         call    PutDate
         call    Printer.PopAttr
@@ -167,10 +170,10 @@ PutOsVersion
         db      $88
 
         ld      a, b
-        rst     $10
+        call    Printer.Put
 
         ld      a, c
-        rst     $10
+        call    Printer.Put
 
         ld      a, d
         call    Put.DigitsHiLo
@@ -179,10 +182,10 @@ PutOsVersion
         call    Put.DigitsHiLo
 
         ld      a, l
-        rst     $10
+        call    Printer.Put
 
         ld      a, h
-        rst     $10
+        call    Printer.Put
 
         ret
 
@@ -212,11 +215,14 @@ PutDate
 
 StatFile
         push    ix
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
+        ld      hl, $000a
+        call    Printer.MoveTo
+
         ld      hl, .openingString
         call    Printer.Print
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      hl, .filename
         call    Printer.Println
 
@@ -226,7 +232,7 @@ StatFile
         jp      c, .getDriveError
         ld      (.drive), a
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      hl, .defaultDriveString
         call    Printer.Print
 
@@ -252,11 +258,11 @@ StatFile
         db      $a1  ; f_fstat
         jp      c, .statError
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      hl, .sizeString
         call    Printer.Print
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      a, (ix + 7)
         call    Printer.Put
         ld      a, (ix + 8)
@@ -272,7 +278,7 @@ StatFile
         db      $9b  ; f_close
         jp      c, .closeError
 
-        ld      ix, screenPrinter
+        ld      ix, leftPrinter
         ld      hl, .okString
         call    Printer.Println
         jp      .end
