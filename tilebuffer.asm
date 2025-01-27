@@ -16,6 +16,17 @@ stride  db
 
 ; Input
 ;   ix - Tilebuffer ptr
+;   de - col / row
+;   bc - attr / value
+Set
+        call    GetAddrAt
+        ld      (hl), c
+        inc     hl
+        ld      (hl), b
+        ret
+
+; Input
+;   ix - Tilebuffer ptr
 ;   de - attr / value
 Fill
         ld      l, (ix + Tilebuffer.addr)

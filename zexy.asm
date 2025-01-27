@@ -44,6 +44,11 @@ zexy:
         ld      de, $203f       ; dark blue underscore
         call    Tilebuffer.Fill
 
+        ld      ix, screenTilebuffer
+        ld      de, $2810       ; col / row (middle)
+        ld      bc, $e22f       ; attr / char (white O)
+        call    Tilebuffer.Set
+
         ld      ix, windowTilebuffer
         ld      de, $4010       ; col / row
         call    Tilebuffer.Fill
