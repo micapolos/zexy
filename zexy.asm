@@ -85,9 +85,9 @@ zexy:
         call    String.ForEach
 
         ld      ix, screenTilebuffer
-        ld      hl, $0002
-        ld      de, $0006
-        ld      bc, $1003
+        ld      hl, $0003
+        ld      de, $0807
+        ld      bc, $0803
         call    Tilebuffer.CopyRect
 
         ld      ix, screenPrinter

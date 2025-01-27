@@ -117,15 +117,14 @@ CopyRect:
 ;   bc - width / height
 ;   de - dst col / row
 CopyRectInc
-        push    de              ; dst col / row
-        call    GetAddrAt       ; hl = src addr
-
-        ex      de, hl          ; hl = src addr
-        pop     de              ; de = dst col / row
-        push    hl              ; src addr
-        ex      de, hl
+        push    hl              ; src col / row
         call    GetAddrAt       ; hl = dst addr
-        pop     hl              ; hl = src addr
+        ex      de, hl          ; de = dst addr
+        pop     hl              ; hl = src col / row
+        push    de              ; dst addr
+        ex      de, hl          ; de = src col / row
+        call    GetAddrAt       ; hl = src addr
+        pop     de              ; de = dst addr
 
         ld      a, (ix + Tilebuffer.stride)
         add     (ix + Tilebuffer.size.width)
@@ -142,18 +141,19 @@ CopyRectInc
 ;   bc - width / height
 ;   de - dst col / row
 CopyRectDec
-        ; FIXIT: It's not working
-        push    de              ; dst col / row
-        call    Frame.Swap
-        call    GetAddrAt       ; hl = src addr
-
-        ex      de, hl          ; hl = src addr
-        pop     de              ; de = dst col / row
-        push    hl              ; src addr
-        ex      de, hl
+        push    hl              ; src col / row
         call    Frame.Swap
         call    GetAddrAt       ; hl = dst addr
-        pop     hl              ; hl = src addr
+        ex      de, hl          ; de = dst addr
+        pop     hl              ; hl = src col / row
+        push    de              ; dst addr
+        ex      de, hl          ; de = src col / row
+        call    Frame.Swap
+        call    GetAddrAt       ; hl = src addr
+        pop     de              ; de = dst addr
+
+        inc     hl
+        inc     de
 
         ld      a, (ix + Tilebuffer.stride)
         add     (ix + Tilebuffer.size.width)
