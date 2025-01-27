@@ -83,8 +83,6 @@ zexy:
         call    Printer.NewLine
         call    Printer.NewLine
 
-        ;call    CmdPwd.Exec
-
         ld      ix, screenPrinter
         ld      hl, helloText
         ld      iy, Printer.Put
@@ -95,6 +93,11 @@ zexy:
         ld      de, $0107
         ld      bc, $0803
         call    Tilebuffer.CopyRect
+
+        ld      ix, screenPrinter
+        ld      hl, $0010
+        call    Printer.MoveTo
+        call    StatFile
 
         ld      ix, screenPrinter
         ld      hl, $001e
@@ -205,6 +208,82 @@ PutDate
         call    Put.DigitsHiLo
 
         ret
+
+StatFile
+        push    ix
+        ld      ix, screenPrinter
+        ld      hl, .openingString
+        call    Printer.Print
+
+        ld      ix, screenPrinter
+        ld      hl, .filename
+        call    Printer.Println
+
+        ld      a, '*'
+        ld      ix, .filename
+        ld      b, $01
+        rst     $08
+        db      $9a  ; f_open
+        jp      c, .openError
+        ld      (.fileHandle), a
+
+        ld      ix, .stat
+        rst     $08
+        db      $a1  ; f_fstat
+        jp      c, .statError
+
+        ld      ix, screenPrinter
+        ld      a, (ix + 7)
+        call    Printer.Put
+        ld      a, (ix + 8)
+        call    Printer.Put
+        ld      a, (ix + 9)
+        call    Printer.Put
+        ld      a, (ix + 10)
+        call    Printer.Put
+
+        ld      a, (.fileHandle)
+        rst     $08
+        db      $9b  ; f_close
+        jp      c, .closeError
+
+        ld      ix, screenPrinter
+        ld      hl, .okString
+        call    Printer.Println
+        jp      .end
+
+.openError
+        ld      ix, screenPrinter
+        ld      hl, .openErrorString
+        call    Printer.Println
+        jp      .end
+
+.statError
+        ld      ix, screenPrinter
+        ld      hl, .statErrorString
+        call    Printer.Println
+        jp      .end
+
+.closeError
+        ld      ix, screenPrinter
+        ld      hl, .closeErrorString
+        call    Printer.Println
+        jp      .end
+
+.end
+        pop     ix
+        ret
+
+.filename               dz      "c:/tbblue.fw"
+.fileHandle             db      0
+.openingString          dz      "Opening file: "
+.openErrorString        dz      "Could not open."
+.statErrorString        dz      "Could not get file info."
+.closeErrorString       dz      "Could not close file."
+.sizeString             dz      "File size: "
+.okString               dz      "OK"
+.stat                   ds      11
+
 
 
 ; =============================================================================
