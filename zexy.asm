@@ -16,7 +16,7 @@
 
 screenTilebuffer
 screenPrinter   Printer { { tileMap, { 32, 80 }, 0 } }
-leftPrinter     Printer { { tileMap, { 32, 40 }, 40 } }
+leftPrinter     Printer { { tileMap, { 32, 39 }, 41 } }
 rightPrinter    Printer { { tileMap + 80, { 32, 40 }, 40 } }
 
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
@@ -29,9 +29,14 @@ scrollY         db      0
 scrollDelta     db      0
 
 zexy:
+        di
+
         nextreg NextReg.CPU_SPEED, 3   ; 28MHz
         nextreg NextReg.MMU_0, 35
         nextreg NextReg.MMU_6, 34
+
+        im      1
+        ei
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
         nextreg $6c, %00000000  ; Default tilemap attribute
@@ -390,7 +395,14 @@ textPalette
         ret
 
         org     $38
-        ret
+        di
+        push    af, bc, de, hl, ix
+        ld      ix, leftPrinter
+        ld      a, '.'
+        call    Printer.Put
+        pop     ix, hl, de, bc, af
+        ei
+        reti
 
 ; =============================================================================
 
