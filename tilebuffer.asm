@@ -3,6 +3,7 @@
 
         include size.asm
         include coord.asm
+        include frame.asm
         include blit.asm
 
         struct  Tilebuffer
@@ -34,7 +35,7 @@ Fill
 ;   hl - attr / value
 FillRect
         push    hl
-        call    CoordAddr
+        call    GetAddrAt
         pop     de
 
         ld      a, (ix + Tilebuffer.stride)
@@ -49,7 +50,7 @@ FillRect
 ; Output:
 ;   hl - addr
 ;   bc - preserved
-CoordAddr
+GetAddrAt
         ; hl = base addr
         ld      l, (ix + Tilebuffer.addr)
         ld      h, (ix + Tilebuffer.addr + 1)
@@ -75,7 +76,7 @@ CoordAddr
 ;   bc - width / height
 LoadSubFrame
         ; hl = src->addr
-        call    CoordAddr
+        call    GetAddrAt
 
         ; dst->addr = hl
         ld      (iy + Tilebuffer.addr), l
@@ -93,6 +94,76 @@ LoadSubFrame
 
         ret
 
+; Input:
+;   ix - Tilebuffer ptr
+;   hl - src col / row
+;   bc - width / height
+;   de - dst col / row
+CopyRect:
+        ; compare src / dst col / row
+        push    hl
+        or      a       ; FC=0
+        sbc     hl, de
+        pop     hl
+
+        ret     z
+        jp      c, CopyRectDec
+
+        ; fallthrough to CopyRectInc
+
+; Input:
+;   ix - Tilebuffer ptr
+;   hl - src col / row
+;   bc - width / height
+;   de - dst col / row
+CopyRectInc
+        push    de              ; dst col / row
+        call    GetAddrAt       ; hl = src addr
+
+        ex      de, hl          ; hl = src addr
+        pop     de              ; de = dst col / row
+        push    hl              ; src addr
+        ex      de, hl
+        call    GetAddrAt       ; hl = dst addr
+        pop     hl              ; hl = src addr
+
+        ld      a, (ix + Tilebuffer.stride)
+        add     (ix + Tilebuffer.size.width)
+        sub     b
+
+        rlca                    ; a = blit stride
+        rlc     b               ; bc = blit width / height
+
+        jp      nc, Blit.CopyRect8Inc
+
+; Input:
+;   ix - Tilebuffer ptr
+;   hl - src col / row
+;   bc - width / height
+;   de - dst col / row
+CopyRectDec
+        ; FIXIT: It's not working
+        push    de              ; dst col / row
+        call    Frame.Swap
+        call    GetAddrAt       ; hl = src addr
+
+        ex      de, hl          ; hl = src addr
+        pop     de              ; de = dst col / row
+        push    hl              ; src addr
+        ex      de, hl
+        call    Frame.Swap
+        call    GetAddrAt       ; hl = dst addr
+        pop     hl              ; hl = src addr
+
+        ld      a, (ix + Tilebuffer.stride)
+        add     (ix + Tilebuffer.size.width)
+        sub     b
+
+        rlca                    ; a = blit stride
+        rlc     b               ; bc = blit width / height
+
+        jp      nc, Blit.CopyRect8Dec
+
 ; TODO: Replace with CopyRect
 ; Input
 ;   ix - Tilebuffer ptr
@@ -107,22 +178,13 @@ ScrollUp
 ; Input
 ;   ix - Tilebuffer ptr
 @MoveUp
-        ld      e, (ix + Tilebuffer.addr)
-        ld      d, (ix + Tilebuffer.addr + 1)
-
-        ld      c, (ix + Tilebuffer.size.height)
+        ld      hl, $0001       ; src col / row
+        ld      de, $0000       ; dst col / row
         ld      b, (ix + Tilebuffer.size.width)
-        rlc     b
-
-        ld      hl, de
-        ld      a, (ix + Tilebuffer.size.width)
-        add     (ix + Tilebuffer.stride)
-        rlca
-        add     hl, a
-
-        ld      a, (ix + Tilebuffer.stride)
-        rlca
-        jp      Blit.CopyRect8Inc
+        ld      c, (ix + Tilebuffer.size.height)
+        dec     c
+        ret
+        jp      CopyRectInc
 
 ; Input
 ;   ix - Tilebuffer ptr

@@ -84,12 +84,19 @@ zexy:
         ld      iy, Printer.Put
         call    String.ForEach
 
+        ld      ix, screenTilebuffer
+        ld      hl, $0002
+        ld      de, $0006
+        ld      bc, $1003
+        call    Tilebuffer.CopyRect
+
+        ld      ix, screenPrinter
         ld      hl, $001e
         call    Printer.MoveTo
 
         ld      ix, screenTilebuffer
         ld      de, $4f02
-        call    Tilebuffer.CoordAddr
+        call    Tilebuffer.GetAddrAt
         ld      (hl), 'A' - $20
         inc     hl
         ld      (hl), %11100010
