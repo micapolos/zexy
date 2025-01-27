@@ -2,11 +2,11 @@
         define  Printer_asm
 
         include blit.asm
-        include surface.asm
+        include tilebuffer.asm
         include coord.asm
 
         struct  Printer
-surface         Surface
+tilebuffer      Tilebuffer
 cursor          Coord   0, 0
 attr            db      %11100010       ; bright white on black
         ends
@@ -71,13 +71,13 @@ Put
         jp      (hl)
 
 .char
-        ld      l, (ix + Printer.cursor.row)
-        ld      h, (ix + Printer.cursor.col)
+        ld      e, (ix + Printer.cursor.row)
+        ld      d, (ix + Printer.cursor.col)
 
         sub     $20
-        ld      e, a
-        ld      d, (ix + Printer.attr)
-        call    Surface.Set
+        ld      c, a
+        ld      b, (ix + Printer.attr)
+        call    Tilebuffer.Set
 
         jp      Advance
 
@@ -120,8 +120,8 @@ Put
 ; Input
 ;   ix - Printer ptr
 Advance
-        ld      h, (ix + Printer.surface.width)
-        ld      l, (ix + Printer.surface.height)
+        ld      h, (ix + Printer.tilebuffer.size.width)
+        ld      l, (ix + Printer.tilebuffer.size.height)
 
         ld      a, (ix + Printer.cursor.col)
         inc     a
@@ -145,8 +145,8 @@ Advance
 ; Input:
 ;   ix - printer ptr
 NewLine
-        ld      h, (ix + Printer.surface.width)
-        ld      l, (ix + Printer.surface.height)
+        ld      h, (ix + Printer.tilebuffer.size.width)
+        ld      l, (ix + Printer.tilebuffer.size.height)
 
         ld      (ix + Printer.cursor.col), 0
         ld      a, (ix + Printer.cursor.row)
@@ -163,8 +163,8 @@ NewLine
 ; Input
 ;   ix - Printer ptr
 ScrollUp
-        ld      b, (ix + Printer.surface.width)
-        ld      c, (ix + Printer.surface.height)
+        ld      b, (ix + Printer.tilebuffer.size.width)
+        ld      c, (ix + Printer.tilebuffer.size.height)
         dec     c
         jp      z, .clearBottomLine
 
@@ -172,15 +172,15 @@ ScrollUp
         ld      hl, $0001
         ld      de, $0000
         push    bc
-        call    Surface.CopyRect
+        call    Tilebuffer.CopyRectInc
         pop     bc
 
 .clearBottomLine
-        ld      h, 0
-        ld      l, c
-        ld      c, 1
-        ld      de, 0
-        call    Surface.FillRect
+        ld      d, $00
+        ld      e, c
+        ld      c, $01
+        ld      hl, $0000
+        call    Tilebuffer.FillRect
 
         ret
 

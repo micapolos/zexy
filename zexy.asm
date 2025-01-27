@@ -16,7 +16,7 @@ CHAR_COUNT  equ   96
         include cmd/ls.asm
         include cmd/pwd.asm
 
-screenPrinter   Printer { { tileMap, 80, 32 }  }
+screenPrinter   Printer { { tileMap, { 32, 80 }, 0 } }
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
 screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }

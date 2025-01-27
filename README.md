@@ -1,6 +1,6 @@
 # Zexy
 
-*Zexy* is an experimental project which aims to deliver modern looking operating system for ZX Spectrum Next.
+*Zexy* is an experimental project which aims to deliver a modern looking operating system for ZX Spectrum Next.
 
 ## Calling convention
 
