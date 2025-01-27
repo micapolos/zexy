@@ -17,7 +17,7 @@ height  db
 ;   de - attr / value
 Set
         push    de
-        call    GetAddrAt
+        call    GetAddr
         pop     de
 
         ld      (hl), e
@@ -30,7 +30,7 @@ Set
 ;   hl - col / row
 ; Output:
 ;   hl - addr
-GetAddrAt
+GetAddr
         ; bc = col / row
         ld      bc, hl
 
@@ -62,7 +62,7 @@ FillRect
         ; hl = addr
         push    bc
         push    de
-        call    GetAddrAt
+        call    GetAddr
         pop     de
         pop     bc
 
@@ -83,13 +83,13 @@ CopyRect
         push    bc
 
         push    de
-        call    GetAddrAt
+        call    GetAddr
         pop     de
 
         ex      de, hl
 
         push    de
-        call    GetAddrAt
+        call    GetAddr
         pop     de
 
         ex      de, hl

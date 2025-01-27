@@ -103,7 +103,7 @@ zexy:
 
         ld      ix, screenTilebuffer
         ld      de, $4f02
-        call    Tilebuffer.GetAddrAt
+        call    Tilebuffer.GetAddr
         ld      (hl), 'A' - $20
         inc     hl
         ld      (hl), %11100010

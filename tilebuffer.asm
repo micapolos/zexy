@@ -19,7 +19,7 @@ stride  db
 ;   de - col / row
 ;   bc - attr / value
 Set
-        call    GetAddrAt
+        call    GetAddr
         ld      (hl), c
         inc     hl
         ld      (hl), b
@@ -46,7 +46,7 @@ Fill
 ;   hl - attr / value
 FillRect
         push    hl
-        call    GetAddrAt
+        call    GetAddr
         pop     de
 
         ld      a, (ix + Tilebuffer.stride)
@@ -61,7 +61,7 @@ FillRect
 ; Output:
 ;   hl - addr
 ;   bc - preserved
-GetAddrAt
+GetAddr
         ; hl = base addr
         ld      l, (ix + Tilebuffer.addr)
         ld      h, (ix + Tilebuffer.addr + 1)
@@ -87,7 +87,7 @@ GetAddrAt
 ;   bc - width / height
 LoadSubFrame
         ; hl = src->addr
-        call    GetAddrAt
+        call    GetAddr
 
         ; dst->addr = hl
         ld      (iy + Tilebuffer.addr), l
@@ -132,12 +132,12 @@ CopyRect:
 ;   de - dst col / row
 CopyRectInc
         push    hl              ; src col / row
-        call    GetAddrAt       ; hl = dst addr
+        call    GetAddr       ; hl = dst addr
         ex      de, hl          ; de = dst addr
         pop     hl              ; hl = src col / row
         push    de              ; dst addr
         ex      de, hl          ; de = src col / row
-        call    GetAddrAt       ; hl = src addr
+        call    GetAddr       ; hl = src addr
         pop     de              ; de = dst addr
 
         ld      a, (ix + Tilebuffer.stride)
@@ -157,13 +157,13 @@ CopyRectInc
 CopyRectDec
         push    hl              ; src col / row
         call    Frame.Swap
-        call    GetAddrAt       ; hl = dst addr
+        call    GetAddr       ; hl = dst addr
         ex      de, hl          ; de = dst addr
         pop     hl              ; hl = src col / row
         push    de              ; dst addr
         ex      de, hl          ; de = src col / row
         call    Frame.Swap
-        call    GetAddrAt       ; hl = src addr
+        call    GetAddr       ; hl = src addr
         pop     de              ; de = dst addr
 
         inc     hl
