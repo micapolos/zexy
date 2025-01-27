@@ -13,9 +13,11 @@ Reset
 ;   (sp) - value
 Call
         pop     hl
+        push    af
         ld      a, (hl)
         inc     hl
         ld      (.arg), a
+        pop     af
         push    hl
 
         ; page-in ROM

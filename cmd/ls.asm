@@ -17,7 +17,7 @@ Exec
         push    iy
 
         ; open dir, A = dir handle
-        ld      a, '*'
+        ld      a, 0
         ld      ix, dirString
         ld      bc, $0000
         ld      de, wildcardString
@@ -50,6 +50,8 @@ Exec
 .print
         ld      iy, $0010
         call    String.ForEach
+        ld      a, $0a
+        rst     $10
 
         pop     iy
         ret

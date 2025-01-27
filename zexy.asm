@@ -97,6 +97,7 @@ zexy:
         ld      ix, screenPrinter
         ld      hl, $0010
         call    Printer.MoveTo
+        call    CmdLs.Exec
         call    StatFile
 
         ld      ix, screenPrinter
@@ -219,7 +220,26 @@ StatFile
         ld      hl, .filename
         call    Printer.Println
 
-        ld      a, '*'
+        xor     a
+        rst     $08
+        db      $89  ; f_getsetdrv
+        jp      c, .getDriveError
+        ld      (.drive), a
+
+        ld      ix, screenPrinter
+        ld      hl, .defaultDriveString
+        call    Printer.Print
+
+        ld      a, (.drive)
+        and     $f8
+        rrca
+        rrca
+        rrca
+        add     'A'
+        call    Printer.Put
+        call    Printer.NewLine
+
+        ld      a, (.drive)
         ld      ix, .filename
         ld      b, $01
         rst     $08
@@ -233,6 +253,10 @@ StatFile
         jp      c, .statError
 
         ld      ix, screenPrinter
+        ld      hl, .sizeString
+        call    Printer.Print
+
+        ld      ix, screenPrinter
         ld      a, (ix + 7)
         call    Printer.Put
         ld      a, (ix + 8)
@@ -241,6 +265,7 @@ StatFile
         call    Printer.Put
         ld      a, (ix + 10)
         call    Printer.Put
+        call    Printer.NewLine
 
         ld      a, (.fileHandle)
         rst     $08
@@ -249,6 +274,12 @@ StatFile
 
         ld      ix, screenPrinter
         ld      hl, .okString
+        call    Printer.Println
+        jp      .end
+
+.getDriveError
+        ld      ix, screenPrinter
+        ld      hl, .getDriveErrorString
         call    Printer.Println
         jp      .end
 
@@ -274,9 +305,12 @@ StatFile
         pop     ix
         ret
 
-.filename               dz      "/zexy.asm"
+.filename               dz      "zexy.asm"
 .fileHandle             db      0
+.drive                  db      0
 .openingString          dz      "Opening file: "
+.getDriveErrorString    dz      "Could not get default drive."
+.defaultDriveString     dz      "Default drive is "
 .openErrorString        dz      "Could not open."
 .statErrorString        dz      "Could not get file info."
 .closeErrorString       dz      "Could not close file."
