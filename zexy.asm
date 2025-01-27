@@ -14,10 +14,11 @@
         include cmd/ls.asm
         include cmd/pwd.asm
 
+screenTilebuffer
 screenPrinter   Printer { { tileMap, { 32, 80 }, 0 } }
+
 helloText       dz      "Hello, my friend.\nHow are you doing?\nI hope you're fine."
 
-screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }
 windowTilebuffer        Tilebuffer { tileMap + $40*2 + $50*2*2, { 2, 8 }, 72 }
 subTilebuffer           Tilebuffer
 

@@ -14,7 +14,7 @@
         include cmd/ls.asm
         include cmd/pwd.asm
 
-screenTilebuffer        Tilebuffer { tileMap, { 32, 80 }, 0 }
+screenTilebuffer
 screenPrinter           Printer { { tileMap, { 32, 80 }, 0 } }
 
 promptString            dz      "ZEXY v0.1 - unit test suite"
