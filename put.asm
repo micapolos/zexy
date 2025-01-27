@@ -5,7 +5,6 @@
 
 ; Input
 ;   A - 2 digits
-;
 DigitsHiLo
         push    af
         call    DigitHi
