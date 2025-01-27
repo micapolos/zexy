@@ -54,6 +54,24 @@ PopAttr
         ld      (ix + Printer.attr), d
         jp      (hl)
 
+; Input
+;   ix - Printer ptr
+;   hl - null-terminated string
+Print
+        push    iy
+        ld      iy, Put
+        call    String.ForEach
+        pop     iy
+        ret
+
+; Input
+;   ix - Printer ptr
+;   hl - null-terminated string
+Println
+        call    Print
+        ld      a, $0a
+        jp      Put
+
 ; Input:
 ;   ix - Printer ptr
 ;   a - byte

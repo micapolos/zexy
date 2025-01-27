@@ -1,6 +1,4 @@
-        device ZXSPECTRUMNEXT
-
-CHAR_COUNT  equ   96
+        device zxspectrumnext
 
         org $8000
 
