@@ -31,18 +31,33 @@ Exec
         jp      c, .dirEntryError
 
         and     a
-        jp      z, .dirEmpty
+        jp      z, .dirDone
 
         ld      hl, .dirBuffer
-        push    hl
 
         ld      a, (hl)
-        call    Printer.PrintHex8
-        ld      a, ' '
-        call    Printer.Put
+        inc     hl
+        push    hl
+
+        and     $10
+        jp      z, .incFileCount
+        ld      hl, .dirCount
+        jp      .inc
+.incFileCount
+        ld      hl, .fileCount
+.inc
+        inc     (hl)
+
+        and     $10
+        jp      z, .printFileEntry
+        ld      hl, .dirEntryString
+        jp      .printEntry
+.printFileEntry
+        ld      hl, .fileEntryString
+.printEntry
+        call    Printer.Print
 
         pop     hl
-        inc     hl
         call    Printer.Println
 
         ; TODO: Remove
@@ -51,6 +66,20 @@ Exec
         call    Raster.FrameWait
 
         jp      .loop
+
+.dirDone
+        ld      hl, .fileCountString
+        call    Printer.Print
+        ld      a, (.fileCount)
+        call    Printer.PrintHex8
+        call    Printer.NewLine
+
+        ld      hl, .dirCountString
+        call    Printer.Print
+        ld      a, (.dirCount)
+        call    Printer.PrintHex8
+        call    Printer.NewLine
+        ret
 
 .dirEntryError
         ld      hl, .dirEntryErrorString
@@ -70,7 +99,13 @@ Exec
 .dirEmptyString         dz      "Directory empty\n"
 .dirEntryErrorString    dz      "Error reading directory entry\n"
 .dirString              dz      "/cmd"
+.fileCountString        dz      "File count: "
+.dirCountString         dz      "Directory count: "
+.dirEntryString         dz      "<DIR> "
+.fileEntryString        dz      "      "
 .dirBuffer              ds      260
+.fileCount              db      0
+.dirCount               db      0
 
         endmodule
 
