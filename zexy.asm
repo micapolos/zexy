@@ -86,7 +86,7 @@ zexy:
 
         ld      ix, screenTilebuffer
         ld      hl, $0003
-        ld      de, $0807
+        ld      de, $0107
         ld      bc, $0803
         call    Tilebuffer.CopyRect
 
