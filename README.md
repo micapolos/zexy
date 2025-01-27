@@ -1,4 +1,6 @@
-# Zexy - ZX Spectrum Next goodies
+# Zexy
+
+*Zexy* is an experimental project which aims to deliver modern looking operating system for ZX Spectrum Next.
 
 ## Calling convention
 
