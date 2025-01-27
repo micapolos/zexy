@@ -1,3 +1,5 @@
+; 32 empty glyphs
+  ds 32*8
 ; space
   db %00000000
   db %00000000

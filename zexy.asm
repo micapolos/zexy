@@ -40,22 +40,22 @@ zexy:
         call    InitTilemapPalette
 
         ld      ix, screenTilebuffer
-        ld      de, $203f       ; dark blue underscore
+        ld      de, $205f       ; dark blue underscore
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
         ld      de, $2810       ; col / row (middle)
-        ld      bc, $e22f       ; attr / char (white O)
+        ld      bc, $e24f       ; attr / char (white O)
         call    Tilebuffer.Set
 
         ld      ix, windowTilebuffer
-        ld      de, $4010       ; col / row
+        ld      de, $4030       ; attr / char 0
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
         ld      de, $4105       ; col / row
         ld      bc, $0602       ; width / height
-        ld      hl, $7011       ; attr / char
+        ld      hl, $7031       ; attr / char 1
         call    Tilebuffer.FillRect
 
         ld      ix, screenTilebuffer
@@ -65,7 +65,7 @@ zexy:
         call    Tilebuffer.LoadSubFrame
 
         ld      ix, subTilebuffer
-        ld      de, $3012       ; attr / value
+        ld      de, $3032       ; attr / value
         call    Tilebuffer.Fill
 
         ld      ix, screenTilebuffer
@@ -103,7 +103,7 @@ zexy:
         ld      ix, screenTilebuffer
         ld      de, $4f02
         call    Tilebuffer.GetAddr
-        ld      (hl), 'A' - $20
+        ld      (hl), 'A'
         inc     hl
         ld      (hl), %11100010
 
@@ -216,7 +216,7 @@ tileMap:
 
 tileDefs:
         include topaz-8.asm
-        ds      96 * 32
+        ;incbin  topan.fnt
 
         MMU     6, 34
         org     $c000

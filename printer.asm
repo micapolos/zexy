@@ -92,7 +92,6 @@ Put
         ld      e, (ix + Printer.cursor.row)
         ld      d, (ix + Printer.cursor.col)
 
-        sub     $20
         ld      c, a
         ld      b, (ix + Printer.attr)
         call    Tilebuffer.Set
