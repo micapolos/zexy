@@ -41,18 +41,24 @@ PopCursor
 ; Input:
 ;   ix - Printer ptr
 PushAttr
+        ld      (.hl), hl
         pop     hl
-        ld      d, (ix + Printer.attr)
-        push    de
-        jp      (hl)
+        ld      (.ret), hl
+        ld      h, (ix + Printer.attr)
+        push    hl
+.hl+1   ld      hl, 0
+.ret+1  jp      0
 
 ; Input:
 ;   ix - Printer ptr
 PopAttr
-        pop     hl      ; ret addr
-        pop     de      ; attr / value
-        ld      (ix + Printer.attr), d
-        jp      (hl)
+        ld      (.hl), hl
+        pop     hl
+        ld      (.ret), hl
+        pop     hl
+        ld      (ix + Printer.attr), h
+.hl+1   ld      hl, 0
+.ret+1  jp      0
 
 ; Input
 ;   ix - Printer ptr

@@ -113,7 +113,7 @@ zexy:
         ld      hl, catFilename
         call    Printer.Println
         ld      hl, catFilename
-        ;call    CmdCat.Exec
+        call    CmdCat.Exec
 
         ld      ix, leftPrinter
         ld      hl, $001e
@@ -338,7 +338,7 @@ StatFile
 .stat                   ds      11
 
 cattingString           dz      "Printing content of: "
-catFilename             dz      "zexy.asm"
+catFilename             dz      "zexyr.asm"
 
 ; =============================================================================
 
