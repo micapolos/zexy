@@ -338,7 +338,7 @@ StatFile
 .stat                   ds      11
 
 cattingString           dz      "Printing content of: "
-catFilename             dz      "zexyr.asm"
+catFilename             dz      "zexy.asm"
 
 ; =============================================================================
 
