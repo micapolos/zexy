@@ -73,8 +73,10 @@ Exec
         jr      .error
 
 .error
+        ld      de, hl
         call    Printer.PushAttr
         ld      (ix + Printer.attr), %10000010
+        ld      hl, de
         call    Printer.Println
         call    Printer.PopAttr
         ret
