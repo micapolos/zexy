@@ -65,7 +65,8 @@ Save
 
         djnz    .loop
 
-        ret
+        ei
+        reti
 
 ; Input
 ;   hl - process ptr
