@@ -1,3 +1,4 @@
 *.lst
 *.nex
+*.map
 .DS_Store

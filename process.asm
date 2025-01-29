@@ -2,6 +2,9 @@
         define Process_asm
 
         struct Process
+; bit 0 - active
+flags   db      0
+regs
 sp      dw
 af      dw
 bc      dw
@@ -17,6 +20,10 @@ regEnd
         ends
 
         module Process
+
+bits    equ     5
+size    equ     1 << bits
+        assert  (Process <= size)
 
 regCount        equ     11
 

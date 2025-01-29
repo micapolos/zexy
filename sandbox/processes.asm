@@ -35,7 +35,7 @@ Main
         call    Scheduler.Init
         ei
 
-        ld      a, 0
+        ld      a, $00
 EntryPoint
 .loop
         out     ($fe), a
@@ -71,4 +71,5 @@ IntEmpty
         savenex open "sandbox/processes.nex", Main, $a100
         savenex auto
         savenex close
+        cspectmap    "sandbox/processes.asm.map"
 

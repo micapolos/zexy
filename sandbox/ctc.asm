@@ -4,6 +4,9 @@
 
         include nextreg.asm
 
+Boot
+        nextreg $50, $20
+
 Main
         nextreg $c0, (IntTable & %11100000) | %00000001
         nextreg $c4, %10000001   ; exp bus & ULA

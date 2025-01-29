@@ -5,67 +5,25 @@
 
         module  Scheduler
 
-; Initializes scheduler which this process becoming process 0.
-; Input
-;   h - processTableMsb
-Init
-        ld      a, h
-        ld      (processTableMsb), a
+process
+.countBits      equ     3
+.count          equ     1 << .countBits
+.current        db      0
 
-        ld      a, 1
-        ld      (processCount), a
-
-        ld      a, 0
-        ld      (currentProcessIndex), a
-
-        ret
-
-; Input
-;   ix - Process ptr
-; Output
-;   FC - 1 = error, 0 = ok
-Launch:
-        di
-
-        ; Increment process count
-        ld      a, (processCount)
-        inc     a
-        and     $80
-        jp      z, .countOk
-
-        scf
-        jp      .ret
-
-.countOk
-        ld      (processCount), a
-
-        ; Store process ptr in the table
-        ld      hl, (processTableMsb)
-        ld      h, (hl)
-        rlca
-        ld      l, a
-
-        ld      a, ixl
-        ld      (hl), a
-        inc     hl
-        ld      a, ixh
-        ld      (hl), a
-
-        xor     a  ; clear FC
-.ret
-        ei
-        ret
+        align   1 << (Process.bits + process.countBits)
+processTable
+.first
+        align   Process.size
+        Process { %00000001 }    ; active
+        dup     process.count - 1
+        align   Process.size
+        Process
+        edup
 
 ; Input
-;   (Process.current) - current process index
-@Exit
-        ; TODO: Support processes which return
-        break
-
-; Input
-;   (currentPtr) - Process ptr
 ;   interrupts disabled
 IntYield
+        break
         ; SP is already on the stack
         ; Push other registers on the stack
         push    af, bc, de, hl
@@ -88,6 +46,7 @@ IntYield
         dec     (hl)
         ld      (hl), e
         djnz    .popLoop
+        break
 
         ; Select next process
         ld      a, (currentProcessIndex)
@@ -97,6 +56,7 @@ IntYield
 .nonZeroProcess
         dec     a
         ld      (currentProcessIndex), a
+        break
 
         ; Push process registers on the stack, SP first
         call    GetProcessPtr
@@ -119,6 +79,7 @@ IntYield
         pop     hl, de, bc, af
 
         ; SP is at the top of the stack
+        break
         ei
         reti
 
