@@ -13,109 +13,47 @@ de2     dw
 hl2     dw
 ix      dw
 iy      dw
-regEnd  align   $20
+regEnd
         ends
-
-        assert  (Process == $20)
 
         module Process
 
 regCount        equ     11
 
 ; Input
-Save
-        ; Save PC and SP in scratch location
-        inc     sp
-        inc     sp
-        ld      (scratchSp), sp
-        dec     sp
-        dec     sp
+;   ix - Process ptr
+;   de - start addr
+;   hl - stack addr
+;   a - parameter passed in A
+Init
+        ld      (ix + Process.af + 1), a
 
-        ; Push all registers on the stack
-        exx
-        push    hl
+        ; Push Exit address on process stack
         push    de
-        push    bc
-        exx
-
-        ex      af, af
-        push    af
-        ex      af, af
-
-        push    iy
-        push    ix
-
-        push    hl
-        push    de
-        push    bc
-        push    af
-
-        ld      hl, (scratchSp)
-        push    hl
-
-        ld      hl, (scratchPc)
-        push    hl
-
-        ; Pop registers from the stack and save them to currentProcessPtr
-        ld      hl, (currentProcessPtr)
-        ld      b, regCount
-.loop
+        ld      de, Exit
+        dec     hl
+        ld      (hl), d
+        dec     hl
+        ld      (hl), e
         pop     de
 
-        ld      (hl), e
-        inc     hl
-
+        ; Push start address on process stack
+        dec     hl
         ld      (hl), d
-        inc     hl
+        dec     hl
+        ld      (hl), e
 
-        djnz    .loop
+        ; Push start address on process stack
+        dec     hl
+        ld      (hl), d
+        dec     hl
+        ld      (hl), e
+
+        ; Init Process.sp
+        ld      (ix + Process.sp), l
+        ld      (ix + Process.sp + 1), h
 
         ret
-
-; Input
-;   hl - process ptr
-; Output
-;   (currentProcessPtr) - process ptr
-Load
-        ld      (currentProcessPtr), hl
-        add     hl, Process.regEnd
-
-        ; Push process registers on the stack
-        ld      b, regCount
-.loop
-        dec     hl
-        ld      d, (hl)
-        dec     hl
-        ld      e, (hl)
-        push    de
-        djnz    .loop
-
-        ; Pop into registers
-        pop     hl
-        ld      (scratchSp), hl
-
-        pop     af, bc, de, hl
-
-        ex      af, af
-        exx
-        pop     af, bc, de, hl
-        exx
-        ex      af, af
-
-        pop     ix
-        pop     iy
-
-        ex      hl, (sp)
-        ld      sp, hl
-
-        ld      hl, (scratchHl)
-
-        ; Return into the last remaining item on the stack, which is process PC.
-        ei
-        reti
-
-currentProcessPtr       dw      0
-scratchSp               dw      0
 
         endmodule
 
