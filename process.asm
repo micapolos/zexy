@@ -2,7 +2,6 @@
         define Process_asm
 
         struct Process
-pc      dw
 sp      dw
 af      dw
 bc      dw
@@ -14,17 +13,23 @@ de2     dw
 hl2     dw
 ix      dw
 iy      dw
+regEnd  align   $20
         ends
 
+        assert  (Process == $20)
+
         module Process
+
+regCount        equ     11
 
 ; Input
 Save
         ; Save PC and SP in scratch location
-        ex      hl, (sp)
-        ld      (scratchPc), hl
-        ex      hl, (sp)
+        inc     sp
+        inc     sp
         ld      (scratchSp), sp
+        dec     sp
+        dec     sp
 
         ; Push all registers on the stack
         exx
@@ -53,7 +58,7 @@ Save
 
         ; Pop registers from the stack and save them to currentProcessPtr
         ld      hl, (currentProcessPtr)
-        ld      b, 12
+        ld      b, regCount
 .loop
         pop     de
 
@@ -65,8 +70,7 @@ Save
 
         djnz    .loop
 
-        ei
-        reti
+        ret
 
 ; Input
 ;   hl - process ptr
@@ -74,41 +78,32 @@ Save
 ;   (currentProcessPtr) - process ptr
 Load
         ld      (currentProcessPtr), hl
-
-        ; Pop return address from the stack, as it'll be replaced with process return address
-        pop     hl
+        add     hl, Process.regEnd
 
         ; Push process registers on the stack
-        ld      b, 12
+        ld      b, regCount
 .loop
-        ld      e, (hl)
-        inc     hl
-
+        dec     hl
         ld      d, (hl)
-        inc     hl
-
+        dec     hl
+        ld      e, (hl)
         push    de
-
         djnz    .loop
 
         ; Pop into registers
-        pop     iy
+        pop     hl
+        ld      (scratchSp), hl
+
+        pop     af, bc, de, hl
+
+        ex      af, af
+        exx
+        pop     af, bc, de, hl
+        exx
+        ex      af, af
+
         pop     ix
-
-        exx
-        pop     hl
-        pop     de
-        pop     bc
-        exx
-        ex      af, af
-        pop     af
-        ex      af, af
-
-        pop     hl
-        ld      (scratchHl), hl
-        pop     de
-        pop     bc
-        pop     af
+        pop     iy
 
         ex      hl, (sp)
         ld      sp, hl
@@ -116,12 +111,11 @@ Load
         ld      hl, (scratchHl)
 
         ; Return into the last remaining item on the stack, which is process PC.
-        ret
+        ei
+        reti
 
 currentProcessPtr       dw      0
-scratchPc               dw      0
 scratchSp               dw      0
-scratchHl               dw      0
 
         endmodule
 

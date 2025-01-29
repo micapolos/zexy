@@ -31,57 +31,23 @@ Main
         out     (c), a
 
         ld      hl, ProcessTable.p0
-        ld      (Process.currentProcessPtr), hl
-
-        ; Init registers with consequent values
-        ld      hl, $1011
-        push    hl
-        pop     af
-        ex      af, af
-        ld      hl, $2021
-        push    hl
-        pop     af
-        ex      af, af
-
-        ld      bc, $3031
-        exx
-        ld      bc, $4041
-        exx
-
-        ld      de, $5051
-        exx
-        ld      de, $6061
-        exx
-
-        ld      hl, $7071
-        exx
-        ld      hl, $8081
-        exx
-
-        ld      ix, $9091
-        ld      iy, $a0a1
-
-        ei
-.loop   jp      .loop
+        call    Process.Load
+        break
+        ret
 
         macro   ProcessBody name, index
-name    ld      a, index
-        push    af
-        out     ($fe), a
-        push    hl
-        pop     de
-        pop     bc
+name    out     ($fe), a
         jp      name
         endm
 
-        org     $a000   : ProcessBody Proc0, 0
-        org     $a100   : ProcessBody Proc1, 1
-        org     $a200   : ProcessBody Proc2, 2
-        org     $a300   : ProcessBody Proc3, 3
-        org     $a400   : ProcessBody Proc4, 4
-        org     $a500   : ProcessBody Proc5, 5
-        org     $a600   : ProcessBody Proc6, 6
-        org     $a700   : ProcessBody Proc7, 7
+        org $a000 : ProcessBody Proc0, 0 : org $a0fe : dw $a000
+        org $a100 : ProcessBody Proc1, 1 : org $a1fe : dw $a100
+        org $a200 : ProcessBody Proc2, 2 : org $a2fe : dw $a200
+        org $a300 : ProcessBody Proc3, 3 : org $a3fe : dw $a300
+        org $a400 : ProcessBody Proc4, 4 : org $a4fe : dw $a400
+        org $a500 : ProcessBody Proc5, 5 : org $a5fe : dw $a500
+        org $a600 : ProcessBody Proc6, 6 : org $a6fe : dw $a600
+        org $a700 : ProcessBody Proc7, 7 : org $a7fe : dw $a700
 
         org     $9000
 IntTable
@@ -102,25 +68,17 @@ IntTable
                 dw      IntEmpty
                 dw      IntEmpty
 
-ProcessTable
-.p0             Process { Proc0, Proc0 + $100 }
-.p1             Process { Proc1, Proc1 + $100 }
-.p2             Process { Proc2, Proc2 + $100 }
-.p3             Process { Proc3, Proc3 + $100 }
-.p4             Process { Proc4, Proc4 + $100 }
-.p5             Process { Proc5, Proc5 + $100 }
-.p6             Process { Proc6, Proc6 + $100 }
-.p7             Process { Proc7, Proc7 + $100 }
+        org     $9100
 
-ProcessPtrTable
-.p0             dw      ProcessTable.p0
-.p1             dw      ProcessTable.p1
-.p2             dw      ProcessTable.p2
-.p3             dw      ProcessTable.p3
-.p4             dw      ProcessTable.p4
-.p5             dw      ProcessTable.p5
-.p6             dw      ProcessTable.p6
-.p7             dw      ProcessTable.p7
+ProcessTable
+.p0             Process { Proc0 + $fe, $0000, $0100, $0200, $0300, $0400, $0500, $0600, $0700, $0800, $0900 }
+.p1             Process { Proc1 + $fe, $0001, $0101, $0201, $0301, $0401, $0501, $0601, $0701, $0801, $0901 }
+.p2             Process { Proc2 + $fe, $0002, $0102, $0202, $0302, $0402, $0502, $0602, $0702, $0802, $0902 }
+.p3             Process { Proc3 + $fe, $0003, $0103, $0203, $0303, $0403, $0503, $0603, $0703, $0803, $0903 }
+.p4             Process { Proc4 + $fe, $0004, $0104, $0204, $0304, $0404, $0504, $0604, $0704, $0804, $0904 }
+.p5             Process { Proc5 + $fe, $0005, $0105, $0205, $0305, $0405, $0505, $0605, $0705, $0805, $0905 }
+.p6             Process { Proc6 + $fe, $0006, $0106, $0206, $0306, $0406, $0506, $0606, $0706, $0806, $0906 }
+.p7             Process { Proc7 + $fe, $0007, $0107, $0207, $0307, $0407, $0507, $0607, $0707, $0807, $0907 }
 
 currentProcessIndex     db      0
 
@@ -129,12 +87,7 @@ IntEmpty
         reti
 
 IntCTC
-        break
         call    Process.Save
-
-        ; TODO: Remove, for debugging
-        ld      hl, (Process.currentProcessPtr)
-        break
 
         ld      a, (currentProcessIndex)
         inc     a
@@ -156,7 +109,11 @@ IntCTC
         ld      (Process.currentProcessPtr), hl
         call    Process.Load
 
-        savenex open "sandbox/scheduler.nex", Main, $bfe0
+        break
+        ei
+        reti
+
+        savenex open "sandbox/scheduler.nex", Main, $a100
         savenex auto
         savenex close
 
