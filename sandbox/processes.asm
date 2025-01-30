@@ -1,44 +1,43 @@
-        device  zxspectrumnext
+       device  zxspectrumnext
 
-        org     $8000
+       org     $8000
 
-        include nextreg.asm
-        include process.asm
-        include scheduler.asm
+       include nextreg.asm
 
 Main
-        di
+       di
 
-        nextreg $c0, (IntTable & %11100000) | %00000001
-        nextreg $c4, %10000001   ; exp bus & ULA
-        nextreg $c5, %00000001   ; ctc channel 0
-        nextreg $c6, %00000000   ;
+       nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
+       nextreg NextReg.CPU_SPEED, 0   ; 28MHz
+       nextreg $c0, (IntTable & %11100000) | %00000001
+       nextreg $c4, %10000001   ; exp bus & ULA
+       nextreg $c5, %00000001   ; ctc channel 0
+       nextreg $c6, %00000000   ;
 
-        ld      a, IntTable >> 8
-        ld      i, a
+       ld      a, IntTable >> 8
+       ld      i, a
 
-        im      2
+       im      2
 
-        ; reset CTC
-        ld      bc, $183b
-        ld      a, %00000011
-        out     (c), a
-        out     (c), a
+       ; reset CTC
+       ld      bc, $183b
+       ld      a, %00000011
+       out     (c), a
+       out     (c), a
 
-        ld      a, %10100101
-        out     (c), a                   ; int en, timer, /256, time const follows
+       ld      a, %10100101
+       out     (c), a                   ; int en, timer, /256, time const follows
 
-        ld      a, 190
-        out     (c), a
+       ld      a, 219
+       out     (c), a
 
-        ld      h, ProcessTable >> 8
-        call    Scheduler.Init
-        ei
+       ld      a, $01
+       ei
 
-        ld      a, $00
-EntryPoint
+ProcessEntry
 .loop
-        out     ($fe), a
+        nextreg NextReg.TRANS_COLOR_FALLBACK, a
+        ;out     ($fe), a
         jp      .loop
 
         org     $9000
@@ -46,7 +45,7 @@ IntTable
 .line           dw      IntEmpty
 .uart0rx        dw      IntEmpty
 .uart1rx        dw      IntEmpty
-.ctc0           dw      Scheduler.IntYield
+.ctc0           dw      IntCTC
 .ctc1           dw      IntEmpty
 .ctc2           dw      IntEmpty
 .ctc3           dw      IntEmpty
@@ -60,16 +59,102 @@ IntTable
                 dw      IntEmpty
                 dw      IntEmpty
 
-        org     $9100
-ProcessTable
-        ds      $100
-
 IntEmpty
-        ei
-        reti
+       ei
+       reti
 
-        savenex open "sandbox/processes.nex", Main, $a100
-        savenex auto
-        savenex close
-        cspectmap    "sandbox/processes.asm.map"
+IntCTC
+       ; debug
+       push    af
+       ld      a, $00
+       nextreg NextReg.TRANS_COLOR_FALLBACK, a
+       ;out     ($fe), a
+       pop     af
 
+       push    af
+       push    bc
+       push    de
+       push    hl
+       push    ix
+       push    iy
+       exx
+       ex      af, af
+       push    af
+       push    bc
+       push    de
+       push    hl
+       ex      af, af
+       exx
+
+       ; de = process SP
+       ld      de, 0
+       add     de, sp
+
+       ; a = current process
+       ld      a, (CurrentProcess)
+
+       ; hl = process ptr
+       ld      hl, ProcessTable
+       rlca
+       add     hl, a
+
+       ; Save process SP
+       ld      (hl), e
+       inc     hl
+       ld      (hl), d
+
+       ; Switch to new process
+       ld      a, (CurrentProcess)
+       inc     a
+       and     $01
+       ld      (CurrentProcess), a
+
+       ; hl = new process ptr
+       ld      hl, ProcessTable
+       rlca
+       add     hl, a
+
+       ; de = new process sp
+       ld      e, (hl)
+       inc     hl
+       ld      d, (hl)
+
+       ; set new process SP
+       ex      de, hl
+       ld      sp, hl
+
+       ; Pop new process registers
+       exx
+       ex      af, af
+       pop     hl
+       pop     de
+       pop     bc
+       pop     af
+       ex      af, af
+       exx
+       pop     iy
+       pop     ix
+       pop     hl
+       pop     de
+       pop     bc
+       pop     af
+
+       ei
+       ret
+
+ProcessTable
+               dw      ProcessStack.p0 - 22
+               dw      ProcessStack.p1 - 22
+CurrentProcess  db      0
+
+ProcessStack
+       ds      128
+.p0
+       ds      124
+       dw      $4500   ; af
+       dw      ProcessEntry
+.p1
+
+       savenex open "sandbox/processes.nex", Main, $bfe0
+       savenex auto
+       savenex close

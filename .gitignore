@@ -1,4 +1,5 @@
 *.lst
 *.nex
 *.map
+mono_crash*
 .DS_Store
