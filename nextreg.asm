@@ -20,6 +20,7 @@ ULA_CONTROL             equ     $68
 ;   A - register
 ; Output:
 ;   A - value
+;   BC, DE, HL - preserved
 Read:
         push    bc
         ld      bc, $243b
