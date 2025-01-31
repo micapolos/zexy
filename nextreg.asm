@@ -4,6 +4,7 @@
         module  NextReg
 
 CPU_SPEED               equ     $07
+DAC_A_D                 equ     $2d
 TILEMAP_OFFSET_Y        equ     $31
 TRANS_COLOR_FALLBACK    equ     $4a
 MMU_0                   equ     $50
