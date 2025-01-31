@@ -15,8 +15,11 @@ Main
         ld      b, 0
 .fill
         ld      (hl), a
-        inc     hl
-        add     a, 2
+        inc     h
+        ld      (hl), a
+        dec     h
+        inc     l
+        add     a, 1
         djnz    .fill
 
         ; Start DMA
@@ -28,6 +31,10 @@ Main
 .loop
         in      a, (Port.DMA)  ; LSB
         and     %11100000
+        ld      c, a
+        in      a, (Port.DMA)  ; MSB
+        swapnib
+        or      c
         nextreg Reg.TRANS_COL_FBK, a
         jp      .loop
 
@@ -40,19 +47,20 @@ dmaProgram
         db      %00000010       ; cycle length 2
         db      %01111000       ; WR2: port B static, I/O
         db      %00100010       ; cycle length 2, next byte prescalar
-        db      %00111000       ; prescalar
+        db      %00011100       ; prescalar
         db      %11001101       ; WR4: burst mode
         dw      $dfdf           ; start address B (DAC)
         db      %10100010       ; WR5: auto restart
         db      %11001111       ; WR6: load
         db      %10100111       ; WR6 - initialize read sequence
         db      %10111011       ; WR6 - Read mask
-        db      %00000010       ; read counter LSB
+        db      %00000110       ; read counter LSB
         db      %10000111       ; WR6: enable DMA
 .size = $ - dmaProgram
 
+        align   $100
 buffer  ds      .size
-.size   equ     $100
+.size   equ     $200
 
         cspectmap    "sandbox/dma-sound.map"
         savenex open "sandbox/dma-sound.nex", Main, $bfe0
