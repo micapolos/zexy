@@ -10,12 +10,12 @@
 Init
         di
 
-        nextreg $c0, (IntTable & %11100000) | %00000001
+        nextreg $c0, (IntTable.start & %11100000) | %00000001
         nextreg $c4, %10000000   ; exp bus, no ULA interrupt
         nextreg $c5, %00000001   ; ctc channel 0
         nextreg $c6, %00000000   ;
 
-        ld      a, IntTable >> 8
+        ld      a, IntTable.start >> 8
         ld      i, a
 
         im      2
