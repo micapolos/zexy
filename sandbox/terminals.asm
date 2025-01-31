@@ -78,7 +78,12 @@ Process
         ld      (ix + Printer.attr), a
         pop     af
         add     a, '0'
+
+        ; TODO: Implement mutex instead of disabling and enabling interrupts.
+        di
         call    Printer.Put
+        ei
+
         pop     af
 
         push    af
