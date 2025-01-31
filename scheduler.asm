@@ -112,7 +112,7 @@ Launch
 ; Interrupt handler, switches to the next process.
 @IntHandler
         ; debug
-        nextreg Reg.TRANS_COLOR_FALLBACK, 0
+        nextreg Reg.TRANS_COL_FBK, 0
 
         push    af
         push    bc

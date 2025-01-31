@@ -26,7 +26,7 @@ Main
 .loop
         in      a, ($6b)  ; LSB
         and     %11100000
-        nextreg Reg.TRANS_COLOR_FALLBACK, a
+        nextreg Reg.TRANS_COL_FBK, a
         jp      .loop
 
 dmaProgram

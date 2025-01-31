@@ -37,14 +37,14 @@ Main
 
         xor     a
 .mainLoop
-        nextreg Reg.TRANS_COLOR_FALLBACK, a
+        nextreg Reg.TRANS_COL_FBK, a
         inc     a
         jp      .mainLoop
 
 Process
 .entry
 .loop
-        nextreg Reg.TRANS_COLOR_FALLBACK, a
+        nextreg Reg.TRANS_COL_FBK, a
         jp      .loop
 
 stackTable

@@ -5,8 +5,8 @@
 
 CPU_SPEED               equ     $07
 DAC_A_D                 equ     $2d
-TILEMAP_OFFSET_Y        equ     $31
-TRANS_COLOR_FALLBACK    equ     $4a
+TM_OFS_Y                equ     $31
+TRANS_COL_FBK           equ     $4a
 MMU_0                   equ     $50
 MMU_1                   equ     $51
 MMU_2                   equ     $52
