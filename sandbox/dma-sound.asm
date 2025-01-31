@@ -34,7 +34,13 @@ Main
         otir
 
 .loop
-        inc     a
+        ld      a, %10111011    ; WR6 - Read mask
+        ld      ($6b), a
+        ld      a, %10000010    ; counter LSB
+        ld      ($6b), a
+        ld      a, %10100111    ; WR6 - initialize read sequence
+        ld      ($6b), a
+        in      a, ($6b)
         nextreg NextReg.TRANS_COLOR_FALLBACK, a
         jp      .loop
 
