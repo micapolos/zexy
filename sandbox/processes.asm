@@ -1,3 +1,6 @@
+PROCESS_COUNT   equ     7
+STACK_SIZE      equ     $100
+
         device  zxspectrumnext
 
         org     $8000
@@ -6,51 +9,38 @@
         include int-table.asm
         include scheduler.asm
 
+
 Main
         nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
+        nextreg NextReg.CPU_SPEED, 0
 
         call    Scheduler.Init
 
-        ld      bc, Process.entry
-        ld      de, Process.stack1
-        ld      a, $73
-        call    Scheduler.Launch
+        ld      de, stackTable
+        ld      b, PROCESS_COUNT
+        ld      a, 0
+.launchLoop
+        add     a, $17
+        add     de, STACK_SIZE
+
+        push    af
+        push    bc
+        push    de
 
         ld      bc, Process.entry
-        ld      de, Process.stack2
-        ld      a, $34
         call    Scheduler.Launch
 
-        ld      bc, Process.entry
-        ld      de, Process.stack3
-        ld      a, $e7
-        call    Scheduler.Launch
+        pop     de
+        pop     bc
+        pop     af
 
-        ld      bc, Process.entry
-        ld      de, Process.stack4
-        ld      a, $27
-        call    Scheduler.Launch
-
-        ld      bc, Process.entry
-        ld      de, Process.stack5
-        ld      a, $d7
-        call    Scheduler.Launch
-
-        ld      bc, Process.entry
-        ld      de, Process.stack6
-        ld      a, $3b
-        call    Scheduler.Launch
-
-        ld      bc, Process.entry
-        ld      de, Process.stack7
-        ld      a, $f1
-        call    Scheduler.Launch
+        djnz    .launchLoop
 
         xor     a
-.loop
+.mainLoop
         nextreg NextReg.TRANS_COLOR_FALLBACK, a
         inc     a
-        jp      .loop
+        jp      .mainLoop
 
 Process
 .entry
@@ -58,22 +48,10 @@ Process
         nextreg NextReg.TRANS_COLOR_FALLBACK, a
         jp      .loop
 
-        ds      $100
-.stack1
-        ds      $100
-.stack2
-        ds      $100
-.stack3
-        ds      $100
-.stack4
-        ds      $100
-.stack5
-        ds      $100
-.stack6
-        ds      $100
-.stack7
-        ds      $100
-.stack8
+stackTable
+        dup     PROCESS_COUNT
+        ds      STACK_SIZE
+        edup
 
         savenex open "sandbox/processes.nex", Main, $bfe0
         savenex auto
