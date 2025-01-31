@@ -3,7 +3,7 @@
 
         module  IntTable
 
-SIZE    equ     $20
+SIZE            equ     $20
 
         align   $20
 start
@@ -25,7 +25,8 @@ uart1tx         dw      0
                 dw      0
 end
 
-        assert  (end - start = SIZE)
+        assert  (start & %11111) = 0
+        assert  end - start = SIZE
 
         endmodule
 
