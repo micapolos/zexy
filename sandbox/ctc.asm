@@ -3,6 +3,7 @@
         org     $8000
 
         include reg.asm
+        include port.asm
 
 Boot
         nextreg $50, $20
@@ -32,7 +33,7 @@ Main
         out     (c), a
 
 .loop   ld      a, (color)
-        out     ($fe), a
+        out     (Port.ULA), a
         jp      .loop
 
         org     $9000

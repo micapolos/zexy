@@ -3,6 +3,7 @@
         org     $8000
 
         include reg.asm
+        include port.asm
 
 Main
         nextreg $c0, (IntTable & %11100000) | %00000001
@@ -58,7 +59,7 @@ IntCTC
         push    af, bc, de, hl
 
         ld      a, $07
-        out     ($fe), a
+        out     (Port.ULA), a
 
         ld      a, (lfo)
         dec     a
@@ -109,7 +110,7 @@ IntCTC
         nextreg $2d, a
 
         ld      a, $00
-        out     ($fe), a
+        out     (Port.ULA), a
 
         pop     hl, de, bc, af
         ei

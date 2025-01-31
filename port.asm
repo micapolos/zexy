@@ -4,6 +4,8 @@
         module  Port
 
 L2_ACCESS       equ     $123b
+ULA             equ     $fe
+DMA             equ     $6b
 
         endmodule
 

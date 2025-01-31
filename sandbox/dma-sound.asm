@@ -3,6 +3,7 @@
         org     $8000
 
         include reg.asm
+        include port.asm
 
 Main
         nextreg Reg.ULA_CTRL, Reg.ULA_CTRL.ulaOff
@@ -21,11 +22,11 @@ Main
         ; Start DMA
         ld      hl, dmaProgram
         ld      b, dmaProgram.size
-        ld      c, $6b
+        ld      c, Port.DMA
         otir
 
 .loop
-        in      a, ($6b)  ; LSB
+        in      a, (Port.DMA)  ; LSB
         and     %11100000
         nextreg Reg.TRANS_COL_FBK, a
         jp      .loop
