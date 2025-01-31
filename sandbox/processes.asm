@@ -5,10 +5,9 @@ STACK_SIZE      equ     $100
 
         org     $8000
 
-        include nextreg.asm
         include int-table.asm
+        include nextreg.asm
         include scheduler.asm
-
 
 Main
         nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
