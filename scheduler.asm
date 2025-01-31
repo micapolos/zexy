@@ -190,10 +190,10 @@ Launch
         ei
         reti
 
-MAX_PROCESS_COUNT       equ     32
-processCount            db      1
-processIndex            db      0
-processTable            ds      MAX_PROCESS_COUNT * 2
+@MAX_PROCESS_COUNT      equ     32
+@processCount           db      1
+@processIndex           db      0
+@processTable           ds      MAX_PROCESS_COUNT * 2
 
         endmodule
 
