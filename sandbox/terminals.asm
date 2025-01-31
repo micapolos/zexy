@@ -72,9 +72,9 @@ Process
         push    af
         push    af
         ld      ix, screenPrinter
-        rlca : rlca : rlca : rlca : rlca : rlca
+        rlca : rlca : rlca : rlca : rlca
         and     %11100000
-        or      %00000110
+        or      %10000110
         ld      (ix + Printer.attr), a
         pop     af
         add     a, '0'
