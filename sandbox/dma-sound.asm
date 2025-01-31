@@ -7,25 +7,15 @@
 Main
         nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
 
-        ; Fill triangle wave, 256 bytes
+        ; Fill sawtooth wave, 256 bytes
         xor     a
         ld      hl, buffer
-
-        ld      b, 128
-.fillUp
+        ld      b, 0
+.fill
         ld      (hl), a
         inc     hl
-        inc     a
-        inc     a
-        djnz    .fillUp
-
-        ld      b, 128
-.fillDown
-        dec     a
-        dec     a
-        ld      (hl), a
-        inc     hl
-        djnz    .fillDown
+        add     a, 8
+        djnz    .fill
 
         ; Start DMA
         ld      hl, dmaProgram
@@ -34,12 +24,6 @@ Main
         otir
 
 .loop
-        ld      a, %10111011    ; WR6 - Read mask
-        ld      ($6b), a
-        ld      a, %10000010    ; counter LSB
-        ld      ($6b), a
-        ld      a, %10100111    ; WR6 - initialize read sequence
-        ld      ($6b), a
         in      a, ($6b)
         nextreg NextReg.TRANS_COLOR_FALLBACK, a
         jp      .loop
@@ -53,11 +37,14 @@ dmaProgram
         db      %00000010       ; cycle length 2
         db      %01111000       ; WR2: port B static, I/O
         db      %00100010       ; cycle length 2, next byte prescalar
-        db      %00001000       ; prescalar
+        db      %11111111       ; prescalar
         db      %11001101       ; WR4: burst mode
         dw      $dfdf           ; start address B (DAC)
         db      %10100010       ; WR5: auto restart
         db      %11001111       ; WR6: load
+        db      %10100111       ; WR6 - initialize read sequence
+        db      %10111011       ; WR6 - Read mask
+        db      %00000010       ; read all mask
         db      %10000111       ; WR6: enable DMA
 .size = $ - dmaProgram
 
