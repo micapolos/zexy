@@ -20,8 +20,8 @@ screenPrinter           Printer { { tileMap, { 32, 80 }, 0 } }
 promptString            dz      "ZEXY v0.1 - unit test suite"
 
 Start
-        nextreg NextReg.CPU_SPEED, 3   ; 28MHz
-        nextreg NextReg.MMU_6, 34
+        nextreg Reg.CPU_SPEED, 3   ; 28MHz
+        nextreg Reg.MMU_6, 34
 
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
         nextreg $6c, %00000000  ; Default tilemap attribute

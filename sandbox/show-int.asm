@@ -2,7 +2,7 @@
 
         org     $8000
 
-        include nextreg.asm
+        include reg.asm
 
 Main
         nextreg $68, %10000000  ; disable ULA
@@ -11,7 +11,7 @@ Main
 .loop
         ld      a, $22
         push    bc
-        call    NextReg.Read
+        call    Reg.Read
         pop     bc
         and     $80
         jp      z, .noint

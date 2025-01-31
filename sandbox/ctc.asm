@@ -2,7 +2,7 @@
 
         org     $8000
 
-        include nextreg.asm
+        include reg.asm
 
 Boot
         nextreg $50, $20

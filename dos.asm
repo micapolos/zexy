@@ -5,8 +5,8 @@
 
 Reset
         ; page-in ROM
-        nextreg NextReg.MMU_0, $ff
-        nextreg NextReg.MMU_1, $ff
+        nextreg Reg.MMU_0, $ff
+        nextreg Reg.MMU_1, $ff
         rst     $00
 
 ; Input
@@ -21,15 +21,15 @@ Call
         push    hl
 
         ; page-in ROM
-        nextreg NextReg.MMU_0, $ff
-        nextreg NextReg.MMU_1, $ff
+        nextreg Reg.MMU_0, $ff
+        nextreg Reg.MMU_1, $ff
 
         rst     $08
 .arg    db      0
 
         ; page-out ROM
-        nextreg NextReg.MMU_0, 35
-        nextreg NextReg.MMU_1, 36
+        nextreg Reg.MMU_0, 35
+        nextreg Reg.MMU_1, 36
         ret
 
         endmodule

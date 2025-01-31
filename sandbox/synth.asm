@@ -2,7 +2,7 @@
 
         org     $8000
 
-        include nextreg.asm
+        include reg.asm
 
 Main
         nextreg $c0, (IntTable & %11100000) | %00000001

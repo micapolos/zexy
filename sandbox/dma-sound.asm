@@ -2,10 +2,10 @@
 
         org     $8000
 
-        include nextreg.asm
+        include reg.asm
 
 Main
-        nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
+        nextreg Reg.ULA_CTRL, %10000000  ; disable ula
 
         ; Fill sawtooth wave, 256 bytes
         xor     a
@@ -14,7 +14,7 @@ Main
 .fill
         ld      (hl), a
         inc     hl
-        add     a, 8
+        add     a, 2
         djnz    .fill
 
         ; Start DMA
@@ -24,8 +24,9 @@ Main
         otir
 
 .loop
-        in      a, ($6b)
-        nextreg NextReg.TRANS_COLOR_FALLBACK, a
+        in      a, ($6b)  ; LSB
+        and     %11100000
+        nextreg Reg.TRANS_COLOR_FALLBACK, a
         jp      .loop
 
 dmaProgram
@@ -37,14 +38,14 @@ dmaProgram
         db      %00000010       ; cycle length 2
         db      %01111000       ; WR2: port B static, I/O
         db      %00100010       ; cycle length 2, next byte prescalar
-        db      %01110000       ; prescalar
+        db      %00111000       ; prescalar
         db      %11001101       ; WR4: burst mode
         dw      $dfdf           ; start address B (DAC)
         db      %10100010       ; WR5: auto restart
         db      %11001111       ; WR6: load
         db      %10100111       ; WR6 - initialize read sequence
         db      %10111011       ; WR6 - Read mask
-        db      %00000010       ; read all mask
+        db      %00000010       ; read counter LSB
         db      %10000111       ; WR6: enable DMA
 .size = $ - dmaProgram
 

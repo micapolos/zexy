@@ -1,7 +1,7 @@
-        ifndef  NextReg_asm
-        define  NextReg_asm
+        ifndef  Reg_asm
+        define  Reg_asm
 
-        module  NextReg
+        module  Reg
 
 CPU_SPEED               equ     $07
 DAC_A_D                 equ     $2d
@@ -15,7 +15,8 @@ MMU_4                   equ     $54
 MMU_5                   equ     $55
 MMU_6                   equ     $56
 MMU_7                   equ     $57
-ULA_CONTROL             equ     $68
+ULA_CTRL                equ     $68
+L2_CTRL                 equ     $70
 
 ; Input:
 ;   A - register

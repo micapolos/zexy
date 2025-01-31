@@ -6,12 +6,12 @@ STACK_SIZE      equ     $100
         org     $8000
 
         include int-table.asm
-        include nextreg.asm
+        include reg.asm
         include scheduler.asm
 
 Main
-        nextreg NextReg.ULA_CONTROL, %10000000  ; disable ula
-        nextreg NextReg.CPU_SPEED, 0
+        nextreg Reg.ULA_CTRL, %10000000  ; disable ula
+        nextreg Reg.CPU_SPEED, 0
 
         call    Scheduler.Init
 
@@ -37,14 +37,14 @@ Main
 
         xor     a
 .mainLoop
-        nextreg NextReg.TRANS_COLOR_FALLBACK, a
+        nextreg Reg.TRANS_COLOR_FALLBACK, a
         inc     a
         jp      .mainLoop
 
 Process
 .entry
 .loop
-        nextreg NextReg.TRANS_COLOR_FALLBACK, a
+        nextreg Reg.TRANS_COLOR_FALLBACK, a
         jp      .loop
 
 stackTable

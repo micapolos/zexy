@@ -1,7 +1,7 @@
         ifndef  Raster_asm
         define  Raster_asm
 
-        include nextreg.asm
+        include reg.asm
 
         module  Raster
 
@@ -11,17 +11,17 @@ Line:
 .loop
         ; h = raster line MSB
         ld      a, $1e
-        call    NextReg.Read
+        call    Reg.Read
         ld      h, a
 
         ; l = raster line LSB
         ld      a, $1f
-        call    NextReg.Read
+        call    Reg.Read
         ld      l, a
 
         ; read MSB for the second time, and retry if it changed
         ld      a, $1e
-        call    NextReg.Read
+        call    Reg.Read
         cp      h
         jp      nz, .loop
 

@@ -1,7 +1,7 @@
         ifndef  Scheduler_asm
         define  Scheduler_asm
 
-        include nextreg.asm
+        include reg.asm
         include int-table.asm
 
         module  Scheduler
@@ -112,7 +112,7 @@ Launch
 ; Interrupt handler, switches to the next process.
 @IntHandler
         ; debug
-        nextreg NextReg.TRANS_COLOR_FALLBACK, 0
+        nextreg Reg.TRANS_COLOR_FALLBACK, 0
 
         push    af
         push    bc

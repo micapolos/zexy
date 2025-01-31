@@ -6,7 +6,7 @@ STACK_SIZE      equ     $100
         org     $8000
 
         include int-table.asm
-        include nextreg.asm
+        include reg.asm
         include scheduler.asm
         include tilebuffer.asm
         include printer.asm
@@ -15,7 +15,7 @@ STACK_SIZE      equ     $100
         include debug.asm
 
 Main
-        nextreg NextReg.CPU_SPEED, 3
+        nextreg Reg.CPU_SPEED, 3
         nextreg $6b, %11001011  ; enable tilemap, 80x32, 512 tiles, textmode, tilemap over ULA
         nextreg $6c, %00000000  ; Default tilemap attribute
         nextreg $6e, (tileMap - $4000) >> 8

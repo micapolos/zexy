@@ -32,9 +32,9 @@ scrollDelta     db      0
 zexy:
         di
 
-        nextreg NextReg.CPU_SPEED, 3   ; 28MHz
-        nextreg NextReg.MMU_0, 35
-        nextreg NextReg.MMU_6, 34
+        nextreg Reg.CPU_SPEED, 3   ; 28MHz
+        nextreg Reg.MMU_0, 35
+        nextreg Reg.MMU_6, 34
 
         im      1
         ei
