@@ -5,7 +5,8 @@
         include reg.asm
 
 Main
-        nextreg Reg.ULA_CTRL, Reg.ULA_CTRL.disabled
+        nextreg Reg.ULA_CTRL, Reg.ULA_CTRL.ulaOff
+        nextreg Reg.DISP_CTRL, Reg.DISP_CTRL.l2on
 
         ; Fill sawtooth wave, 256 bytes
         xor     a

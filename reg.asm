@@ -16,7 +16,9 @@ MMU_5                   equ     $55
 MMU_6                   equ     $56
 MMU_7                   equ     $57
 ULA_CTRL                equ     $68
-.disabled               equ     %10000000
+.ulaOff                 equ     %10000000
+DISP_CTRL               equ     $69
+.l2on                   equ     %10000000
 L2_CTRL                 equ     $70
 
 ; Input:
