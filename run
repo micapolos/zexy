@@ -1,4 +1,4 @@
 set -e
 sjasmplus --lst --zxnext=cspect $1.asm
 cp $1.nex ~/Documents/nextsync12/apps/$1.nex
-cspect $1.nex
+cspect -map=$1.map $1.nex
