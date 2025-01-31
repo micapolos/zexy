@@ -37,7 +37,7 @@ dmaProgram
         db      %00000010       ; cycle length 2
         db      %01111000       ; WR2: port B static, I/O
         db      %00100010       ; cycle length 2, next byte prescalar
-        db      %11111111       ; prescalar
+        db      %01110000       ; prescalar
         db      %11001101       ; WR4: burst mode
         dw      $dfdf           ; start address B (DAC)
         db      %10100010       ; WR5: auto restart
