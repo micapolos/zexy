@@ -5,18 +5,10 @@
         include int-table.asm
         include reg.asm
         include port.asm
+        include video.asm
 
 Main
-        ld      a, Reg.PERIPH_1
-        call    Reg.Read
-        and     Reg.PERIPH_1.hz60
-        jp      nz, .hz60
-.hz50
-        ld      hl, 312
-        jp      .lineCountOk
-.hz60
-        ld      hl, 262
-.lineCountOk
+        call    Video.GetScanlines
         ld      (LineHandler.lineCount), hl
 
         di
