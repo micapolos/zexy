@@ -6,22 +6,15 @@
 ; ===================================================================
 
         macro   DebugWait count
-        push    af
-        push    bc
-        push    de
-        push    hl
+        push    af, bc, de, hl
         ld      bc, count
         call    Debug.Wait
-        pop     hl
-        pop     de
-        pop     bc
-        pop     af
+        pop     hl, de, bc, af
         endm
 
 ; ===================================================================
-
 ; Input
-;   bc - counter
+;   bc - count
 Wait
 .loop   dec     bc
         ld      a, b
