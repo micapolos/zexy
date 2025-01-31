@@ -4,6 +4,7 @@
         include blit.asm
         include tilebuffer.asm
         include coord.asm
+        include string.asm
 
         struct  Printer
 tilebuffer      Tilebuffer
