@@ -1,6 +1,8 @@
         ifndef  Reg_asm
         define  Reg_asm
 
+        include port.asm
+
         module  Reg
 
 TIMING                  equ     $03
@@ -34,11 +36,15 @@ MMU_7                   equ     $57
 
 ULA_CTRL                equ     $68
 .ulaOff                 equ     %10000000
+.extKeysOff             equ     %00010000
 
 DISP_CTRL               equ     $69
 .l2on                   equ     %10000000
 
 L2_CTRL                 equ     $70
+
+EXT_KEYS_0              equ     $b0
+EXT_KEYS_1              equ     $b1
 
 INT_CTL                 equ     $c0
 .intTableMask           equ     %11100000
@@ -59,7 +65,7 @@ INT_EN_1                equ     $c5
 .ctc1                   equ     %00000010
 .ctc0                   equ     %00000001
 
-INT_EN_2                equ     $c5
+INT_EN_2                equ     $c6
 .uart1TxEmpty           equ     %01000000
 .uart1RxHalfFull        equ     %00100000
 .uart1RxAvail           equ     %00010000
@@ -74,7 +80,7 @@ INT_EN_2                equ     $c5
 ;   BC, DE, HL - preserved
 Read:
         push    bc
-        ld      bc, $243b
+        ld      bc, Port.ACTIVE_REG
         out     (c), a
         inc     b
         in      a, (c)
