@@ -3,6 +3,9 @@
 
         module  Reg
 
+TIMING                  equ     $03
+.zx48                   equ     %00010000
+
 PERIPH_1                equ     $05
 .hz60                   equ     %00000100
 
