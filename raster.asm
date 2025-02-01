@@ -54,5 +54,14 @@ FrameWait
         pop     de
         ret
 
+; Input
+;    b - number of frames
+FramesWait
+        push    bc
+        call    FrameWait
+        pop     bc
+        djnz    FramesWait
+        ret
+
         endmodule
         endif

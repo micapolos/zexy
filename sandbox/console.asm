@@ -4,6 +4,8 @@
 
         include terminal.asm
         include cmd/ls.asm
+        include cmd/cat.asm
+        include raster.asm
 
 Main
         call    Terminal.Init
@@ -26,12 +28,22 @@ Main
 
         call    Writer.NewLine
 
+        ld      b, 100
+        call    Raster.FramesWait
+
         call    CmdLs.Exec
+
+        ld      b, 100
+        call    Raster.FramesWait
+
+        ld      hl, string.filename
+        call    CmdCat.Exec
 
 .loop   jp      .loop
 
 string
-.hello  dz      "Hello, everyone!!!"
+.hello          dz      "Hello, everyone!!!"
+.filename       dz      "console.lst"
 
         savenex open "built/sandbox/console.nex", Main, $bfe0
         savenex auto
