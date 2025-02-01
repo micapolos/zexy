@@ -123,7 +123,7 @@ lfo     db      $00
 vol     db      $ff
 
 
-        savenex open "sandbox/synth.nex", Main, $bfe0
+        savenex open "built/sandbox/synth.nex", Main, $bfe0
         savenex auto
         savenex close
 

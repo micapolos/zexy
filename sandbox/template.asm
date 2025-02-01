@@ -5,7 +5,7 @@
 Main
         ret
 
-        savenex open "sandbox/template.nex", Main, $bfe0
+        savenex open "built/sandbox/template.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "sandbox/template.map"
+        cspectmap       "built/sandbox/template.map"

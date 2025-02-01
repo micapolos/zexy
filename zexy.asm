@@ -415,6 +415,6 @@ textPalette
 
 ; =============================================================================
 
-        SAVENEX OPEN "zexy.nex", zexy, $bfe0
+        SAVENEX OPEN "built/zexy.nex", zexy, $bfe0
         SAVENEX AUTO
         SAVENEX CLOSE

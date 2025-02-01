@@ -64,7 +64,7 @@ LineHandler
 color           db      0
 line            dw      0
 
-        savenex open "sandbox/line-int.nex", Main, $bfe0
+        savenex open "built/sandbox/line-int.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "sandbox/line-int.map"
+        cspectmap       "built/sandbox/line-int.map"

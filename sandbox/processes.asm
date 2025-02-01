@@ -52,7 +52,7 @@ stackTable
         ds      STACK_SIZE
         edup
 
-        savenex         open "sandbox/processes.nex", Main, $bfe0
+        savenex         open "built/sandbox/processes.nex", Main, $bfe0
         savenex         auto
         savenex         close
-        cspectmap       "sandbox/processes.map"
+        cspectmap       "built/sandbox/processes.map"

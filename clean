@@ -1,1 +1,2 @@
+rm -rf built
 find . \( -name "*.lst" -o -name "*.nex" -o -name "*.map" -o -name "*.mono_crash" \) -delete

@@ -62,7 +62,7 @@ dmaProgram
 buffer  ds      .size
 .size   equ     $200
 
-        cspectmap    "sandbox/dma-sound.map"
-        savenex open "sandbox/dma-sound.nex", Main, $bfe0
+        cspectmap    "built/sandbox/dma-sound.map"
+        savenex open "built/sandbox/dma-sound.nex", Main, $bfe0
         savenex auto
         savenex close

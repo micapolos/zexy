@@ -131,7 +131,7 @@ tileMap:
 tileDefs:
         include topaz-8.asm
 
-        savenex         open "sandbox/terminals.nex", Main, $bfe0
+        savenex         open "built/sandbox/terminals.nex", Main, $bfe0
         savenex         auto
         savenex         close
-        cspectmap       "sandbox/terminals.map"
+        cspectmap       "built/sandbox/terminals.map"
