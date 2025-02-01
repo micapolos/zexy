@@ -1,6 +1,8 @@
         ifndef  Debug_asm
         define  Debug_asm
 
+        include port.asm
+
         module  Debug
 
 ; ===================================================================
@@ -21,6 +23,21 @@ Wait
         or      c
         ret     z
         jp      .loop
+
+; ===================================================================
+; Wait until space key is pressed
+WaitSpace
+        ld      bc, $7ffe
+.upLoop
+        in      a, (c)
+        and     %00000001
+        jp      z, .upLoop
+.downLoop
+        in      a, (c)
+        and     %00000001
+        jp      nz, .downLoop
+.end
+        ret
 
         endmodule
 

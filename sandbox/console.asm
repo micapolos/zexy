@@ -5,7 +5,7 @@
         include terminal.asm
         include cmd/ls.asm
         include cmd/cat.asm
-        include raster.asm
+        include debug.asm
 
 Main
         call    Terminal.Init
@@ -28,13 +28,15 @@ Main
 
         call    Writer.NewLine
 
-        ld      b, 100
-        call    Raster.FramesWait
+        ld      hl, string.pressSpace
+        call    Writer.StringLine
+        call    Debug.WaitSpace
 
         call    CmdLs.Exec
 
-        ld      b, 100
-        call    Raster.FramesWait
+        ld      hl, string.pressSpace
+        call    Writer.StringLine
+        call    Debug.WaitSpace
 
         ld      hl, string.filename
         call    CmdCat.Exec
@@ -42,7 +44,8 @@ Main
 .loop   jp      .loop
 
 string
-.hello          dz      "Hello, everyone!!!"
+.hello          dz      "Hello, everyone. This is Zexy console!!!"
+.pressSpace     dz      "Press space to continue..."
 .filename       dz      "console.lst"
 
         savenex open "built/sandbox/console.nex", Main, $bfe0
