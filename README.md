@@ -4,9 +4,10 @@
 
 ## Calling convention
 
-* Unless specified differently, AF, BC, DE and HL are not callee-preserved
-* Register ix is usually used to pass structure pointers
-* Register iy is usually used for callbacks
+* Unless specified differently, `af`, `bc`, `de` and `hl` are not callee-preserved
+* Register `ix` is usually used to pass structure pointers
+* Register `iy` is usually used for callbacks
+* Dynamic dispatch is implemented using `ix/iy` register pair, where `ix` points to object and `iy` points to procedure (functional interface) or vtable of procedures (interface).
 
 ## Running
 
