@@ -84,7 +84,7 @@ Exec
 ;   ix - writer ptr
 ;   hl - addr
 ;   bc - count
-PrintBuffer
+@PrintBuffer
         ld      a, (hl)
         inc     hl
         dec     bc
