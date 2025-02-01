@@ -99,6 +99,28 @@ Hex16
         ld      a, l
         jp      Hex8
 
+; =========================================================
+; Input
+;   ix - Writer ptr
+;   a - value
+Bin8
+        ld      b, 8
+.loop
+        ld      c, '0'
+        rlca
+        jp      nc, .print
+        inc     c
+.print
+        push    af
+        push    bc
+        ld      a, c
+        call    Char
+        pop     bc
+        pop     af
+        djnz    .loop
+
+        ret
+
         endmodule
 
         endif

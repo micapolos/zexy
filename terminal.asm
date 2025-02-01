@@ -15,7 +15,7 @@
 
 width           equ     80
 height          equ     32
-writer          Writer { screenPrinter, Printer.Put }
+writer          Writer { printer, Printer.Put }
 
 ; ==========================================================
 Init
@@ -23,7 +23,7 @@ Init
         nextreg $6c, %00000000  ; Default tilemap attribute
         nextreg $6e, (tileMap - $4000) >> 8
         nextreg $6f, (tileDefs - $4000) >> 8
-        nextreg $68, %10000000  ; Disable ULA output
+        nextreg $68, %10010000  ; Disable ULA output, cancel ext keys simulation
 
         ; Clear tilemap
         ld      hl, tileMap
@@ -48,8 +48,7 @@ Init
         call    Palette.Load9Bit
         ret
 
-@screenTilebuffer
-@screenPrinter   Printer { { tileMap, { height, width }, 0 } }
+printer   Printer { { tileMap, { height, width }, 0 } }
 
 @tilemapPalette
         ds      256 * 2

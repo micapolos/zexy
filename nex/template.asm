@@ -3,7 +3,7 @@
         org     $8000
 
 Main
-        ret
+.loop   jr      .loop
 
         savenex open "built/template.nex", Main, $bfe0
         savenex auto
