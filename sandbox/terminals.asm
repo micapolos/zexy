@@ -10,6 +10,7 @@ STACK_SIZE      equ     $100
         include scheduler.asm
         include tilebuffer.asm
         include printer.asm
+        include print.asm
         include palette.asm
         include color.asm
         include debug.asm

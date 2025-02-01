@@ -3,14 +3,19 @@
 
         module  Mem
 
+; =========================================================
+; Input
+;   hl - addr
+;   bc - size
+Clear
+        ld      e, 0
+        ; fallthrough
+
+; =========================================================
 ; Input
 ;   hl - addr
 ;   bc - size
 ;   e - value
-; Output
-;   hl - advanced
-;   bc - 0
-;   de - preserved
 Fill
 .loop
         ld      (hl), e
