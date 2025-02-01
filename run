@@ -1,5 +1,5 @@
 set -e
 mkdir -p built built/sandbox ~/Documents/nextsync12 ~/Documents/nextsync12/sandbox
-sjasmplus --lst --zxnext=cspect $1.asm
+sjasmplus --lst=built/$1.lst --zxnext=cspect $1.asm
 cp built/$1.nex ~/Documents/nextsync12/apps/$1.nex
 cspect -map=$1.map built/$1.nex
