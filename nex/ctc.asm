@@ -90,7 +90,7 @@ IntCTC
 color          db      0
 changeCounter  db      50
 
-        savenex open "built/sandbox/ctc.nex", Main, $bfe0
+        savenex open "built/ctc.nex", Main, $bfe0
         savenex auto
         savenex close
 

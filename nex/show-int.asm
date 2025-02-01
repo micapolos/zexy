@@ -27,7 +27,7 @@ Main
         nextreg $4a, a          ; global background color
         jp      .loop
 
-        savenex open "built/sandbox/show-int.nex", Main, $bfe0
+        savenex open "built/show-int.nex", Main, $bfe0
         savenex auto
         savenex close
 

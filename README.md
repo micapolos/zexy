@@ -10,14 +10,10 @@
 
 ## Running
 
-```
-./run zexy
-```
-
-## Testing
+Run any executable in `nex` directory by its name, like:
 
 ```
-./run test
+./run console
 ```
 
 ## Cleaning

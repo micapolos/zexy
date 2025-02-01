@@ -10,27 +10,6 @@ charProc        dw
 
 ; =========================================================
 ; Input
-;   ix - target
-; Writer
-;   ix - Writer ptr
-@Push
-        macro   Writer_Push charProc
-        push    charProc
-        push    ix
-
-        ld      ix, 0
-        add     ix, sp
-        endm
-
-; =========================================================
-@Pop
-        macro   Writer_Pop
-        pop     hl
-        pop     hl
-        endm
-
-; =========================================================
-; Input
 ;   ix - Writer ptr
 ;   a - char
 Char

@@ -48,7 +48,7 @@ string
 .pressSpace     dz      "Press space to continue..."
 .filename       dz      "console.lst"
 
-        savenex open "built/sandbox/console.nex", Main, $bfe0
+        savenex open "built/console.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "built/sandbox/console.map"
+        cspectmap       "built/console.map"
