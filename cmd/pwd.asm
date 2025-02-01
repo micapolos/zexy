@@ -2,7 +2,7 @@
         define  CmdPwd_asm
 
         include string.asm
-        include printer.asm
+        include writer.asm
 
         module  CmdPwd
 
@@ -11,7 +11,7 @@ currentDirectoryString  dz      "Current directory: "
 dirBuffer               ds      256
 
 ; Input:
-;   ix - printer ptr
+;   ix - writer ptr
 Exec
         ; open dir, A = dir handle
         ld      a, '*'
@@ -21,13 +21,13 @@ Exec
         jp      c, .error
 
         ld      hl, currentDirectoryString
-        call    Printer.Print
+        call    Writer.String
 
         ld      hl, dirBuffer
-        jp      Printer.Println
+        jp      Writer.StringLine
 .error
         ld      hl, errorString
-        jp      Printer.Println
+        jp      Writer.StringLine
 
         endmodule
 

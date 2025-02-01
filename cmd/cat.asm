@@ -1,33 +1,33 @@
         ifndef  CmdCat_asm
         define  CmdCat_asm
 
-        include printer.asm
+        include writer.asm
 
         module  CmdCat
 
 ; Input
-;   ix - Printer ptr
+;   ix - Writer ptr
 ;   hl - filename ptr
 Exec
         ; open dir, A = dir handle
-        push    ix              ; printer ptr
+        push    ix              ; writer ptr
         ld      a, '$'          ; system dir
         ld      ix, hl          ; filename
         ld      b, $01          ; read
         rst     $08
         db      $9a             ; f_open
-        pop     ix              ; printer ptr
+        pop     ix              ; writer ptr
         jr      c, .openError
 
 .loop
         ; a - file handle
         push    af              ; file handle
-        push    ix              ; printer ptr
+        push    ix              ; writer ptr
         ld      ix, .buffer     ; buffer ptr
         ld      bc, $0100       ; size
         rst     $08
         db      $9d             ; f_read
-        pop     ix              ; printer ptr
+        pop     ix              ; writer ptr
         push    af              ; read flag
 
         ld      a, b
@@ -73,13 +73,7 @@ Exec
         jr      .error
 
 .error
-        ld      de, hl
-        call    Printer.PushAttr
-        ld      (ix + Printer.attr), %10000010
-        ld      hl, de
-        call    Printer.Println
-        call    Printer.PopAttr
-        ret
+        jp      Writer.StringLine
 
 .buffer                     ds      256
 .openErrorString            dz      "Error opening file"
@@ -87,7 +81,7 @@ Exec
 .closeErrorString           dz      "Error closing file"
 
 ; Input
-;   ix - printer ptr
+;   ix - writer ptr
 ;   hl - addr
 ;   bc - count
 PrintBuffer
@@ -96,7 +90,7 @@ PrintBuffer
         dec     bc
         push    hl
         push    bc
-        call    Printer.Put
+        call    Writer.Char
         pop     bc
         pop     hl
         ld      a, b

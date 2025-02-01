@@ -3,6 +3,7 @@
         org     $8000
 
         include terminal.asm
+        include cmd/ls.asm
 
 Main
         call    Terminal.Init
@@ -24,6 +25,8 @@ Main
         call    Writer.Hex16
 
         call    Writer.NewLine
+
+        call    CmdLs.Exec
 
 .loop   jp      .loop
 

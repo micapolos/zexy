@@ -54,60 +54,6 @@ PopAttr
         ld      (ix + Printer.attr), h
         ret
 
-; Input
-;   ix - Printer ptr
-;   hl - null-terminated string
-Print
-        push    iy
-        ld      iy, Put
-        call    String.ForEach
-        pop     iy
-        ret
-
-; Input
-;   ix - Printer ptr
-;   hl - null-terminated string
-Println
-        call    Print
-        ld      a, $0a
-        jp      Put
-
-; Input
-;   ix - Printer ptr
-;   a - value
-PrintHex4
-        cp      10
-        jp      c, .digit
-        add     'A' - '9' + 1
-.digit
-        add     '0'
-        jp      Put
-
-; Input
-;   ix - Printer ptr
-;   a - value
-PrintHex8
-        push    af
-        swapnib
-        and     $0f
-        call    PrintHex4
-        pop     af
-
-        and     $0f
-        jp      PrintHex4
-
-; Input
-;   ix - Printer ptr
-;   hl - value
-PrintHex16
-        push    hl
-        ld      a, h
-        call    PrintHex8
-        pop     hl
-
-        ld      a, l
-        jp      PrintHex8
-
 ; Input:
 ;   ix - Printer ptr
 ;   a - byte

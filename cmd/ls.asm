@@ -2,12 +2,12 @@
         define  CmdLs_asm
 
         include string.asm
-        include printer.asm
+        include writer.asm
 
         module  CmdLs
 
 ; Input
-;   ix - Printer ptr
+;   ix - Writer ptr
 Exec
         ; open dir, A = dir handle
         push    ix
@@ -54,38 +54,38 @@ Exec
 .printFileEntry
         ld      hl, .fileEntryString
 .printEntry
-        call    Printer.Print
+        call    Writer.String
 
         pop     hl
-        call    Printer.Println
+        call    Writer.StringLine
 
         jp      .loop
 
 .dirDone
         ld      hl, .fileCountString
-        call    Printer.Print
+        call    Writer.String
         ld      a, (.fileCount)
-        call    Printer.PrintHex8
-        call    Printer.NewLine
+        call    Writer.Hex8
+        call    Writer.NewLine
 
         ld      hl, .dirCountString
-        call    Printer.Print
+        call    Writer.String
         ld      a, (.dirCount)
-        call    Printer.PrintHex8
-        call    Printer.NewLine
+        call    Writer.Hex8
+        call    Writer.NewLine
         ret
 
 .dirEntryError
         ld      hl, .dirEntryErrorString
-        jp      Printer.Println
+        jp      Writer.StringLine
 
 .dirEmpty
         ld      hl, .dirEmptyString
-        jp      Printer.Println
+        jp      Writer.StringLine
 
 .error
         ld      hl, .errorString
-        jp      Printer.Println
+        jp      Writer.StringLine
 
 .fileHandle             db      0
 .errorString            dz      "Error opening directory\n"
