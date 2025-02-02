@@ -48,6 +48,7 @@ Init
         call    Palette.Load9Bit
         ret
 
+tilebuffer
 printer         Printer { { tileMap, { height, width }, 0 }, { 0, 0 }, %11100010 }
 
 @tilemapPalette

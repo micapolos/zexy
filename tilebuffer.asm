@@ -189,11 +189,15 @@ CopyRectDec
 ;   de - Coord (col / row)
 ;   bc - Size (width / height)
 Cut
-        ; hl = new addr
+        ; hl = addr
         ld      hl, (ix + Tilebuffer.addr)
-        ld      a, e
+
+        ; hl += col * 2
+        ld      a, d
         rlca
         add     hl, a
+
+        ; hl += (width + stride) * 2 * row
         ld      a, (ix + Tilebuffer.size.width)
         add     (ix + Tilebuffer.stride)
         rlca
@@ -201,11 +205,20 @@ Cut
         mul     d, e
         add     hl, de
 
-        push    de
-        ld      d, (ix + Tilebuffer.size.width)
-        mul     d, e
+        ; Store new addr
+        ld      (ix + Tilebuffer.addr), hl
 
-        ld      hl, (ix + Tilebuffer.size)
+        ; stride += width - new width
+        ld      a, (ix + Tilebuffer.stride)
+        sub     b
+        add     (ix + Tilebuffer.size.width)
+
+        ; Store new stride
+        ld      (ix + Tilebuffer.stride), a
+
+        ; Store new size
+        ld      (ix + Tilebuffer.size), bc
+
         ret
 
 ; Input
