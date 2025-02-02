@@ -66,6 +66,78 @@ capslck equ     $37
 
 count   equ     $38
 
+codes
+.n0     dw      KeyCode.n0
+.n1     dw      KeyCode.n1
+.n2     dw      KeyCode.n2
+.n3     dw      KeyCode.n3
+.n4     dw      KeyCode.n4
+.n5     dw      KeyCode.n5
+.n6     dw      KeyCode.n6
+.n7     dw      KeyCode.n7
+.n8     dw      KeyCode.n8
+.n9     dw      KeyCode.n9
+
+.a      dw      KeyCode.a
+.b      dw      KeyCode.b
+.c      dw      KeyCode.c
+.d      dw      KeyCode.d
+.e      dw      KeyCode.e
+.f      dw      KeyCode.f
+.g      dw      KeyCode.g
+.h      dw      KeyCode.h
+.i      dw      KeyCode.i
+.j      dw      KeyCode.j
+.k      dw      KeyCode.k
+.l      dw      KeyCode.l
+.m      dw      KeyCode.m
+.n      dw      KeyCode.n
+.o      dw      KeyCode.o
+.p      dw      KeyCode.p
+.q      dw      KeyCode.q
+.r      dw      KeyCode.r
+.s      dw      KeyCode.s
+.t      dw      KeyCode.t
+.u      dw      KeyCode.u
+.v      dw      KeyCode.v
+.w      dw      KeyCode.w
+.x      dw      KeyCode.x
+.y      dw      KeyCode.y
+.z      dw      KeyCode.z
+
+.enter  dw      KeyCode.enter
+.space  dw      KeyCode.space
+.caps   dw      KeyCode.caps
+.symb   dw      KeyCode.symb
+.left   dw      KeyCode.left
+.right  dw      KeyCode.right
+.up     dw      KeyCode.up
+.down   dw      KeyCode.down
+.dot    dw      KeyCode.dot
+.comma  dw      KeyCode.comma
+.quotes dw      KeyCode.quotes
+.graph  dw      KeyCode.graph
+.edit   dw      KeyCode.edit
+.inv    dw      KeyCode.invVideo
+.true   dw      KeyCode.trueVideo
+.delete dw      KeyCode.delete
+.break  dw      KeyCode.break
+.colon  dw      KeyCode.colon
+.extend dw      KeyCode.extend
+.capslk dw      KeyCode.capslock
+
+; =========================================================
+; Input
+;   a - key
+; Output
+;   de - keycode
+GetCode
+        ld      hl, codes
+        rlca
+        add     hl, a
+        ld      de, (hl)
+        ret
+
         endmodule
 
         endif

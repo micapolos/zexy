@@ -10,6 +10,7 @@
 lines
 .zx48   ds      8
 .next   ds      2
+
 keys
         db      Key.space,  Key.symb, Key.m,  Key.n,  Key.b
         db      Key.enter,  Key.l,    Key.k,  Key.j,  Key.h
@@ -24,6 +25,27 @@ keys
         db      Key.dot,    Key.comma,   Key.quotes, Key.colon
         db      Key.extend, Key.capslck, Key.graph,  Key.true
         db      Key.inv,    Key.break,   Key.edit,   Key.delete
+
+; =========================================================
+; Input
+;   a - key
+; Output
+;   nz - pressed
+IsKeyPressed
+        call    Key.GetCode
+        ; fall-through
+
+; =========================================================
+; Input
+;   de - keycode
+; Output
+;   nz - pressed
+IsKeyCodePressed
+        ld      hl, KeyTable.lines
+        ld      a, d
+        add     hl, a
+        and     e
+        ret
 
 ; =========================================================
 ; Input

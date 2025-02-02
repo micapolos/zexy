@@ -3,8 +3,8 @@
 
         module  KeyCode
 
-; MSB - line index
-; LSB - key mask
+; h - offset in KeyTable
+; l - bit mask
 b       equ     $0010
 n       equ     $0008
 m       equ     $0004
