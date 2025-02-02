@@ -55,6 +55,20 @@ Exec
         ld      hl, .fileEntryString
 .printEntry
         call    Writer.String
+        pop     hl
+
+        push    hl
+        call    String.Skip     ; skip filename
+        ld      a, 4
+        add     hl, a           ; skip time/date
+        ldi     de, (hl)
+        ldi     bc, (hl)        ; bcde - filesize
+        call    Writer.Hex32h
+
+        ld      a, ' '
+        call    Writer.Char
+        ld      a, ' '
+        call    Writer.Char
 
         pop     hl
         call    Writer.StringLine

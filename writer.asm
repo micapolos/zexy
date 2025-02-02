@@ -112,9 +112,29 @@ Hex16
 ; =========================================================
 ; Input
 ;   ix - Writer ptr
-;   a - value
+;   hl - value
 Hex16h
         call    Hex16
+        jp      HexSuffix
+
+; =========================================================
+; Input
+;   ix - Writer ptr
+;   bcde - value
+Hex32
+        push    de
+        ld      hl, bc
+        call    Hex16
+        pop     de
+        ld      hl, de
+        jp      Hex16
+
+; =========================================================
+; Input
+;   ix - Writer ptr
+;   bcde - value
+Hex32h
+        call    Hex32
         jp      HexSuffix
 
 ; =========================================================
