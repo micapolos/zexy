@@ -76,17 +76,6 @@ Exec
         jp      .loop
 
 .dirDone
-        ld      hl, .fileCountString
-        call    Writer.String
-        ld      a, (.fileCount)
-        call    Writer.Hex8h
-        call    Writer.NewLine
-
-        ld      hl, .dirCountString
-        call    Writer.String
-        ld      a, (.dirCount)
-        call    Writer.Hex8h
-        call    Writer.NewLine
         ret
 
 .dirEntryError
@@ -107,8 +96,6 @@ Exec
 .dirEmptyString         dz      "Directory empty\n"
 .dirEntryErrorString    dz      "Error reading directory entry\n"
 .dirString              dz      "."
-.fileCountString        dz      "File count: "
-.dirCountString         dz      "Directory count: "
 .dirEntryString         dz      "<DIR> "
 .fileEntryString        dz      "      "
 .dirBuffer              ds      260
