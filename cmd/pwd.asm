@@ -3,10 +3,11 @@
 
         include string.asm
         include writer.asm
+        include esxdos.asm
 
         module  CmdPwd
 
-errorString             dz      "Error getting current directory\n"
+errorString             dz      "Error getting current drive and directory\n"
 currentDirectoryString  dz      "Current directory: "
 dirBuffer               ds      256
 
@@ -15,13 +16,12 @@ dirBuffer               ds      256
 Exec
         ; open dir, A = dir handle
         ld      a, '*'
+        push    ix
         ld      ix, dirBuffer
         rst     $08
-        db      $a8
+        db      EsxDOS.getCwd
+        pop     ix
         jp      c, .error
-
-        ld      hl, currentDirectoryString
-        call    Writer.String
 
         ld      hl, dirBuffer
         jp      Writer.StringLine

@@ -68,8 +68,10 @@ Nibble
         cp      $0a
         jp      c, .digit
         add     'A' - 10
+        jp      .print
 .digit
         add     '0'
+.print
         jp      Char
 
 ; =========================================================
@@ -89,6 +91,14 @@ Hex8
 ; =========================================================
 ; Input
 ;   ix - Writer ptr
+;   a - value
+Hex8h
+        call    Hex8
+        jp      HexSuffix
+
+; =========================================================
+; Input
+;   ix - Writer ptr
 ;   hl - value
 Hex16
         push    hl
@@ -98,6 +108,21 @@ Hex16
 
         ld      a, l
         jp      Hex8
+
+; =========================================================
+; Input
+;   ix - Writer ptr
+;   a - value
+Hex16h
+        call    Hex16
+        jp      HexSuffix
+
+; =========================================================
+; Input
+;   ix - Writer ptr
+@HexSuffix
+        ld      a, 'h'
+        jp      Char
 
 ; =========================================================
 ; Input

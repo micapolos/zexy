@@ -5,6 +5,7 @@
         include terminal.asm
         include cmd/ls.asm
         include cmd/cat.asm
+        include cmd/pwd.asm
         include debug.asm
 
 Main
@@ -28,6 +29,14 @@ Main
 
         call    Writer.NewLine
 
+        ; Set system drive
+        ld      a, '$'
+        rst     $08
+        db      EsxDOS.getSetDrv
+        jp      c, .error
+
+        call    CmdPwd.Exec
+
         ld      hl, string.pressSpace
         call    Writer.StringLine
         call    Debug.WaitSpace
@@ -42,6 +51,7 @@ Main
         call    CmdCat.Exec
 
 .loop   jp      .loop
+.error  jp      .loop
 
 string
 .hello          dz      "Hello, everyone. This is Zexy console!!!"

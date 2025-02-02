@@ -13,7 +13,7 @@ Exec
         push    ix
         ld      a, '$'          ; system dir
         ld      ix, .dirString
-        ld      b, $01          ; ???
+        ld      bc, $9028       ; lfn, no ./..
         rst     $08
         db      $a3
         pop     ix
@@ -65,13 +65,13 @@ Exec
         ld      hl, .fileCountString
         call    Writer.String
         ld      a, (.fileCount)
-        call    Writer.Hex8
+        call    Writer.Hex8h
         call    Writer.NewLine
 
         ld      hl, .dirCountString
         call    Writer.String
         ld      a, (.dirCount)
-        call    Writer.Hex8
+        call    Writer.Hex8h
         call    Writer.NewLine
         ret
 
