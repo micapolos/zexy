@@ -14,7 +14,6 @@ dirBuffer               ds      256
 ; Input:
 ;   ix - writer ptr
 Exec
-        ; open dir, A = dir handle
         ld      a, '*'
         push    ix
         ld      ix, dirBuffer

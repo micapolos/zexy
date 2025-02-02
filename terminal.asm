@@ -56,23 +56,23 @@ printer         Printer { { tileMap, { height, width }, 0 }, { 0, 0 }, %11100010
 
 @textPalette
         ; normal palette
-        RGB_333         0, 0, 0
-        RGB_333         0, 0, 3
-        RGB_333         0, 3, 0
-        RGB_333         0, 3, 3
-        RGB_333         3, 0, 0
-        RGB_333         3, 0, 3
-        RGB_333         3, 3, 0
-        RGB_333         3, 3, 3
+        RGB_333         0, 0, 1
+        RGB_333         0, 0, 6
+        RGB_333         0, 5, 1
+        RGB_333         0, 5, 6
+        RGB_333         5, 0, 1
+        RGB_333         5, 0, 6
+        RGB_333         5, 5, 1
+        RGB_333         5, 5, 6
 
         ; bright palette
-        RGB_333         0, 0, 0
+        RGB_333         0, 0, 1
         RGB_333         0, 0, 7
-        RGB_333         0, 7, 0
+        RGB_333         0, 7, 1
         RGB_333         0, 7, 7
-        RGB_333         7, 0, 0
+        RGB_333         7, 0, 1
         RGB_333         7, 0, 7
-        RGB_333         7, 7, 0
+        RGB_333         7, 7, 1
         RGB_333         7, 7, 7
 
 @tileSize        equ     2

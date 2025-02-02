@@ -37,7 +37,7 @@ Main
         call    Writer.NewLine
 
         ld      ix, Terminal.printer
-        ld      (ix + Printer.attr), %01000010
+        ld      (ix + Printer.attr), %11100000
 
         ld      ix, Terminal.writer
 
