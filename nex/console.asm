@@ -5,7 +5,7 @@
         include terminal.asm
         include cmd/ls.asm
         include cmd/cat.asm
-        include cmd/pwd.asm
+        include esxdos.asm
         include debug.asm
 
 Main
@@ -46,15 +46,6 @@ Main
         rst     $08
         db      EsxDOS.getSetDrv
         jp      c, .error
-
-        ;call    WritePrompt
-        ;call    Debug.WaitSpace
-
-        ;ld      hl, string.pwd
-        ;call    Writer.StringLine
-        ;call    Debug.WaitSpace
-
-        ;call    CmdPwd.Exec
 
         call    WritePrompt
         call    Debug.WaitSpace
