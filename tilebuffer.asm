@@ -5,14 +5,19 @@
         include coord.asm
         include frame.asm
         include blit.asm
+        include stack.asm
 
         struct  Tilebuffer
 addr    dw
 size    Size
-stride  db
+stride  db      0
         ends
 
         module  Tilebuffer
+
+struct
+.size   equ     Tilebuffer
+.size16 equ     (Tilebuffer + 1) >> 1
 
 ; Input
 ;   ix - Tilebuffer ptr
@@ -177,6 +182,44 @@ CopyRectDec
         rlc     b               ; bc = blit width / height
 
         jp      nc, Blit.CopyRect8Dec
+
+; Input
+;   ix - Tilebuffer ptr
+;   bc - width / height
+;   de - col / row
+Clip
+        ; hl = new addr
+        ld      hl, (ix + Tilebuffer.addr)
+        ld      a, e
+        rlca
+        add     hl, a
+        ld      a, (ix + Tilebuffer.size.width)
+        add     (ix + Tilebuffer.stride)
+        rlca
+        ld      d, a
+        mul     d, e
+        add     hl, de
+
+        push    de
+        ld      d, (ix + Tilebuffer.size.width)
+        mul     d, e
+
+        ld      hl, (ix + Tilebuffer.size)
+        ret
+
+; Input
+;   ix - Tilebuffer ptr
+Push
+        ld      hl, ix
+        ld      b, struct.size16
+        jp      Stack.Pop16
+
+; Input
+;   ix - Tilebuffer ptr
+Pop
+        ld      hl, ix
+        ld      b, struct.size16
+        jp      Stack.Pop16
 
         endmodule
 

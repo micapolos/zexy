@@ -48,7 +48,7 @@ Init
         call    Palette.Load9Bit
         ret
 
-printer   Printer { { tileMap, { height, width }, 0 } }
+printer         Printer { { tileMap, { height, width }, 0 }, { 0, 0 }, %11100010 }
 
 @tilemapPalette
         ds      256 * 2

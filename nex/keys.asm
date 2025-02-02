@@ -18,7 +18,7 @@ Main
         call    Printer.MoveTo
 
 .scanLoop
-        ld      ix, Terminal.writer
+        ld      ix, eventWriter
         ld      iy, WriteKey
         call    KeyTable.Scan
 
@@ -63,24 +63,9 @@ Main
 
 WriteKey
         push    af
-        ld      a, (.didWriteKey)
-        or      a
-        jp      z, .noComma
-.comma
-        ld      a, ','
-        call    Writer.Char
-        ld      a, ' '
-        call    Writer.Char
-.noComma
-        ld      a, 1
-        ld      (.didWriteKey), a
-        pop     af
-
-        push    af
         and     $3f
         call    KeyName.GetString
         call    Writer.String
-
         ld      a, ' '
         call    Writer.Char
         pop     af
@@ -93,11 +78,18 @@ WriteKey
 .keyUp
         ld      hl, .upString
 .write
-        jp      Writer.String
+        jp      Writer.StringLine
 
 .downString     dz      "down"
 .upString       dz      "up"
-.didWriteKey    db      0
+
+eventPrinter
+        Printer {
+          { tileMap + 80*2*2 + 30*2, { 30, 20 }, 60 },
+          { 0, 0 },
+          %11100000
+        }
+eventWriter            Writer { eventPrinter, Printer.Put }
 
         savenex open "built/keys.nex", Main, $bfe0
         savenex auto

@@ -264,7 +264,7 @@ Scan
 .edit   db      9, %01000000
 .inv    db      9, %00010000
 .true   db      9, %00001000
-.delete db      9, %00000001
+.delete db      9, %10000000
 .break  db      9, %00000100
 .colon  db      8, %10000000
 .extend db      9, %00000001
