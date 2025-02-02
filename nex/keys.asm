@@ -7,6 +7,8 @@
         include raster.asm
         include empty.asm
         include key-name.asm
+        include key-code.asm
+        include key.asm
 
 Main
         call    Terminal.Init
@@ -22,24 +24,37 @@ Main
 
         ld      ix, Terminal.printer
         call    Printer.PushCursor
+        call    Printer.PushAttr
 
         ld      hl, $0000
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
-        ld      hl, KeyTable.lines
-        ld      b, 10
+        ld      a, 0
+        ld      b, KeyCode.count
 .writeLoop
-        ldi     a, (hl)
-
         push    bc
-        push    hl
-        call    Writer.Bin8
-        pop     hl
+        push    af
+        push    af
+        call    Key.IsPressed
+        jp      z, .notPressed
+        ld      a, %00001010            ; inverse attr
+        jp      .printKey
+.notPressed
+        ld      a, %01000010            ; not-inversed attr
+.printKey
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), a
+        pop     af
+        call    KeyName.GetChar
+        ld      ix, Terminal.writer
+        call    Writer.Char
+        pop     af
         pop     bc
+        inc     a
         djnz    .writeLoop
 
         ld      ix, Terminal.printer
+        call    Printer.PopAttr
         call    Printer.PopCursor
 
         call    Raster.FrameWait
@@ -63,7 +78,7 @@ WriteKey
 
         push    af
         and     $3f
-        call    KeyName.String
+        call    KeyName.GetString
         call    Writer.String
 
         ld      a, ' '

@@ -14,7 +14,7 @@
 ;   nz - pressed
 IsKeyPressed
         ; de = key ref
-        ld      hl, @refs
+        ld      hl, @scanCodes
         rlca
         add     hl, a
         ld      de, (hl)
@@ -209,72 +209,65 @@ lines
 
 ; =========================================================
 
-@refs
-.b               dw     $0010
-.n               dw     $0008
-.m               dw     $0004
-.symb            dw     $0002
-.space           dw     $0001
+@scanCodes
+.n0     db      3, %00001
+.n1     db      3, %00010
+.n2     db      3, %00100
+.n3     db      3, %01000
+.n4     db      3, %10000
+.n5     db      4, %10000
+.n6     db      4, %01000
+.n7     db      4, %00100
+.n8     db      4, %00010
+.n9     db      4, %00001
 
-.h               dw     $0110
-.j               dw     $0108
-.k               dw     $0104
-.l               dw     $0102
-.enter           dw     $0101
+.a      db      6, %00010
+.b      db      0, %10001
+.c      db      7, %01000
+.d      db      6, %00100
+.e      db      5, %00100
+.f      db      6, %01000
+.g      db      4, %10000
+.h      db      1, %10000
+.i      db      2, %00100
+.j      db      1, %01000
+.k      db      1, %00100
+.l      db      1, %00010
+.m      db      0, %00100
+.n      db      0, %01000
+.o      db      2, %00010
+.p      db      2, %00001
+.q      db      5, %00001
+.r      db      5, %01000
+.s      db      6, %00010
+.t      db      5, %10000
+.u      db      2, %01000
+.v      db      7, %10000
+.w      db      5, %00010
+.x      db      7, %00100
+.y      db      2, %10000
+.z      db      7, %00010
 
-.y               dw     $0210
-.u               dw     $0208
-.i               dw     $0204
-.o               dw     $0202
-.p               dw     $0201
-
-.n6              dw     $0310
-.n7              dw     $0308
-.n8              dw     $0304
-.n9              dw     $0302
-.n0              dw     $0301
-
-.n5              dw     $0410
-.n4              dw     $0408
-.n3              dw     $0404
-.n2              dw     $0402
-.n1              dw     $0401
-
-.t               dw     $0510
-.r               dw     $0508
-.e               dw     $0504
-.w               dw     $0502
-.q               dw     $0501
-
-.g               dw     $0610
-.f               dw     $0608
-.d               dw     $0604
-.s               dw     $0602
-.a               dw     $0601
-
-.v               dw     $0710
-.c               dw     $0708
-.x               dw     $0704
-.z               dw     $0702
-.caps            dw     $0701
-
-.colon           dw     $0880
-.quotes          dw     $0840
-.comma           dw     $0820
-.dot             dw     $0810
-.up              dw     $0808
-.down            dw     $0804
-.left            dw     $0802
-.right           dw     $0801
-
-.delete          dw     $0880
-.edit            dw     $0840
-.break           dw     $0820
-.invVideo        dw     $0810
-.trueVideo       dw     $0808
-.graph           dw     $0804
-.capslock        dw     $0802
-.extend          dw     $0801
+.enter  db      1, %00001
+.space  db      0, %00001
+.caps   db      7, %00001
+.symb   db      0, %00010
+.left   db      8, %00000010
+.right  db      8, %00000001
+.up     db      8, %00001000
+.down   db      8, %00000100
+.dot    db      8, %00010000
+.comma  db      8, %00100000
+.quotes db      8, %01000000
+.graph  db      9, %00000100
+.edit   db      9, %01000000
+.inv    db      9, %00010000
+.true   db      9, %00001000
+.delete db      9, %00000001
+.break  db      9, %00000100
+.colon  db      8, %10000000
+.extend db      9, %00000001
+.capslk db      9, %00000010
 
         endmodule
 

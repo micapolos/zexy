@@ -3,17 +3,93 @@
 
         module  KeyName
 
+; =========================================================
+; Input
+;   a - key
+; Output
+;   a - char
+GetChar
+        ld      hl, charMap
+        add     hl, a
+        ld      a, (hl)
+        ret
+
+; =========================================================
 ; Input
 ;   a - key
 ; Output
 ;   hl - string ptr
-String
-        ld      hl, map
+GetString
+        ld      hl, stringMap
         rlca
         add     hl, a
         ld      de, (hl)
         ex      hl, de
         ret
+
+; =========================================================
+
+charMap
+.n0     db '0'
+.n1     db '1'
+.n2     db '2'
+.n3     db '3'
+.n4     db '4'
+.n5     db '5'
+.n6     db '6'
+.n7     db '7'
+.n8     db '8'
+.n9     db '9'
+
+.a      db 'A'
+.b      db 'B'
+.c      db 'C'
+.d      db 'D'
+.e      db 'E'
+.f      db 'F'
+.g      db 'G'
+.h      db 'H'
+.i      db 'I'
+.j      db 'J'
+.k      db 'K'
+.l      db 'L'
+.m      db 'M'
+.n      db 'N'
+.o      db 'O'
+.p      db 'P'
+.q      db 'Q'
+.r      db 'R'
+.s      db 'S'
+.t      db 'T'
+.u      db 'U'
+.v      db 'V'
+.w      db 'W'
+.x      db 'X'
+.y      db 'Y'
+.z      db 'Z'
+
+.enter  db '*'
+.space  db '*'
+.caps   db '*'
+.symb   db '*'
+.left   db '*'
+.right  db '*'
+.up     db '*'
+.down   db '*'
+.dot    db '.'
+.comma  db ','
+.quotes db '\"'
+.graph  db '*'
+.edit   db '*'
+.inv    db '*'
+.true   db '*'
+.delete db '*'
+.break  db '*'
+.colon  db ';'
+.extend db '*'
+.capslk db '*'
+
+; =========================================================
 
 string
 .n0     dz "0"
@@ -75,7 +151,9 @@ string
 .extend dz "Extend mode"
 .capslk dz "Caps Lock"
 
-map
+; =========================================================
+
+stringMap
 .n0     dw      string.n0
 .n1     dw      string.n1
 .n2     dw      string.n2

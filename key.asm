@@ -7,7 +7,7 @@
 
 ; =========================================================
 ; Input
-;   a - key
+;   a - key code
 ; Output
 ;   nz - pressed
 IsPressed       equ     KeyTable.IsKeyPressed
