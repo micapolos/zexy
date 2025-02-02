@@ -42,6 +42,9 @@ DISP_CTRL               equ     $69
 .l2on                   equ     %10000000
 
 L2_CTRL                 equ     $70
+.mode256                equ     %00000000
+.mode320                equ     %00010000
+.mode640                equ     %00100000
 
 EXT_KEYS_0              equ     $b0
 EXT_KEYS_1              equ     $b1
