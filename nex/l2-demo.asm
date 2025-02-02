@@ -9,7 +9,12 @@
 Main
         nextreg Reg.CPU_SPEED, 0
         call    L2_320.Init
-        call    L2_320.Clear
+
+        ld      a, 165
+        call    L2_320.Fill
+
+        ld      a, 0
+        call    L2_320.Fill
 
 .loop   jr      .loop
 
