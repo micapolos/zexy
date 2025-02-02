@@ -12,7 +12,7 @@ Main
         call    Terminal.Init
 
         ld      ix, Terminal.printer
-        ld      hl, $0001
+        ld      hl, $0002
         call    Printer.MoveTo
 
 .scanLoop
@@ -48,6 +48,20 @@ Main
 
 WriteKey
         push    af
+        ld      a, (.didWriteKey)
+        or      a
+        jp      z, .noComma
+.comma
+        ld      a, ','
+        call    Writer.Char
+        ld      a, ' '
+        call    Writer.Char
+.noComma
+        ld      a, 1
+        ld      (.didWriteKey), a
+        pop     af
+
+        push    af
         and     $3f
         call    KeyName.String
         call    Writer.String
@@ -64,14 +78,11 @@ WriteKey
 .keyUp
         ld      hl, .upString
 .write
-        call    Writer.String
-        ld      a, ','
-        call    Writer.Char
-        ld      a, ' '
-        jp      Writer.Char
+        jp      Writer.String
 
 .downString     dz      "down"
 .upString       dz      "up"
+.didWriteKey    db      0
 
         savenex open "built/keys.nex", Main, $bfe0
         savenex auto

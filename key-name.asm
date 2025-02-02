@@ -56,8 +56,8 @@ string
 
 .enter  dz "Enter"
 .space  dz "Space"
-.caps   dz "Caps"
-.symb   dz "Symb"
+.caps   dz "Caps shift"
+.symb   dz "Symbol shift"
 .left   dz "Left"
 .right  dz "Right"
 .up     dz "Up"
@@ -71,7 +71,8 @@ string
 .true   dz "True Video"
 .delete dz "Delete"
 .break  dz "Break"
-.extend dz "Extend"
+.colon  dz ";"
+.extend dz "Extend mode"
 .capslk dz "Caps Lock"
 
 map
@@ -130,6 +131,7 @@ map
 .true   dw      string.true
 .delete dw      string.delete
 .break  dw      string.break
+.colon  dw      string.colon
 .extend dw      string.extend
 .capslk dw      string.capslk
 
