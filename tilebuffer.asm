@@ -5,7 +5,7 @@
         include coord.asm
         include frame.asm
         include blit.asm
-        include stack.asm
+        include struct.asm
 
         struct  Tilebuffer
 addr    dw
@@ -183,11 +183,12 @@ CopyRectDec
 
         jp      nc, Blit.CopyRect8Dec
 
+; =========================================================
 ; Input
 ;   ix - Tilebuffer ptr
-;   bc - width / height
-;   de - col / row
-Clip
+;   de - Coord (col / row)
+;   bc - Size (width / height)
+Cut
         ; hl = new addr
         ld      hl, (ix + Tilebuffer.addr)
         ld      a, e
@@ -209,17 +210,11 @@ Clip
 
 ; Input
 ;   ix - Tilebuffer ptr
-Push
-        ld      hl, ix
-        ld      b, struct.size16
-        jp      Stack.Pop16
+Push    StructPush_tail Tilebuffer
 
 ; Input
 ;   ix - Tilebuffer ptr
-Pop
-        ld      hl, ix
-        ld      b, struct.size16
-        jp      Stack.Pop16
+Pop     StructPop_tail Tilebuffer
 
         endmodule
 
