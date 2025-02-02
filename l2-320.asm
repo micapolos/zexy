@@ -2,6 +2,7 @@
         define  L2_320_asm
 
         include bank.asm
+        include reg.asm
 
         module  L2_320
 

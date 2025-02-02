@@ -2,15 +2,15 @@
 
         org     $8000
 
-        include reg.asm
-        include mem.asm
         include l2-320.asm
 
 Main
-        nextreg Reg.CPU_SPEED, 0
         call    L2_320.Init
 
-        ld      a, 165
+        ld      a, %00100101
+        call    L2_320.Fill
+
+        ld      a, %11011011
         call    L2_320.Fill
 
         ld      a, 0
