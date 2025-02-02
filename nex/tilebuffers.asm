@@ -14,12 +14,12 @@ Main
         call    Tilebuffer.Fill
 
         ld      ix, Terminal.printer
-        ld      hl, $0000
+        ld      hl, $0100
         call    Printer.MoveTo
 
         ld      ix, Terminal.writer
-        ld      a, 'A'
-        call    Writer.Char
+        ld      hl, string.tilebuffer1
+        call    Writer.String
 
         ld      ix, Terminal.tilebuffer
         call    Tilebuffer.Push
@@ -33,54 +33,68 @@ Main
         call    Tilebuffer.Fill
 
         ld      ix, Terminal.printer
-        ld      hl, $0000
+        ld      hl, $0100
         call    Printer.MoveTo
 
         ld      ix, Terminal.writer
-        ld      a, 'B'
-        call    Writer.Char
+        ld      hl, string.tilebuffer2
+        call    Writer.String
 
         ld      ix, Terminal.tilebuffer
         call    Tilebuffer.Push
 
-        ld      de, $0101
-        ld      bc, $3e1a
+        ld      de, $0202
+        ld      bc, $3c18
         call    Tilebuffer.Cut
 
         ld      de, (%01000000 << 8) | ' '
         call    Tilebuffer.Fill
 
         ld      ix, Terminal.printer
+        ld      hl, $0100
+        call    Printer.MoveTo
+
+        ld      ix, Terminal.writer
+        ld      hl, string.tilebuffer3
+        call    Writer.String
+
+        ld      ix, Terminal.printer
         ld      hl, $0000
         call    Printer.MoveTo
 
         ld      ix, Terminal.writer
-        ld      a, 'C'
+        ld      a, '*'
         call    Writer.Char
 
         ld      ix, Terminal.tilebuffer
         call    Tilebuffer.Pop
 
         ld      ix, Terminal.printer
-        ld      hl, $0100
+        ld      hl, $0000
         call    Printer.MoveTo
 
         ld      ix, Terminal.writer
-        ld      a, 'D'
+        ld      a, '*'
         call    Writer.Char
 
         ld      ix, Terminal.tilebuffer
         call    Tilebuffer.Pop
 
         ld      ix, Terminal.printer
-        ld      hl, $0100
+        ld      hl, $0000
         call    Printer.MoveTo
 
         ld      ix, Terminal.writer
-        ld      a, 'E'
+        ld      a, '*'
         call    Writer.Char
 
 .loop   jr      .loop
+
+string
+.tilebuffer1    dz      "Tilebuffer1"
+.tilebuffer2    dz      "Tilebuffer2"
+.tilebuffer3    dz      "Tilebuffer3"
+
 
         savenex open "built/tilebuffers.nex", Main, $bfe0
         savenex auto
