@@ -154,21 +154,26 @@ Scan
         rrc      c              ; next key-pressed bit
         jp       nc, .keyUp
 .keyDown
-        or       $80            ; key pressed, set bit 7 in a
+        or       $80            ; key down, set bit 7 in a
 .keyUp
         push     hl
         push     bc
+        push     de
 
         ; call (iy)
         push     .ret
         jp       (iy)
 
-.ret    pop      bc
+.ret
+        pop      de
+        pop      bc
         pop      hl
         pop      af
+        jp       .nextBit
 .noChange
         inc      hl
         rrc      c              ; next key-pressed bit
+.nextBit
         djnz     .loop
 
         pop      de
