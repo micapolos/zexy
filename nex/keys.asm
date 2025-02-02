@@ -64,7 +64,11 @@ WriteKey
 .keyUp
         ld      hl, .upString
 .write
-        jp      Writer.StringLine
+        call    Writer.String
+        ld      a, ','
+        call    Writer.Char
+        ld      a, ' '
+        jp      Writer.Char
 
 .downString     dz      "down"
 .upString       dz      "up"
