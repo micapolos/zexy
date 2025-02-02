@@ -34,17 +34,17 @@ Main
 .writeLoop
         push    bc
         push    af
+        push    af
         call    Key.IsPressed
         jp      z, .notPressed
         ld      a, %00001010            ; inverse attr
         jp      .printKey
 .notPressed
-        ld      a, %01000010            ; not-inversed attr
+        ld      a, %01000000            ; not-inversed attr
 .printKey
         ld      ix, Terminal.printer
         ld      (ix + Printer.attr), a
         pop     af
-        push    af
         call    KeyName.GetChar
         ld      ix, Terminal.writer
         call    Writer.Char
