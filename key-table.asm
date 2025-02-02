@@ -14,10 +14,11 @@
 ;   nz - pressed
 IsKeyPressed
         ; de = key ref
-        ld      hl, @scanCodes
+        ld      hl, scanCodes
         rlca
         add     hl, a
-        ld      de, (hl)
+        ldi     e, (hl)
+        ld      d, (hl)
 
         ; hl = key line
         ld      hl, lines
@@ -186,7 +187,7 @@ Scan
 
 ; =========================================================
 
-lines
+@lines
 .zx48   ds      8
 .next   ds      2
 
@@ -210,62 +211,62 @@ lines
 ; =========================================================
 
 @scanCodes
-.n0     db      3, %10000
-.n1     db      4, %10000
-.n2     db      4, %01000
+.n0     db      3, %00001
+.n1     db      4, %00001
+.n2     db      4, %00010
 .n3     db      4, %00100
-.n4     db      4, %00010
-.n5     db      4, %00001
-.n6     db      3, %00001
-.n7     db      3, %00010
+.n4     db      4, %01000
+.n5     db      4, %10000
+.n6     db      3, %10000
+.n7     db      3, %01000
 .n8     db      3, %00100
-.n9     db      3, %01000
+.n9     db      3, %00010
 
-.a      db      6, %01000
-.b      db      0, %10001
-.c      db      7, %00010
+.a      db      6, %00001
+.b      db      0, %10000
+.c      db      7, %01000
 .d      db      6, %00100
 .e      db      5, %00100
-.f      db      6, %00010
-.g      db      4, %00001
-.h      db      1, %00001
+.f      db      6, %01000
+.g      db      6, %10000
+.h      db      1, %10000
 .i      db      2, %00100
-.j      db      1, %00010
+.j      db      1, %01000
 .k      db      1, %00100
-.l      db      1, %01000
+.l      db      1, %00010
 .m      db      0, %00100
-.n      db      0, %00010
-.o      db      2, %01000
-.p      db      2, %10000
-.q      db      5, %10000
-.r      db      5, %00010
-.s      db      6, %01000
-.t      db      5, %00001
-.u      db      2, %00010
-.v      db      7, %00001
-.w      db      5, %01000
+.n      db      0, %01000
+.o      db      2, %00010
+.p      db      2, %00001
+.q      db      5, %00001
+.r      db      5, %01000
+.s      db      6, %00010
+.t      db      5, %10000
+.u      db      2, %01000
+.v      db      7, %10000
+.w      db      5, %00010
 .x      db      7, %00100
-.y      db      2, %00001
-.z      db      7, %01000
+.y      db      2, %10000
+.z      db      7, %00010
 
-.enter  db      1, %10000
-.space  db      0, %10000
-.caps   db      7, %10000
-.symb   db      0, %01000
+.enter  db      1, %00001
+.space  db      0, %00001
+.caps   db      7, %00001
+.symb   db      0, %00010
 .left   db      8, %00000010
 .right  db      8, %00000001
-.up     db      8, %10000000
+.up     db      8, %00001000
 .down   db      8, %00000100
-.dot    db      8, %01000000
+.dot    db      8, %00010000
 .comma  db      8, %00100000
-.quotes db      8, %00010000
+.quotes db      8, %01000000
 .graph  db      9, %00000100
-.edit   db      9, %00010000
-.inv    db      9, %01000000
-.true   db      9, %10000000
+.edit   db      9, %01000000
+.inv    db      9, %00010000
+.true   db      9, %00001000
 .delete db      9, %00000001
 .break  db      9, %00000100
-.colon  db      8, %00001000
+.colon  db      8, %10000000
 .extend db      9, %00000001
 .capslk db      9, %00000010
 
