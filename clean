@@ -1,2 +1,3 @@
 set -e
 rm -rf built
+rm -rf ~/Documents/nextsync12/apps/zexy/*.nex
