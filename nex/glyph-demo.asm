@@ -20,53 +20,38 @@ Main
 
         nextreg Reg.MMU_7, 18
 
-        ld      de, glyph.a
+        ld      de, text
         ld      h, $e1
-        ld      a, 1
-        ld      (Glyph.Draw.x), a
-        ld      a, 4
-        ld      (Glyph.Draw.h), a
-        ld      a, 6
-        ld      (Glyph.Draw.w), a
-        ld      a, 89
-        ld      (Glyph.Draw.v), a
-        call    Glyph.Draw
-
-        inc     h
-        ld      de, glyph.b
-        call    Glyph.Draw
-
-        inc     h
-        ld      de, glyph.c
-        call    Glyph.Draw
-
-        inc     h
-        ld      de, glyph.d
+        ld      a, $01
+        ld      (Glyph.Draw.l), a
+        ld      c, text.width
+        ld      a, %11001010
+        ld      (Glyph.Draw.val), a
         call    Glyph.Draw
 
 .loop   jr      .loop
 
-glyph
-.a
-        db      %01111100
-        db      %10010000
-        db      %10010000
-        db      %01111100
-.b
-        db      %11111100
-        db      %10100100
-        db      %10100100
-        db      %01011000
-.c
-        db      %01111000
-        db      %10000100
-        db      %10000100
-        db      %10000100
-.d
-        db      %11111100
-        db      %10000100
-        db      %10000100
-        db      %01111000
+text
+        db      %00111110
+        db      %01001000
+        db      %01001000
+        db      %00111110
+        db      0
+        db      %01111110
+        db      %01010010
+        db      %01010010
+        db      %00101100
+        db      0
+        db      %00111100
+        db      %01000010
+        db      %01000010
+        db      %01000010
+        db      0
+        db      %01111110
+        db      %01000010
+        db      %01000010
+        db      %00111100
+.width  equ     $ - text
 
         savenex open "built/glyph-demo.nex", Main, $bfe0
         savenex auto

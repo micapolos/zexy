@@ -5,23 +5,21 @@
 
 ; =========================================================
 ; Input
-;   de - glyph addr
-;   h - row base addr
-;   .x - x coord
-;   .h - height
-;   .w - width
-;   .v - value
+;   de - line addr
+;   h - dst addr msb
+;   c - width
+;   .l - dst addr lsb
+;   .val - value
 Draw
-.h+*    ld      c, 0            ; row counter
 .loop
         ld      a, (de)
         inc     de
-.x+*    ld      l, 0            ; column
-.w+*    ld      b, 0            ; bit counter
+.l+*    ld      l, 0            ; column
+        ld      b, 8            ; bit counter
 .lineLoop
         rlca
         jp      nc, .nextBit
-.v+*    ld      (hl), 0         ; self-modified color
+.val+*  ld      (hl), 0         ; self-modified color
 .nextBit
         inc     l
         djnz    .lineLoop
