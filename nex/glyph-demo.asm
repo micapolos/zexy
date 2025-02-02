@@ -21,12 +21,8 @@ Main
         nextreg Reg.MMU_7, 18
 
         ld      de, text
-        ld      h, $e1
-        ld      a, $01
-        ld      (Glyph.Draw.l), a
-        ld      c, text.width
-        ld      a, %11001010
-        ld      (Glyph.Draw.val), a
+        ld      hl, $e101
+        ld      bc, (text.color << 8) | text.width
         call    Glyph.Draw
 
 .loop   jr      .loop
@@ -52,6 +48,7 @@ text
         db      %01000010
         db      %00111100
 .width  equ     $ - text
+.color  equ     %11001010
 
         savenex open "built/glyph-demo.nex", Main, $bfe0
         savenex auto
