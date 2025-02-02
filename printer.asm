@@ -5,12 +5,15 @@
         include tilebuffer.asm
         include coord.asm
         include string.asm
+        include struct.asm
 
         struct  Printer
 tilebuffer      Tilebuffer
 cursor          Coord   0, 0
 attr            db      %11100010       ; bright white on black
         ends
+
+        assert  Printer.tilebuffer = 0
 
         module  Printer
 
@@ -182,6 +185,20 @@ ScrollUp
         call    Tilebuffer.FillRect
 
         ret
+
+; Input
+;   ix - Printer ptr
+;   de - Coord (col / row)
+;   bc - Size (width / height)
+Cut     equ     Tilebuffer.Cut
+
+; Input
+;   ix - Printer ptr
+Push    StructPush_tail Printer
+
+; Input
+;   ix - Printer ptr
+Pop     StructPop_tail Printer
 
         endmodule
         endif
