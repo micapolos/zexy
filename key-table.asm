@@ -3,28 +3,9 @@
 
         include port.asm
         include reg.asm
-        include key.asm
+        include key-code.asm
 
         module  KeyTable
-
-lines
-.zx48   ds      8
-.next   ds      2
-
-keys
-        db      Key.space,  Key.symb, Key.m,  Key.n,  Key.b
-        db      Key.enter,  Key.l,    Key.k,  Key.j,  Key.h
-        db      Key.p,      Key.o,    Key.i,  Key.u,  Key.y
-        db      Key.n0,     Key.n9,   Key.n8, Key.n7, Key.n6
-        db      Key.n1,     Key.n2,   Key.n3, Key.n4, Key.n5
-        db      Key.q,      Key.w,    Key.e,  Key.r,  Key.t
-        db      Key.a,      Key.s,    Key.d,  Key.f,  Key.g
-        db      Key.caps,   Key.z,    Key.x,  Key.c,  Key.v
-
-        db      Key.right,  Key.left,    Key.down,   Key.up
-        db      Key.dot,    Key.comma,   Key.quotes, Key.colon
-        db      Key.extend, Key.capslck, Key.graph,  Key.true
-        db      Key.inv,    Key.break,   Key.edit,   Key.delete
 
 ; =========================================================
 ; Input
@@ -32,19 +13,21 @@ keys
 ; Output
 ;   nz - pressed
 IsKeyPressed
-        call    Key.GetCode
-        ; fall-through
+        ; de = key ref
+        ld      hl, @refs
+        rlca
+        add     hl, a
+        ld      de, (hl)
 
-; =========================================================
-; Input
-;   de - keycode
-; Output
-;   nz - pressed
-IsKeyCodePressed
-        ld      hl, KeyTable.lines
+        ; hl = key line
+        ld      hl, lines
         ld      a, d
         add     hl, a
+
+        ; check key bit
+        ld      a, (hl)
         and     e
+
         ret
 
 ; =========================================================
@@ -200,6 +183,98 @@ Scan
 
         pop      de
         ret
+
+; =========================================================
+
+lines
+.zx48   ds      8
+.next   ds      2
+
+; =========================================================
+
+@keys
+        db      KeyCode.space,  KeyCode.symb, KeyCode.m,  KeyCode.n,  KeyCode.b
+        db      KeyCode.enter,  KeyCode.l,    KeyCode.k,  KeyCode.j,  KeyCode.h
+        db      KeyCode.p,      KeyCode.o,    KeyCode.i,  KeyCode.u,  KeyCode.y
+        db      KeyCode.n0,     KeyCode.n9,   KeyCode.n8, KeyCode.n7, KeyCode.n6
+        db      KeyCode.n1,     KeyCode.n2,   KeyCode.n3, KeyCode.n4, KeyCode.n5
+        db      KeyCode.q,      KeyCode.w,    KeyCode.e,  KeyCode.r,  KeyCode.t
+        db      KeyCode.a,      KeyCode.s,    KeyCode.d,  KeyCode.f,  KeyCode.g
+        db      KeyCode.caps,   KeyCode.z,    KeyCode.x,  KeyCode.c,  KeyCode.v
+
+        db      KeyCode.right,  KeyCode.left,    KeyCode.down,   KeyCode.up
+        db      KeyCode.dot,    KeyCode.comma,   KeyCode.quotes, KeyCode.colon
+        db      KeyCode.extend, KeyCode.capslck, KeyCode.graph,  KeyCode.true
+        db      KeyCode.inv,    KeyCode.break,   KeyCode.edit,   KeyCode.delete
+
+; =========================================================
+
+@refs
+.b               dw     $0010
+.n               dw     $0008
+.m               dw     $0004
+.symb            dw     $0002
+.space           dw     $0001
+
+.h               dw     $0110
+.j               dw     $0108
+.k               dw     $0104
+.l               dw     $0102
+.enter           dw     $0101
+
+.y               dw     $0210
+.u               dw     $0208
+.i               dw     $0204
+.o               dw     $0202
+.p               dw     $0201
+
+.n6              dw     $0310
+.n7              dw     $0308
+.n8              dw     $0304
+.n9              dw     $0302
+.n0              dw     $0301
+
+.n5              dw     $0410
+.n4              dw     $0408
+.n3              dw     $0404
+.n2              dw     $0402
+.n1              dw     $0401
+
+.t               dw     $0510
+.r               dw     $0508
+.e               dw     $0504
+.w               dw     $0502
+.q               dw     $0501
+
+.g               dw     $0610
+.f               dw     $0608
+.d               dw     $0604
+.s               dw     $0602
+.a               dw     $0601
+
+.v               dw     $0710
+.c               dw     $0708
+.x               dw     $0704
+.z               dw     $0702
+.caps            dw     $0701
+
+.colon           dw     $0880
+.quotes          dw     $0840
+.comma           dw     $0820
+.dot             dw     $0810
+.up              dw     $0808
+.down            dw     $0804
+.left            dw     $0802
+.right           dw     $0801
+
+.delete          dw     $0880
+.edit            dw     $0840
+.break           dw     $0820
+.invVideo        dw     $0810
+.trueVideo       dw     $0808
+.graph           dw     $0804
+.capslock        dw     $0802
+.extend          dw     $0801
 
         endmodule
 

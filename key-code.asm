@@ -3,75 +3,68 @@
 
         module  KeyCode
 
-; h - offset in KeyTable
-; l - bit mask
-b       equ     $0010
-n       equ     $0008
-m       equ     $0004
-symb    equ     $0002
-space   equ     $0001
+; =========================================================
 
-h       equ     $0110
-j       equ     $0108
-k       equ     $0104
-l       equ     $0102
-enter   equ     $0101
+n0              equ     $00
+n1              equ     $01
+n2              equ     $02
+n3              equ     $03
+n4              equ     $04
+n5              equ     $05
+n6              equ     $06
+n7              equ     $07
+n8              equ     $08
+n9              equ     $09
 
-y       equ     $0210
-u       equ     $0208
-i       equ     $0204
-o       equ     $0202
-p       equ     $0201
+a               equ     $0a
+b               equ     $0b
+c               equ     $0c
+d               equ     $0d
+e               equ     $0e
+f               equ     $0f
+g               equ     $10
+h               equ     $11
+i               equ     $12
+j               equ     $13
+k               equ     $14
+l               equ     $15
+m               equ     $16
+n               equ     $17
+o               equ     $18
+p               equ     $19
+q               equ     $1a
+r               equ     $1b
+s               equ     $1c
+t               equ     $1d
+u               equ     $1e
+v               equ     $1f
+w               equ     $20
+x               equ     $21
+y               equ     $22
+z               equ     $23
 
-n6      equ     $0310
-n7      equ     $0308
-n8      equ     $0304
-n9      equ     $0302
-n0      equ     $0301
+enter           equ     $24
+space           equ     $25
+caps            equ     $26
+symb            equ     $27
+left            equ     $28
+right           equ     $29
+up              equ     $2a
+down            equ     $2b
+dot             equ     $2c
+comma           equ     $2d
+quotes          equ     $2e
+graph           equ     $2f
+edit            equ     $30
+inv             equ     $31
+true            equ     $32
+delete          equ     $33
+break           equ     $34
+colon           equ     $35
+extend          equ     $36
+capslck         equ     $37
 
-n5      equ     $0410
-n4      equ     $0408
-n3      equ     $0404
-n2      equ     $0402
-n1      equ     $0401
-
-t       equ     $0510
-r       equ     $0508
-e       equ     $0504
-w       equ     $0502
-q       equ     $0501
-
-g       equ     $0610
-f       equ     $0608
-d       equ     $0604
-s       equ     $0602
-a       equ     $0601
-
-v       equ     $0710
-c       equ     $0708
-x       equ     $0704
-z       equ     $0702
-caps    equ     $0701
-
-colon           equ     $0880
-quotes          equ     $0840
-comma           equ     $0820
-dot             equ     $0810
-up              equ     $0808
-down            equ     $0804
-left            equ     $0802
-right           equ     $0801
-
-delete          equ     $0880
-edit            equ     $0840
-break           equ     $0820
-invVideo        equ     $0810
-trueVideo       equ     $0808
-graph           equ     $0804
-capslock        equ     $0802
-extend          equ     $0801
-
-.ext
+count           equ     $38
 
         endmodule
 
