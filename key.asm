@@ -5,6 +5,20 @@
 
         module  Key
 
+; =========================================================
+; Input
+;   a - key
+; Output
+;   de - keycode
+GetCode
+        ld      hl, codes
+        rlca
+        add     hl, a
+        ld      de, (hl)
+        ret
+
+; =========================================================
+
 n0      equ     $00
 n1      equ     $01
 n2      equ     $02
@@ -66,6 +80,8 @@ capslck equ     $37
 
 count   equ     $38
 
+; =========================================================
+
 codes
 .n0     dw      KeyCode.n0
 .n1     dw      KeyCode.n1
@@ -125,18 +141,6 @@ codes
 .colon  dw      KeyCode.colon
 .extend dw      KeyCode.extend
 .capslk dw      KeyCode.capslock
-
-; =========================================================
-; Input
-;   a - key
-; Output
-;   de - keycode
-GetCode
-        ld      hl, codes
-        rlca
-        add     hl, a
-        ld      de, (hl)
-        ret
 
         endmodule
 
