@@ -1,2 +1,4 @@
 set -e
 find nex -name "*.asm" -print0 | xargs -0 -I {} sh -c './build "$(basename {} .asm)"'
+cp README.md ~/Documents/nextsync12/apps/zexy/readme.md
+cp README.md built/readme.md

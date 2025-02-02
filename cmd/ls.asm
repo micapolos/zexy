@@ -11,9 +11,9 @@
 Exec
         ; open dir, A = dir handle
         push    ix
-        ld      a, '$'          ; system dir
+        ld      a, '*'          ; current dir
         ld      ix, .dirString
-        ld      bc, $9028       ; lfn, no ./..
+        ld      bc, $1000       ; lfn
         rst     $08
         db      $a3
         pop     ix
@@ -92,7 +92,7 @@ Exec
 .okString               dz      "Directory opened\n"
 .dirEmptyString         dz      "Directory empty\n"
 .dirEntryErrorString    dz      "Error reading directory entry\n"
-.dirString              dz      "/"
+.dirString              dz      "."
 .fileCountString        dz      "File count: "
 .dirCountString         dz      "Directory count: "
 .dirEntryString         dz      "<DIR> "

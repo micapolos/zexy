@@ -11,6 +11,9 @@
 Main
         call    Terminal.Init
 
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), %01000010
+
         ld      ix, Terminal.writer
 
         ld      hl, string.hello
@@ -35,15 +38,35 @@ Main
         db      EsxDOS.getSetDrv
         jp      c, .error
 
+        ld      hl, string.prompt
+        call    Writer.String
+        call    Debug.WaitSpace
+
+        ld      hl, string.pwd
+        call    Writer.StringLine
+        call    Debug.WaitSpace
+
         call    CmdPwd.Exec
 
-        ld      hl, string.pressSpace
+        ld      hl, string.prompt
+        call    Writer.String
+        call    Debug.WaitSpace
+
+        ld      hl, string.ls
         call    Writer.StringLine
         call    Debug.WaitSpace
 
         call    CmdLs.Exec
 
-        ld      hl, string.pressSpace
+        ld      hl, string.prompt
+        call    Writer.String
+        call    Debug.WaitSpace
+
+        ld      hl, string.cat
+        call    Writer.String
+        ld      a, ' '
+        call    Writer.Char
+        ld      hl, string.filename
         call    Writer.StringLine
         call    Debug.WaitSpace
 
@@ -55,8 +78,11 @@ Main
 
 string
 .hello          dz      "Hello, everyone. This is Zexy console!!!"
-.pressSpace     dz      "Press space to continue..."
-.filename       dz      "console.lst"
+.filename       dz      "readme.md"
+.prompt         dz      "> "
+.pwd            dz      "pwd"
+.ls             dz      "ls"
+.cat            dz      "cat"
 
         savenex open "built/console.nex", Main, $bfe0
         savenex auto
