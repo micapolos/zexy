@@ -2,8 +2,8 @@
         define  Coord_asm
 
         struct  Coord
-row     db
 col     db
+row     db
         ends
 
         module  Coord

@@ -67,7 +67,7 @@ StringLine
 Nibble
         cp      $0a
         jp      c, .digit
-        add     'A' - '9' + 1
+        add     'A' - 10
 .digit
         add     '0'
         jp      Char
