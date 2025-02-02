@@ -1,0 +1,1 @@
+find nex -name "*.asm" -print0 | xargs -0 -I {} sh -c './build "$(basename {} .asm)"'
