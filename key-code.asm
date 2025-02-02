@@ -23,17 +23,17 @@ i       equ     $0204
 o       equ     $0202
 p       equ     $0201
 
-k6      equ     $0310
-k7      equ     $0308
-k8      equ     $0304
-k9      equ     $0302
-k0      equ     $0301
+n6      equ     $0310
+n7      equ     $0308
+n8      equ     $0304
+n9      equ     $0302
+n0      equ     $0301
 
-k5      equ     $0410
-k4      equ     $0408
-k3      equ     $0404
-k2      equ     $0402
-k1      equ     $0401
+n5      equ     $0410
+n4      equ     $0408
+n3      equ     $0404
+n2      equ     $0402
+n1      equ     $0401
 
 t       equ     $0510
 r       equ     $0508
