@@ -7,25 +7,54 @@
 ; Input
 ;   de - src line addr
 ;   hl - dst addr
-;   bc - color / width
+;   bc - bit 1 value / row count
 Draw
         ld      a, l
         ld      (.l), a
-        ld      a, b
-        ld      (.b), a
 .loop
         ld      a, (de)
         inc     de
-.l+*    ld      l, 0            ; self-modified offset
-        ld      b, 8            ; bit counter
-.lineLoop
+.bit7
         rlca
-        jp      nc, .nextBit
-.b+*    ld      (hl), 0         ; self-modified color
-.nextBit
+        jp      nc, .bit6
+        ld      (hl), b
+.bit6
         inc     l
-        djnz    .lineLoop
-
+        rlca
+        jp      nc, .bit5
+        ld      (hl), b
+.bit5
+        inc     l
+        rlca
+        jp      nc, .bit4
+        ld      (hl), b
+.bit4
+        inc     l
+        rlca
+        jp      nc, .bit3
+        ld      (hl), b
+.bit3
+        inc     l
+        rlca
+        jp      nc, .bit2
+        ld      (hl), b
+.bit2
+        inc     l
+        rlca
+        jp      nc, .bit1
+        ld      (hl), b
+.bit1
+        inc     l
+        rlca
+        jp      nc, .bit0
+        ld      (hl), b
+.bit0
+        inc     l
+        rlca
+        jp      nc, .nextLine
+        ld      (hl), b
+.nextLine
+.l+*    ld      l, 0            ; self-modified code
         inc     h
         dec     c
         jp      nz, .loop
