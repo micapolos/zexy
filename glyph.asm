@@ -6,9 +6,20 @@
 ; =========================================================
 ; Input
 ;   de - src line addr
-;   hl - dst addr
+;   hl - dst addr MSB
 ;   bc - bit 1 value / row count
 Draw
+        ld      a, l
+        ld      (DrawFast.l), a
+        ; fall-through
+
+; =========================================================
+; Input
+;   de - src line addr
+;   h - dst addr MSB
+;   .l - dst addr LSB
+;   bc - bit 1 value / row count
+DrawFast
         ld      a, l
         ld      (.l), a
 .loop
