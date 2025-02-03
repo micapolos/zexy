@@ -13,10 +13,22 @@ Main
         ld      hl, cursor
         ld      c, $08
         call    Cursor.Init
-.loop
         break
+.loop
+        ld      b, $0c
+.updateLoop
+        push    bc
         ld      hl, cursor
         call    Cursor.Update
+        pop     bc
+        break
+        djnz    .updateLoop
+
+        ld      hl, cursor
+        ld      bc, $123
+        ld      e, $45
+        call    Cursor.Move
+        break
 
         jr      .loop
 
