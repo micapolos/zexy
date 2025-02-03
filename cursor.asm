@@ -22,16 +22,11 @@ flag
 ; Output
 ;   hl - advanced Cursor ptr
 Init
-        ld      (hl), c
-        inc     hl
-        ld      (hl), 0
-        inc     hl
-        ld      (hl), 0
-        inc     hl
-        ld      (hl), 0
-        inc     hl
-        ld      (hl), 0
-        inc     hl
+        ldi      (hl), c
+        ldi      (hl), 0
+        ldi      (hl), 0
+        ldi      (hl), 0
+        ldi      (hl), 0
         ret
 
 ; =========================================================
@@ -41,12 +36,9 @@ Init
 ;   hl - advanced Cursor ptr
 Update
                                         ; (hl) = blinkPeriod
-        ld      c, (hl)                 ; c = blinkPeriod
-        inc     hl                      ; (hl) = blinkCounter
-        ld      b, (hl)                 ; b = blinkCounter
-        inc     hl                      ; (hl) = flags
-        ld      a, (hl)                 ; a = flags
-        dec     hl                      ; hl = blinkCounter
+        ldi     c, (hl)                 ; c = blinkPeriod
+        ldi     b, (hl)                 ; b = blinkCounter
+        ldd     a, (hl)                 ; a = flags
 
         dec     b                       ; b = decremented blinkCounter
         jp      ns, .blinkCounterOk
@@ -54,10 +46,8 @@ Update
         xor     flag.visible            ; invert visible flag
 
 .blinkCounterOk
-        ld      (hl), b                 ; save blinkCounter
-        inc     hl                      ; (hl) = flags
-        ld      (hl), a                 ; save flags
-        inc     hl                      ; (hl) = x
+        ldi     (hl), b                 ; save blinkCounter
+        ldi     (hl), a                 ; save flags
         inc     hl                      ; (hl) = y
         inc     hl                      ; hl = advanced
         ret
@@ -72,16 +62,11 @@ Update
 ; Output
 ;    hl - advanced Cursor ptr
 Move
-                                ; (hl) = blinkPeriod
-        inc     hl              ; (hl) = blinkCounter
-        ld      (hl), 0         ; reset blinkCounter
-        inc     hl              ; (hl) = flags
-        ld      (hl), b         ; save xMsb without any flags
-        inc     hl
-        ld      (hl), c         ; save x
-        inc     hl              ; (hl) = y
-        ld      (hl), e         ; save y
-        inc     hl              ; hl = advanced
+        inc     hl              ; skip blinkPeriod
+        ldi     (hl), 0         ; reset blinkCounter
+        ldi     (hl), b         ; save xMsb without any flags
+        ldi     (hl), c         ; save x
+        ldi     (hl), e         ; save y
         ret
 
         endmodule
