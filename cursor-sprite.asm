@@ -43,7 +43,7 @@ Sync
 LoadPattern
         ld      hl, pattern
         ld      bc, pattern.size
-        jp      Sprite.LoadPattern
+        jp      Sprite.LoadPatternDataFrom
 
 pattern
         dh      "0000000000000000"

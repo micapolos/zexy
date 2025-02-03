@@ -3,6 +3,7 @@
 
         include reg.asm
         include port.asm
+        include dma.asm
 
         struct  Sprite
 attr0   db
@@ -35,10 +36,28 @@ Load
 
 ; =========================================================
 ; Input
-;   hl - src
-;   bc - len
 ;   a - start sprite
-LoadPattern
+;   hl - attr data ptr
+;   bc - attr data length
+LoadAttrs
+        ld      bc, Port.SPR_SEL
+        out     (c), a
+        ; fallthrough
+
+; =========================================================
+; Input
+;   hl - attr data ptr
+;   bc - attr data length
+LoadAttrsCont
+        ld      de, Port.SPR_PAT_UPLD
+        jp      Dma.CopyToPort
+
+; =========================================================
+; Input
+;   a - start sprite
+;   hl - pattern data ptr
+;   bc - pattern data length
+LoadPatterns
         ld      bc, Port.SPR_SEL
         out     (c), a
         ; fallback
@@ -47,28 +66,9 @@ LoadPattern
 ; Input
 ;   hl - src
 ;   bc - len
-LoadPatternCurrent
-        ld      (dmaProgram.src), hl
-        ld      (dmaProgram.len), bc
-        ld      hl, dmaProgram
-        ld      b, dmaProgram.size
-        ld      c, Port.DMA
-        otir
-        ret
-
-dmaProgram
-        db      %10000011
-        db      %01111101
-.src    dw      0
-.len    dw      0
-        db      %00010100
-        db      %00101000
-        db      %10101101
-        dw      Port.SPR_PAT_LD
-        db      %10000010
-        db      %11001111
-        db      %10000111
-.size   equ     $ - dmaProgram
+LoadPatternsCont
+        ld      de, Port.SPR_PAT_UPLD
+        jp      Dma.CopyToPort
 
         endmodule
 
