@@ -20,8 +20,6 @@ Draw
 ;   .l - dst addr LSB
 ;   bc - bit 1 value / row count
 DrawFast
-        ld      a, l
-        ld      (.l), a
 .loop
         ld      a, (de)
         inc     de
