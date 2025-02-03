@@ -24,6 +24,7 @@ DrawFast
         ld      a, (de)
         inc     de
 .bit7
+.l+*    ld      l, 0            ; self-modified code
         rlca
         jp      nc, .bit6
         ld      (hl), b
@@ -63,7 +64,6 @@ DrawFast
         jp      nc, .nextLine
         ld      (hl), b
 .nextLine
-.l+*    ld      l, 0            ; self-modified code
         inc     h
         dec     c
         jp      nz, .loop
