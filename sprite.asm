@@ -49,7 +49,7 @@ LoadAttrs
 ;   hl - attr data ptr
 ;   bc - attr data length
 LoadAttrsCont
-        ld      de, Port.SPR_PAT_UPLD
+        ld      de, Port.SPR_ATTR_UPLD
         jp      Dma.CopyToPort
 
 ; =========================================================

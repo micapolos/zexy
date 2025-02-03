@@ -25,7 +25,7 @@ Main
         nextreg Reg.PAL_IDX, 0  ; start from color 0
         call    Palette.Load9Bit
 
-        nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn | %01000000
+        nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn
 
 .loop   jr      .loop
 
