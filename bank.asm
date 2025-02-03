@@ -2,6 +2,7 @@
         define  Bank_asm
 
         include mem.asm
+        include reg.asm
 
         module  Bank
 

@@ -1,6 +1,8 @@
         ifndef  Writer_asm
         define  Writer_asm
 
+        include string.asm
+
         struct  Writer
 target          dw
 charProc        dw

@@ -1,6 +1,8 @@
         ifndef Dos_asm
         define Dos_asm
 
+        include reg.asm
+
         module Dos
 
 Reset

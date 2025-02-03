@@ -47,6 +47,7 @@ Main
         db      EsxDOS.getSetDrv
         jp      c, .error
 
+.loop
         call    WritePrompt
         call    Debug.WaitSpace
 
@@ -70,9 +71,7 @@ Main
         ld      hl, string.filename
         call    CmdCat.Exec
 
-        call    WritePrompt
-
-.loop   jp      .loop
+        jp      .loop
 .error  jp      .loop
 
 WritePrompt

@@ -1,0 +1,3 @@
+# Builds single lib
+set -e
+sjasmplus --zxnext $1
