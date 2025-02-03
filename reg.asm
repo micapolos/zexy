@@ -31,6 +31,15 @@ LINE_INT_VAL            equ     $23
 
 DAC_A_D                 equ     $2d
 TM_OFS_Y                equ     $31
+
+SPR_IDX                 equ     $34
+SPR_ATTR_0              equ     $35
+SPR_ATTR_1              equ     $36
+SPR_ATTR_2              equ     $37
+SPR_ATTR_3              equ     $38
+SPR_ATTR_4              equ     $39
+
+
 TRANS_COL_FBK           equ     $4a
 
 MMU_0                   equ     $50

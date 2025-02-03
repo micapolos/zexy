@@ -5,7 +5,8 @@
         include terminal.asm
         include cursor.asm
         include raster.asm
-        include key-table.asm
+        include sprite.asm
+        include cursor-sprite.asm
 
 Main
         call    Terminal.Init
@@ -20,6 +21,9 @@ Main
         push    bc
         ld      hl, cursor
         call    Cursor.Update
+        ld      hl, cursor
+        ld      de, sprite
+        call    CursorSprite.Sync
         pop     bc
         break
         djnz    .updateLoop
@@ -33,8 +37,9 @@ Main
         jr      .loop
 
 cursor  Cursor
+sprite  Sprite { $ff, $ff, $fe, $7f, $ff }
 
-        savenex open "built/cursor-demo.nex", Main, $bfe0
+        savenex open "built/cursor-debug.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "built/cursor-demo.map"
+        cspectmap       "built/cursor-debug.map"
