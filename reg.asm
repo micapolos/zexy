@@ -13,6 +13,9 @@ PERIPH_1                equ     $05
 
 CPU_SPEED               equ     $07
 
+SPR_LAY_SYS             equ     $15
+.sprOn                  equ     %00000001
+
 CLIP_WND_L2             equ     $18
 
 CLIP_WND_CTL            equ     $1c
@@ -38,7 +41,11 @@ SPR_ATTR_1              equ     $36
 SPR_ATTR_2              equ     $37
 SPR_ATTR_3              equ     $38
 SPR_ATTR_4              equ     $39
-
+SPR_ATTR_0_INC          equ     $75
+SPR_ATTR_1_INC          equ     $76
+SPR_ATTR_2_INC          equ     $77
+SPR_ATTR_3_INC          equ     $78
+SPR_ATTR_4_INC          equ     $79
 
 TRANS_COL_FBK           equ     $4a
 
