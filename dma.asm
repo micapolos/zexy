@@ -42,9 +42,11 @@ Fill
 ;   a - value
 Copy
         push    hl
+        push    bc
         ld      bc, hl
         ld      hl, program.startA
         ld      (hl), bc
+        pop     bc
         pop     hl
 
         ld      hl, program.len
@@ -71,9 +73,11 @@ Copy
 ;   bc - size
 CopyToPort
         push    hl
+        push    bc
         ld      bc, hl
         ld      hl, program.startA
         ld      (hl), bc
+        pop     bc
         pop     hl
 
         ld      hl, program.len
