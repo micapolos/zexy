@@ -1,6 +1,8 @@
         ifndef  String_asm
         define  String_asm
 
+        include call.asm
+
         module  String
 
 ; =========================================================
@@ -16,9 +18,7 @@ ForEach
         and     a
         ret     z
         push    hl
-        push    .continue
-        jp      (iy)
-.continue
+        calli   iy
         pop     hl
         jp      .loop
 
