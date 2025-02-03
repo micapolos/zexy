@@ -13,6 +13,14 @@ PERIPH_1                equ     $05
 
 CPU_SPEED               equ     $07
 
+CLIP_WND_L2             equ     $18
+
+CLIP_WND_CTL            equ     $1c
+.resTmIdx               equ     %00001000
+.resUlaRegIdx           equ     %00000100
+.resSprRegIdx           equ     %00000010
+.resL2RegIdx            equ     %00000001
+
 LINE_INT_CTL            equ     $22
 .intRead                equ     %10000000
 .ulaIntOff              equ     %00000100

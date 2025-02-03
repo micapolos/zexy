@@ -35,9 +35,7 @@ Fill
 .startA dw      0               ; start address A
 .len    dw      0               ; length
         db      %00110100       ; WR1: port A static, memory
-        db      %00000010       ; cycle length 2
-        db      %01010000       ; WR2: port B increment, memory
-        db      %00000010       ; cycle length 2
+        db      %00010000       ; WR2: port B increment, memory
         db      %10101101       ; WR4: continuous mode
 .startB dw      0               ; start address B
         db      %10000010       ; WR5: stop on end

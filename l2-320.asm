@@ -13,6 +13,13 @@ Init
         nextreg Reg.ULA_CTRL, Reg.ULA_CTRL.ulaOff | Reg.ULA_CTRL.extKeysOff
         nextreg Reg.DISP_CTRL, Reg.DISP_CTRL.l2on
         nextreg Reg.L2_CTRL, Reg.L2_CTRL.mode320
+
+        nextreg Reg.CLIP_WND_CTL, Reg.CLIP_WND_CTL.resL2RegIdx
+        nextreg Reg.CLIP_WND_L2, 0
+        nextreg Reg.CLIP_WND_L2, 159
+        nextreg Reg.CLIP_WND_L2, 0
+        nextreg Reg.CLIP_WND_L2, 255
+
         ret
 
 ; =========================================================

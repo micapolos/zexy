@@ -21,7 +21,7 @@ Main
         nextreg Reg.MMU_7, 18
 
         ld      de, text
-        ld      hl, $e101
+        ld      hl, $e100
         ld      bc, (text.color << 8) | text.width
         call    Glyph.Draw
 

@@ -3,6 +3,7 @@
 
         include mem.asm
         include reg.asm
+        include dma.asm
 
         module  Bank
 
@@ -20,9 +21,10 @@ Clear
 Fill
 .loop
         nextreg Reg.MMU_7, a
-        ld      hl, $e000
+        ld      a, e
+        ld      de, $e000
         ld      bc, $2000
-        jp      Mem.Fill
+        jp      Dma.Fill
 
         endmodule
 
