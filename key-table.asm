@@ -4,6 +4,7 @@
         include port.asm
         include reg.asm
         include key-code.asm
+        include call.asm
 
         module  KeyTable
 
@@ -165,12 +166,7 @@ Scan
         push     hl
         push     bc
         push     de
-
-        ; call (iy)
-        push     .ret
-        jp       (iy)
-
-.ret
+        calli    iy
         pop      de
         pop      bc
         pop      hl

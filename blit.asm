@@ -1,6 +1,8 @@
         ifndef  Blit_asm
         define  Blit_asm
 
+        include call.asm
+
         module  Blit
 
 ; Input:
@@ -75,6 +77,24 @@ CopyRect8Dec
         dec     c
         jp      nz, .nextRow
 
+        ret
+
+; =========================================================
+; Input
+;   h - line MSB
+;   c - count
+;   a, b, de, l - passed to callback
+;   iy - BlitLine proc
+;     Input
+;       h - line MSB
+;     Output
+;       h, c - preserved
+BlitLines
+.loop
+        calli   iy
+        inc     h
+        dec     c
+        jp      nz, .loop
         ret
 
         endmodule

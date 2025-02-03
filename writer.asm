@@ -2,6 +2,7 @@
         define  Writer_asm
 
         include string.asm
+        include call.asm
 
         struct  Writer
 target          dw
@@ -29,10 +30,8 @@ Char
         ; ix = target
         pop     ix
 
-        ; call (hl)
-        push    .ret
-        jp      (hl)
-.ret
+        calli   hl
+
         pop     ix
         ret
 
