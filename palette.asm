@@ -5,17 +5,16 @@
 
 ; Input:
 ;   HL - palette addr
+;   b - count
 ; Output:
 ;   HL, BC, DE, AF - undefined
 Load9Bit
 .loop:
-        ld      a, (hl)
-        inc     hl
-        nextreg $44, a
+        ldi     a, (hl)
+        nextreg Reg.PAL_VAL9, a
 
-        ld      a, (hl)
-        inc     hl
-        nextreg $44, a
+        ldi     a, (hl)
+        nextreg Reg.PAL_VAL9, a
 
         djnz    .loop
 

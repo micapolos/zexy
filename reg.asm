@@ -14,6 +14,7 @@ PERIPH_1                equ     $05
 CPU_SPEED               equ     $07
 
 SPR_LAY_SYS             equ     $15
+.sprOverBord            equ     %00000010
 .sprOn                  equ     %00000001
 
 CLIP_WND_L2             equ     $18
@@ -41,11 +42,26 @@ SPR_ATTR_1              equ     $36
 SPR_ATTR_2              equ     $37
 SPR_ATTR_3              equ     $38
 SPR_ATTR_4              equ     $39
-SPR_ATTR_0_INC          equ     $75
-SPR_ATTR_1_INC          equ     $76
-SPR_ATTR_2_INC          equ     $77
-SPR_ATTR_3_INC          equ     $78
-SPR_ATTR_4_INC          equ     $79
+
+PAL_IDX                 equ     $40
+PAL_VAL8                equ     $41
+
+PAL_CTRL                equ     $43
+.palAutoIncOff          equ     %10000000
+.rwUlaPal1              equ     %00000000
+.rwUlaPal2              equ     %00010000
+.rwL2PalL1              equ     %00100000
+.rwL2PalL2              equ     %00110000
+.rwSprPal1              equ     %01000000
+.rwSprPal2              equ     %01010000
+.rwTmPal1               equ     %01100000
+.rwTmPal2               equ     %01110000
+.selSprPal2             equ     %00001000
+.selL2Pal2              equ     %00000100
+.selUlaPal2             equ     %00000010
+.ulaNextMode            equ     %00000001
+
+PAL_VAL9                equ     $44
 
 TRANS_COL_FBK           equ     $4a
 
@@ -69,6 +85,12 @@ L2_CTRL                 equ     $70
 .mode256                equ     %00000000
 .mode320                equ     %00010000
 .mode640                equ     %00100000
+
+SPR_ATTR_0_INC          equ     $75
+SPR_ATTR_1_INC          equ     $76
+SPR_ATTR_2_INC          equ     $77
+SPR_ATTR_3_INC          equ     $78
+SPR_ATTR_4_INC          equ     $79
 
 EXT_KEYS_0              equ     $b0
 EXT_KEYS_1              equ     $b1

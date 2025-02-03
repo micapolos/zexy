@@ -32,12 +32,7 @@ Fill
 
         ld      (program.value), a
 
-        ld      hl, program
-        ld      b, program.size
-        ld      c, Port.DMA
-        otir
-
-        ret
+        jp      LoadProgram
 
 ; =========================================================
 ; Input
@@ -67,12 +62,7 @@ Copy
         ld      hl, program.wr2
         ld      (hl), %00010000       ; WR2: port B increment, memory
 
-        ld      hl, program
-        ld      b, program.size
-        ld      c, Port.DMA
-        otir
-
-        ret
+        jp      LoadProgram
 
 ; =========================================================
 ; Input
@@ -101,11 +91,13 @@ CopyToPort
         ld      hl, program.wr2
         ld      (hl), %00101000       ; WR2: port B static, I/O
 
+        jp      LoadProgram
+
+@LoadProgram
         ld      hl, program
         ld      b, program.size
         ld      c, Port.DMA
         otir
-
         ret
 
 ; =========================================================
