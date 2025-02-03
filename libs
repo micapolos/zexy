@@ -1,2 +1,3 @@
+# Builds all libs
 set -e
 find . -name "*.asm" -print0 | xargs -0 -I {} ./lib {}
