@@ -3,6 +3,7 @@
 
         include string.asm
         include writer.asm
+        include esxdos.asm
 
         module  CmdLs
 
@@ -15,7 +16,7 @@ Exec
         ld      ix, .dirString
         ld      bc, $1000       ; lfn
         rst     $08
-        db      $a3
+        db      EsxDOS.openDir
         pop     ix
         jp      c, .error
         ld      (.fileHandle), a
@@ -25,7 +26,7 @@ Exec
         ld      a, (.fileHandle)
         ld      ix, .dirBuffer
         rst     $08
-        db      $a4
+        db      EsxDOS.readDir
         pop     ix
         jp      c, .dirEntryError
 
@@ -76,11 +77,15 @@ Exec
         jp      .loop
 
 .dirDone
+        ld      a, (.fileHandle)
+        rst     $08
+        db      EsxDOS.close
         ret
 
 .dirEntryError
         ld      hl, .dirEntryErrorString
-        jp      Writer.StringLine
+        call    Writer.StringLine
+        jp      .dirDone
 
 .dirEmpty
         ld      hl, .dirEmptyString

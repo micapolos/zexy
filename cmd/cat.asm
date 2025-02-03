@@ -2,6 +2,7 @@
         define  CmdCat_asm
 
         include writer.asm
+        include esxdos.asm
 
         module  CmdCat
 
@@ -15,7 +16,7 @@ Exec
         ld      ix, hl          ; filename
         ld      b, $01          ; read
         rst     $08
-        db      $9a             ; f_open
+        db      EsxDOS.open
         pop     ix              ; writer ptr
         jr      c, .openError
 
@@ -26,7 +27,7 @@ Exec
         ld      ix, .buffer     ; buffer ptr
         ld      bc, $0100       ; size
         rst     $08
-        db      $9d             ; f_read
+        db      EsxDOS.read
         pop     ix              ; writer ptr
         push    af              ; read flag
 
@@ -52,7 +53,7 @@ Exec
 
 .close
         rst     $08
-        db      $9b             ; f_close
+        db      EsxDOS.close
         jr      c, .closeError
         ret
 
