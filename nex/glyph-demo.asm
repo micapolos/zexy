@@ -9,12 +9,6 @@
 Main
         call    L2_320.Init
 
-        ld      a, %00100101
-        call    L2_320.Fill
-
-        ld      a, %11011011
-        call    L2_320.Fill
-
         ld      a, %00100001
         call    L2_320.Fill
 
