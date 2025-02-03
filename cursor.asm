@@ -35,7 +35,6 @@ Init
 ; Output
 ;   hl - advanced Cursor ptr
 Update
-                                        ; (hl) = blinkPeriod
         ldi     c, (hl)                 ; c = blinkPeriod
         ldi     b, (hl)                 ; b = blinkCounter
         ldd     a, (hl)                 ; a = flags
