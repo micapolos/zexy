@@ -4,3 +4,5 @@ mkdir -p built ~/Documents/nextsync12/apps
 mkdir -p built ~/Documents/nextsync12/apps/zexy
 sjasmplus --lst=built/$1.lst --zxnext=cspect nex/$1.asm
 cp built/$1.nex ~/Documents/nextsync12/apps/zexy/$1.nex
+cp README.md built/readme.md
+cp README.md ~/Documents/nextsync12/apps/zexy/readme.md
