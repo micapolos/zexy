@@ -50,7 +50,7 @@ Main
 
         ld      ix, Terminal.writer
         ld      iy, KeyWriter.Put
-        call    KeyTable.Scan
+        call    KeyEvent
 
         ld      hl, cursor
         ld      ix, Terminal.printer
@@ -68,6 +68,10 @@ Main
         call    Raster.FrameWait
 
         jr      .loop
+
+KeyEvent
+        call    KeyTable.Scan
+        ret
 
 cursor  Cursor
 sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
