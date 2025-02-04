@@ -43,7 +43,7 @@ Sync
 LoadPattern
         ld      hl, pattern
         ld      bc, pattern.size
-        jp      Sprite.LoadPatternDataFrom
+        jp      Sprite.LoadPatterns
 
 pattern
         dh      "0000000000000000"
@@ -54,14 +54,14 @@ pattern
         dh      "0000000000000000"
         dh      "0000000000000000"
         dh      "0000000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
-        dh      "1100000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
+        dh      "ff00000000000000"
 .size   equ     $ - pattern
 
         endmodule

@@ -7,23 +7,27 @@
         include raster.asm
         include sprite.asm
         include cursor-sprite.asm
+        include math.asm
 
 Main
         call    Terminal.Init
 
-        nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn
+        nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn | Reg.SPR_LAY_SYS.sprOverBord
 
         ld      a, 0
         call    CursorSprite.LoadPattern
 
         ld      hl, cursor
-        ld      c, $08
+        ld      c, $10
         call    Cursor.Init
-.loop
-        ld      b, $0c
-.updateLoop
-        push    bc
 
+        ld      hl, (curX)
+        ld      bc, hl
+        ld      hl, cursor
+        ld      e, $89
+        call    Cursor.Move
+
+.loop
         ld      hl, cursor
         call    Cursor.Update
 
@@ -35,18 +39,30 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
-        pop     bc
-        djnz    .updateLoop
+        ld      bc, $7ffe
+        in      a, (c)
+        and     %00001
+        jp      nz, .spaceUp
 
+.spaceDown
+        ld      hl, (curX)
+        ld      de, 320
+        call    Math.IncHLWrapDE
+        ld      (curX), hl
+
+        ld      bc, hl
         ld      hl, cursor
-        ld      bc, $123
-        ld      e, $45
+        ld      e, $89
         call    Cursor.Move
+
+.spaceUp
+        call    Raster.FrameWait
 
         jr      .loop
 
 cursor  Cursor
 sprite  Sprite
+curX    dw      60
 
         savenex open "built/cursor-debug.nex", Main, $bfe0
         savenex auto
