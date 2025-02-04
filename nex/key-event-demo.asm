@@ -65,36 +65,30 @@ Main
 ;   de - KeyEvent
 WriteKey
         push    de
-        ld      a, e
-        call    KeyName.GetString
-        call    Writer.String
+        ld      a, d    ; modifiers
+        call    Writer.Bin8
         ld      a, ' '
         call    Writer.Char
         pop     de
 
-        ld      a, d
-        and     KeyEvent.keyDown
-        jp      z, .keyUp
-.keyDown
-        ld      hl, .downString
-        jp      .write
-.keyUp
-        ld      hl, .upString
-.write
-        jp      Writer.StringLine
+        ld      a, e
+        call    KeyName.GetString
+        call    Writer.String
+
+        jp      Writer.NewLine
 
 .downString     dz      "down"
 .upString       dz      "up"
 
 eventPrinter
         Printer {
-          { tileMap + 80*2*2 + 30*2, { 30, 20 }, 60 },
+          { tileMap + 80*2*2 + 25*2, { 30, 30 }, 50 },
           { 0, 0 },
           %11100000
         }
 eventWriter            Writer { eventPrinter, Printer.Put }
 
-        savenex open "built/keys.nex", Main, $bfe0
+        savenex open "built/key-event-demo.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "built/keys.map"
+        cspectmap       "built/key-event-demo.map"
