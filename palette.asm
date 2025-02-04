@@ -1,6 +1,8 @@
         ifndef  Palette_asm
         define  Palette_asm
 
+        include reg.asm
+
         module  Palette
 
 ; Input:
