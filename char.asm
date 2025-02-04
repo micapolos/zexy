@@ -3,6 +3,7 @@
 
         module  Char
 
+backSpace       equ      $08
 newLine         equ      $0a
 space           equ      ' '
 quotes          equ      '"'

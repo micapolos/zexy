@@ -89,7 +89,7 @@ Put
         dw      .ret
         dw      .ret
         dw      .ret
-        dw      .ret
+        dw      Delete
         dw      .ret
         dw      NewLine
         dw      .ret
@@ -155,6 +155,28 @@ NewLine
         call    ScrollUp
 .done
         ret
+
+; Input:
+;   ix - printer ptr
+Delete
+        ld      a, (ix + Printer.cursor.col)
+        or      a
+        jp      nz, .colOk
+        add     (ix + Printer.tilebuffer.size.width)
+        ld      b, a
+        ld      a, (ix + Printer.cursor.row)
+        or      a
+        ret     z
+        dec     a
+        ld      (ix + Printer.cursor.row), a
+        ld      a, b
+.colOk
+        dec     a
+        ld      (ix + Printer.cursor.col), a
+        ld      d, a
+        ld      e, (ix + Printer.cursor.row)
+        ld      bc, $0000
+        jp      Tilebuffer.Set
 
 ; Input
 ;   ix - Printer ptr

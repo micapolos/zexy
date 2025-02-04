@@ -73,7 +73,7 @@ noCapsKeyMap
 .edit           db      0
 .inv            db      0
 .true           db      0
-.delete         db      0
+.delete         db      Char.backSpace
 .break          db      0
 .colon          db      ';'
 .extend         db      0
@@ -81,7 +81,7 @@ noCapsKeyMap
 
 ; =========================================================
 capsKeyMap
-        db      0, '1', '2', '3', '4'
+        db      Char.backSpace, '1', '2', '3', '4'
         db      '5', '6', '7', '8', '9'
 
         db      'A', 'B', 'C', 'D', 'E'
@@ -106,7 +106,7 @@ capsKeyMap
 .edit           db      0
 .inv            db      0
 .true           db      0
-.delete         db      0
+.delete         db      Char.backSpace
 .break          db      0
 .colon          db      ';'
 .extend         db      0
@@ -139,7 +139,7 @@ symbKeyMap
 .edit           db      0
 .inv            db      0
 .true           db      0
-.delete         db      0
+.delete         db      Char.backSpace
 .break          db      0
 .colon          db      ';'
 .extend         db      0
