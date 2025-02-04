@@ -23,7 +23,7 @@ Init
         nextreg $6c, %00000000  ; Default tilemap attribute
         nextreg $6e, (tileMap - $4000) >> 8
         nextreg $6f, (tileDefs - $4000) >> 8
-        nextreg $68, %10010000  ; Disable ULA output, cancel ext keys simulation
+        nextreg Reg.ULA_CTRL, Reg.ULA_CTRL.ulaOff | Reg.ULA_CTRL.extKeysOff
 
         ; Clear tilemap
         ld      hl, tileMap

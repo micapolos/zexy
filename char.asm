@@ -5,7 +5,7 @@
 
 newLine         equ      $0a
 space           equ      ' '
-quotes          equ      $22
+quotes          equ      '"'
 delete          equ      $7f
 
         endmodule

@@ -45,7 +45,7 @@ SPR_ATTR_4              equ     $39
 
 PAL_IDX                 equ     $40
 PAL_VAL8                equ     $41
-SPR_TRANS_IDX           equ     $42
+SPR_TRANS_IDX           equ     $4b
 
 PAL_CTRL                equ     $43
 .palAutoIncOff          equ     %10000000

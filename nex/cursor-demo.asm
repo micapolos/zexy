@@ -9,6 +9,8 @@
         include cursor-sprite.asm
         include sprite.asm
         include math.asm
+        include key-table.asm
+        include key-writer.asm
 
 Main
         call    Terminal.Init
@@ -43,33 +45,33 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
-        ld      bc, $7ffe
-        in      a, (c)
-        and     %00001
-        jp      nz, .spaceUp
+        ld      ix, Terminal.writer
+        ld      iy, KeyWriter.Put
+        call    KeyTable.Scan
 
-.spaceDown
-        ld      hl, (curX)
-        ld      de, 320
-        call    Math.IncHLWrapDE
-        ld      (curX), hl
-
-        ld      bc, hl
         ld      hl, cursor
-        ld      e, $89
+        ld      ix, Terminal.printer
+        ld      b, 0
+        ld      c, (ix + Printer.cursor.col)
+        rl      bc
+        rl      bc
+        ld      a, (ix + Printer.cursor.row)
+        rlca
+        rlca
+        rlca
+        ld      e, a
         call    Cursor.Move
 
-.spaceUp
         call    Raster.FrameWait
 
         jr      .loop
 
 cursor  Cursor
-sprite  Sprite  { 0, 0, 0, %01000000, %10000000 }
+sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
 curX    dw      60
 
 cursorPattern
-        include data/cursor-line.asm
+        include data/cursor-underscore.asm
 .size   equ     $ - cursorPattern
 
         savenex open "built/cursor-demo.nex", Main, $bfe0
