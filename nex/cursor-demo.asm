@@ -65,8 +65,8 @@ Main
         ld      ix, Terminal.printer
         ld      b, 0
         ld      c, (ix + Printer.cursor.col)
-        rl      bc
-        rl      bc
+        sla     bc
+        sla     bc
         ld      a, (ix + Printer.cursor.row)
         rlca
         rlca
