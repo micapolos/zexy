@@ -3,27 +3,26 @@
 
         include char.asm
         include writer.asm
+        include key-event.asm
 
         module  KeyWriter
 
 ; =========================================================
 ; Input
 ;   ix - writer
-;   a - key event
+;   de - KeyEvent
 Put
-        push    af
-        and     %10000000
-        jp      z, .popRet
+        ld      a, d
+        and     KeyEvent.keyDown
+        ret     z
 
-        ld      bc, $7ffe
-        in      a, (c)
-        and     %00000010
-        jp      z, .symb
+        ld      a, d
+        and     KeyModifier.symbolShift
+        jp      nz, .symb
 .noSymb
-        ld      bc, $fefe
-        in      a, (c)
-        and     %00000001
-        jp      z, .caps
+        ld      a, d
+        and     KeyModifier.capsShift
+        jp      nz, .caps
 .noCaps
         ld      hl, noCapsKeyMap
         jp      .lookup
@@ -34,17 +33,12 @@ Put
         ld      hl, symbKeyMap
         jp      .lookup
 .lookup
-        pop     af
-        and     %01111111       ; mask-out keyup / keydown bit
+        ld      a, e
         add     hl, a
         ld      a, (hl)
         or      a
         ret     z               ; don't write char 0
         jp      Writer.Char
-
-.popRet
-        pop     af
-        ret
 
 ; =========================================================
 noCapsKeyMap

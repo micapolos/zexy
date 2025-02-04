@@ -61,16 +61,19 @@ Main
 
         jp       .scanLoop
 
+; Input
+;   de - KeyEvent
 WriteKey
-        push    af
-        and     $3f
+        push    de
+        ld      a, e
         call    KeyName.GetString
         call    Writer.String
         ld      a, ' '
         call    Writer.Char
-        pop     af
+        pop     de
 
-        bit     7, a
+        ld      a, d
+        and     KeyEvent.keyDown
         jp      z, .keyUp
 .keyDown
         ld      hl, .downString

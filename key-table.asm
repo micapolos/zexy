@@ -5,6 +5,8 @@
         include reg.asm
         include key-code.asm
         include call.asm
+        include keyboard.asm
+        include key-event.asm
 
         module  KeyTable
 
@@ -157,19 +159,35 @@ Scan
         jp       nc, .noChange
 .change
         push     af
+        push     de             ; will be used to store KeyEvent
+
         ldi      a, (hl)
+        ld       e, a           ; store key in e
         rrc      c              ; next key-pressed bit
         jp       nc, .keyUp
 .keyDown
-        or       $80            ; key down, set bit 7 in a
+        ld       d, KeyEvent.keyDown
+        jp       .contKey
 .keyUp
+        ld       d, 0
+.contKey
         push     hl
         push     bc
+
+        ; a = KeyModifier
         push     de
-        calli    iy
+        call     Keyboard.GetModifier
         pop      de
+
+        or       d              ; combine with KeyDown from d
+        ld       d, a           ; store in d
+
+        calli    iy
+
         pop      bc
         pop      hl
+
+        pop      de
         pop      af
         jp       .nextBit
 .noChange
