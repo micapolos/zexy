@@ -129,7 +129,7 @@ tileMap:
         ds      80 * 32 * 2
 
 tileDefs:
-        include topaz-8.asm
+        include data/topaz-8.asm
 
         savenex         open "built/terminals.nex", Main, $bfe0
         savenex         auto

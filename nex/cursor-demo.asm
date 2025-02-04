@@ -7,15 +7,19 @@
         include raster.asm
         include sprite.asm
         include cursor-sprite.asm
+        include sprite.asm
         include math.asm
 
 Main
         call    Terminal.Init
 
         nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn | Reg.SPR_LAY_SYS.sprOverBord
+        nextreg Reg.SPR_TRANS_IDX, 0
 
+        ld      hl, cursorPattern
+        ld      de, cursorPattern.size
         ld      a, 0
-        call    CursorSprite.LoadPattern
+        call    Sprite.LoadPatterns
 
         ld      hl, cursor
         ld      c, $10
@@ -61,10 +65,14 @@ Main
         jr      .loop
 
 cursor  Cursor
-sprite  Sprite
+sprite  Sprite  { 0, 0, 0, %01000000, %10000000 }
 curX    dw      60
 
-        savenex open "built/cursor-debug.nex", Main, $bfe0
+cursorPattern
+        include data/cursor-line.asm
+.size   equ     $ - cursorPattern
+
+        savenex open "built/cursor-demo.nex", Main, $bfe0
         savenex auto
         savenex close
-        cspectmap       "built/cursor-debug.map"
+        cspectmap       "built/cursor-demo.map"
