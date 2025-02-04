@@ -29,8 +29,7 @@ MoveTo
 ;   ix - Printer ptr
 PushCursor
         pop     hl
-        ld      d, (ix + Printer.cursor.col)
-        ld      e, (ix + Printer.cursor.row)
+        ld      de, (ix + Printer.cursor)
         push    de
         jp      (hl)
 
@@ -74,9 +73,7 @@ Put
         jp      (hl)
 
 .char
-        ld      e, (ix + Printer.cursor.row)
-        ld      d, (ix + Printer.cursor.col)
-
+        ld      de, (ix + Printer.cursor)
         ld      c, a
         ld      b, (ix + Printer.attr)
         call    Tilebuffer.Set
@@ -122,9 +119,7 @@ Put
 ; Input
 ;   ix - Printer ptr
 Advance
-        ld      h, (ix + Printer.tilebuffer.size.width)
-        ld      l, (ix + Printer.tilebuffer.size.height)
-
+        ld      hl, (ix + Printer.tilebuffer.size)
         ld      a, (ix + Printer.cursor.col)
         inc     a
         cp      h
@@ -147,8 +142,7 @@ Advance
 ; Input:
 ;   ix - printer ptr
 NewLine
-        ld      h, (ix + Printer.tilebuffer.size.width)
-        ld      l, (ix + Printer.tilebuffer.size.height)
+        ld      hl, (ix + Printer.tilebuffer.size)
 
         ld      (ix + Printer.cursor.col), 0
         ld      a, (ix + Printer.cursor.row)
@@ -165,8 +159,7 @@ NewLine
 ; Input
 ;   ix - Printer ptr
 ScrollUp
-        ld      b, (ix + Printer.tilebuffer.size.width)
-        ld      c, (ix + Printer.tilebuffer.size.height)
+        ld      bc, (ix + Printer.tilebuffer.size)
         dec     c
         jp      z, .clearBottomLine
 

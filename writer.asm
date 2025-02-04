@@ -19,13 +19,11 @@ Char
         push    ix
 
         ; hl = target
-        ld      l, (ix + Writer.target)
-        ld      h, (ix + Writer.target + 1)
+        ld      hl, (ix + Writer.target)
         push    hl
 
         ; hl = proc
-        ld      l, (ix + Writer.charProc)
-        ld      h, (ix + Writer.charProc + 1)
+        ld      hl, (ix + Writer.charProc)
 
         ; ix = target
         pop     ix

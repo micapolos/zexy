@@ -34,12 +34,8 @@ Set
 ;   ix - Tilebuffer ptr
 ;   de - attr / value
 Fill
-        ld      l, (ix + Tilebuffer.addr)
-        ld      h, (ix + Tilebuffer.addr + 1)
-
-        ld      c, (ix + Tilebuffer.size.height)
-        ld      b, (ix + Tilebuffer.size.width)
-
+        ld      hl, (ix + Tilebuffer.addr)
+        ld      bc, (ix + Tilebuffer.size)
         ld      a, (ix + Tilebuffer.stride)
 
         jp      Blit.FillRect16
@@ -68,8 +64,7 @@ FillRect
 ;   bc - preserved
 GetAddr
         ; hl = base addr
-        ld      l, (ix + Tilebuffer.addr)
-        ld      h, (ix + Tilebuffer.addr + 1)
+        ld      hl, (ix + Tilebuffer.addr)
 
         ; hl += col * 2
         ld      a, d
