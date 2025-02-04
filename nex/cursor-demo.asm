@@ -18,6 +18,9 @@ Main
         nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn | Reg.SPR_LAY_SYS.sprOverBord
         nextreg Reg.SPR_TRANS_IDX, 0
 
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), %11100000
+
         ld      hl, cursorPattern
         ld      de, cursorPattern.size
         ld      a, 0
