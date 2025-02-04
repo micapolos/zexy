@@ -51,7 +51,7 @@ Main
         ld      bc, (ix + Printer.cursor)
         push    bc
 
-        ld      ix, Terminal.writer
+        ld      ix, writer
         ld      iy, KeyWriter.Put
         call    KeyTable.Scan
 
@@ -79,6 +79,31 @@ Main
 
         jr      .loop
 
+; =========================================================
+; Input
+;   ix - Printer ptr
+;   a - char
+WriteChar
+        call    Printer.Put
+        jp      CursorMoveToPrinterCoord
+
+; =========================================================
+; Input
+;   ix - Printer ptr
+CursorMoveToPrinterCoord
+        ld      hl, cursor
+        ld      b, 0
+        ld      c, (ix + Printer.cursor.col)
+        sla     bc
+        sla     bc
+        ld      a, (ix + Printer.cursor.row)
+        rlca
+        rlca
+        rlca
+        ld      e, a
+        jp      Cursor.Move
+
+writer  Writer  { Terminal.printer, WriteChar }
 cursor  Cursor
 sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
 curX    dw      60
