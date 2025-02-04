@@ -30,10 +30,9 @@ Main
         ld      c, $10
         call    Cursor.Init
 
-        ld      hl, (curX)
-        ld      bc, hl
         ld      hl, cursor
-        ld      e, $89
+        ld      bc, 0
+        ld      e, 0
         call    Cursor.Move
 
 .loop
@@ -48,9 +47,19 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
+        ld      ix, Terminal.printer
+        ld      bc, (ix + Printer.cursor)
+        push    bc
+
         ld      ix, Terminal.writer
         ld      iy, KeyWriter.Put
-        call    KeyEvent
+        call    KeyTable.Scan
+
+        pop     hl
+        ld      ix, Terminal.printer
+        ld      bc, (ix + Printer.cursor)
+        sub     hl, bc
+        jp      z, .noMove
 
         ld      hl, cursor
         ld      ix, Terminal.printer
@@ -65,13 +74,10 @@ Main
         ld      e, a
         call    Cursor.Move
 
+.noMove
         call    Raster.FrameWait
 
         jr      .loop
-
-KeyEvent
-        call    KeyTable.Scan
-        ret
 
 cursor  Cursor
 sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
