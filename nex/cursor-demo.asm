@@ -47,32 +47,9 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
-        ld      ix, Terminal.printer
-        ld      bc, (ix + Printer.cursor)
-        push    bc
-
         ld      ix, writer
         ld      iy, KeyWriter.Put
         call    KeyTable.Scan
-
-        pop     hl
-        ld      ix, Terminal.printer
-        ld      bc, (ix + Printer.cursor)
-        sub     hl, bc
-        jp      z, .noMove
-
-        ld      hl, cursor
-        ld      ix, Terminal.printer
-        ld      b, 0
-        ld      c, (ix + Printer.cursor.col)
-        sla     bc
-        sla     bc
-        ld      a, (ix + Printer.cursor.row)
-        rlca
-        rlca
-        rlca
-        ld      e, a
-        call    Cursor.Move
 
 .noMove
         call    Raster.FrameWait
