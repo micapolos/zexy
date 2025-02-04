@@ -178,6 +178,64 @@ Delete
         ld      bc, $0000
         jp      Tilebuffer.Set
 
+; Input:
+;   ix - printer ptr
+Left
+        ld      a, (ix + Printer.cursor.col)
+        or      a
+        ret     z
+        dec     a
+        ld      (ix + Printer.cursor.col), a
+        ret
+
+; Input:
+;   ix - printer ptr
+Right
+        ld      a, (ix + Printer.cursor.col)
+        inc     a
+        cp      (ix + Printer.tilebuffer.size.width)
+        ret     nc
+        ld      (ix + Printer.cursor.col), a
+        ret
+
+; Input:
+;   ix - printer ptr
+Up
+        ld      a, (ix + Printer.cursor.row)
+        or      a
+        ret     z
+        dec     a
+        ld      (ix + Printer.cursor.row), a
+        ret
+
+; Input:
+;   ix - printer ptr
+Down
+        ld      a, (ix + Printer.cursor.row)
+        inc     a
+        cp      (ix + Printer.tilebuffer.size.height)
+        ret     nc
+        ld      (ix + Printer.cursor.row), a
+        ret
+
+; Input:
+;   ix - printer ptr
+TopLeft
+        ld      a, 0
+        ld      (ix + Printer.cursor.col), a
+        ld      (ix + Printer.cursor.row), a
+        ret
+
+; Input:
+;   ix - printer ptr
+BottomLeft
+        ld      a, 0
+        ld      (ix + Printer.cursor.row), a
+        ld      a, (ix + Printer.tilebuffer.size.width)
+        dec     a
+        ld      (ix + Printer.cursor.col), a
+        ret
+
 ; Input
 ;   ix - Printer ptr
 ScrollUp

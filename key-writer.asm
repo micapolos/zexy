@@ -81,8 +81,8 @@ noCapsKeyMap
 
 ; =========================================================
 capsKeyMap
-        db      Char.backSpace, '1', '2', '3', '4'
-        db      '5', '6', '7', '8', '9'
+        db      Char.backSpace, 0, 0, 0, 0
+        db      0, 0, 0, 0, 0
 
         db      'A', 'B', 'C', 'D', 'E'
         db      'F', 'G', 'H', 'I', 'J'
