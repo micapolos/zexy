@@ -5,17 +5,76 @@
         include writer.asm
         include key-event.asm
 
+        struct  KeyWriter
+; delay after first press
+initialDelay            db      $00
+; repeat delay
+repeatDelay             db      $00
+; bit 7: 1 = key pressed, 0 = no key pressed
+; bit 6..0: pressed key
+repeatKey               db      $00
+; counter for delays
+delayCounter            db      $00
+        ends
+
         module  KeyWriter
 
 ; =========================================================
 ; Input
-;   ix - writer
-;   de - KeyEvent
-Put
-        ld      a, d
-        and     KeyEvent.keyDown
+;   hl - KeyWriter ptr
+;   de - repeat / delay
+; Output
+;   hl - advanced KeyWriter ptr
+Init
+        ldi     (hl), de        ; delay / repeat
+        ldi     (hl), 0         ; repeat key
+        ldi     (hl), 0         ; counter
+        ret
+
+; =========================================================
+; Input
+;   hl - KeyWriter ptr
+;   ix - Writer ptr
+; Output
+;   hl - advanced KeyWriter ptr
+Update
+        ldi     de, (hl)        ; de = repeatDelay / initialDelay
+        ldi     c, (hl)         ; c = repeatKey
+        ld      b, (hl)         ; b = delayCounter
+
+        ; return if no repeat key is pressed
+        ld      a, c
+        and     %10000000
         ret     z
 
+        ret
+
+; =========================================================
+; Input
+;   hl - KeyWriter ptr
+;   de - KeyEvent
+;   ix - Writer ptr
+; Output
+;   hl - advanced KeyWriter ptr
+HandleKeyEvent
+        ldi     bc, (hl)                ; bc = repeatDelay / initialDelay
+
+        ld      a, d                    ; a = KeyModifier
+        and     KeyEvent.keyDown        ; check for keyDown
+        jp      nz, .keyDown
+.keyUp
+        ; compare with repeatKey
+        ld      a, e
+        cp      (hl)
+        jp      nz, .keyUpCont          ; key current repeatKey if keyUp is different
+        ld      (hl), 0                 ; reset repeatKey if keyUp is the same
+.keyUpCont
+        inc     hl
+        inc     hl
+        ret
+
+.keyDown
+        push    hl
         ld      a, d
         and     KeyModifier.symbolShift
         jp      nz, .symb
@@ -33,15 +92,34 @@ Put
         ld      hl, symbKeyMap
         jp      .lookup
 .lookup
+        ; read key
         ld      a, e
         add     hl, a
         ld      a, (hl)
         or      a
-        ret     z               ; don't write char 0
-        jp      Writer.Char
+        jp      z, .noChar
+
+        push    bc
+        push    de
+        call    Writer.Char
+        pop     de
+        pop     bc
+
+        pop     hl
+        ld      a, e                    ; a = pressed key
+        or      %10000000               ; keyRepeat pressed flag
+        ldi     (hl), a                 ; repeatKey = a with repeat flag
+        ldi     (hl), c                 ; delayCounter = initialDelay
+        ret
+
+.noChar
+        pop     hl
+        inc     hl
+        inc     hl
+        ret
 
 ; =========================================================
-noCapsKeyMap
+@noCapsKeyMap
         db      '0', '1', '2', '3', '4'
         db      '5', '6', '7', '8', '9'
 
@@ -74,7 +152,7 @@ noCapsKeyMap
 .capslck        db      0
 
 ; =========================================================
-capsKeyMap
+@capsKeyMap
         db      Char.backSpace, 0, 0, 0, 0
         db      0, 0, 0, 0, 0
 
@@ -107,7 +185,7 @@ capsKeyMap
 .capslck        db      0
 
 ; =========================================================
-symbKeyMap
+@symbKeyMap
         db      '_', '!', '@', '#', '$'
         db      '%', '&', Char.quote, '(', ')'
 

@@ -15,6 +15,10 @@
 Main
         call    Terminal.Init
 
+        ld      hl, keyWriter
+        ld      de, $0818       ; repeatDelay / initialDelay
+        call    KeyWriter.Init
+
         nextreg Reg.SPR_LAY_SYS, Reg.SPR_LAY_SYS.sprOn | Reg.SPR_LAY_SYS.sprOverBord
         nextreg Reg.SPR_TRANS_IDX, 0
 
@@ -47,14 +51,23 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
-        ld      ix, writer
-        ld      iy, KeyWriter.Put
+        ld      iy, HandleKeyEvent
         call    KeyTable.Scan
 
 .noMove
         call    Raster.FrameWait
 
         jr      .loop
+
+; Input
+;   de - KeyEvent
+HandleKeyEvent
+        push    ix
+        ld      ix, writer
+        ld      hl, keyWriter
+        call    KeyWriter.HandleKeyEvent
+        pop     ix
+        ret
 
 ; =========================================================
 ; Input
@@ -84,6 +97,7 @@ writer  Writer  { Terminal.printer, WriteChar }
 cursor  Cursor
 sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
 curX    dw      60
+keyWriter       KeyWriter
 
 cursorPattern
         include data/cursor-underscore.asm
