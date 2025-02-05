@@ -18,6 +18,24 @@ Main
         ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
         call    L2_320.BlitUntilZ
 
+        ld      de, $20
+        ld      bc, $100
+        ld      hl, $10e0
+        ld      a, 0
+        call    L2_320.FillRect
+
+        ld      de, $30
+        ld      bc, $e0
+        ld      hl, $20c0
+        ld      a, 56
+        call    L2_320.FillRect
+
+        ld      de, $40
+        ld      bc, $c0
+        ld      hl, $30a0
+        ld      a, 165
+        call    L2_320.FillRect
+
 .loop
         ; shift = DMA, no shift = CPU
         call    Keyboard.GetModifier

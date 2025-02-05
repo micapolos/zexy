@@ -86,6 +86,56 @@ BlitUntilZ
         inc     l
         jp      .bankLoop
 
+; ========================================================
+; Input
+;   de - col
+;   h - row
+;   bc - width
+;   l - height
+;   a - color
+FillRect
+        ; Write row, height and color
+        ld      (.color), a
+        ld      a, h
+        ld      (.row), a
+        ld      a, l
+        ld      (.height), a
+
+        ; Write blitLineProc
+        ld      hl, .fillLine
+        ld      (BlitUntilZ.blitLineProc), hl
+
+        ; h = start address
+        ld      a, e
+        and     $1f
+        add     $e0
+        ld      h, a
+
+        ; l = bank number (preserve bc = width)
+        push    bc
+        ld      b, 5
+        bsrl    de, b
+        ld      a, e
+        add     $12
+        ld      l, a
+        pop     bc
+
+        jp      BlitUntilZ
+
+.fillLine
+.row+*          ld      l, 0
+.height+*       ld      b, 0
+.color+*        ld      a, 0
+.loop
+        ld      (hl), a
+        inc     l
+        djnz    .loop
+
+        dec     bc
+        ld      a, b
+        or      c
+        ret
+
         endmodule
 
         endif
