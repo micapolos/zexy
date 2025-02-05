@@ -3,6 +3,7 @@
 
         include bank.asm
         include reg.asm
+        include blit.asm
 
         module  L2_320
 
@@ -48,46 +49,6 @@ Fill
 
 ; ========================================================
 ; Input
-;   h - line address MSB
-;   l - bank number
-;   (.blitLineProc) - blit line proc
-;     Input
-;       h - line address MSB
-;       l - bank number
-;       de - preserved
-;       bc - preserved
-;       af - corrupted
-;     Output
-;       f - z to stop, nz to continue
-; Output
-;     z - stop
-BlitUntilZ
-.bankLoop
-        ; set bank "e" in slot 7
-        ld      a, l
-        nextreg Reg.MMU_7, a
-
-.lineLoop
-        push    hl
-.blitLineProc+* call    0
-        pop     hl
-        ret     z
-
-.nextLine
-        inc     h
-        ld      a, h
-        and     $1f
-        jp      nz, .lineLoop
-
-.nextBank
-        ld      a, h
-        sub     $20
-        ld      h, a
-        inc     l
-        jp      .bankLoop
-
-; ========================================================
-; Input
 ;   de - col
 ;   h - row
 ;   bc - width
@@ -103,7 +64,7 @@ FillRect
 
         ; Write blitLineProc
         ld      hl, .fillLine
-        ld      (BlitUntilZ.blitLineProc), hl
+        ld      (Blit.BankLines256UntilZ.blitLineProc), hl
 
         ; h = start address
         ld      a, e
@@ -120,7 +81,7 @@ FillRect
         ld      l, a
         pop     bc
 
-        jp      BlitUntilZ
+        jp      Blit.BankLines256UntilZ
 
 .fillLine
 .row+*          ld      l, 0

@@ -97,6 +97,48 @@ BlitLines
         jp      nz, .loop
         ret
 
+; ========================================================
+; Blits 256-aligned lines starting from the given bank.
+;
+; Input
+;   h - line address MSB
+;   l - bank number
+;   (.blitLineProc) - blit line proc
+;     Input
+;       h - line address MSB
+;       l - bank number
+;       de - preserved
+;       bc - preserved
+;       af - corrupted
+;     Output
+;       f - z to stop, nz to continue
+; Output
+;     z - stop
+BankLines256UntilZ
+.bankLoop
+        ; set bank "e" in slot 7
+        ld      a, l
+        nextreg Reg.MMU_7, a
+
+.lineLoop
+        push    hl
+.blitLineProc+* call    0
+        pop     hl
+        ret     z
+
+.nextLine
+        inc     h
+        ld      a, h
+        and     $1f
+        jp      nz, .lineLoop
+
+.nextBank
+        ld      a, h
+        sub     $20
+        ld      h, a
+        inc     l
+        jp      .bankLoop
+
         endmodule
 
         endif
