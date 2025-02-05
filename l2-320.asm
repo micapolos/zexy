@@ -82,7 +82,6 @@ FillRect
         pop     bc
 
         jp      Blit.Bank7Lines256UntilZ
-
 .fillLine
 .row+*          ld      l, 0
 .height+*       ld      b, 0
@@ -95,6 +94,66 @@ FillRect
         dec     bc
         ld      a, b
         or      c
+        ret
+
+; ========================================================
+; Input
+;   de - col
+;   l - row
+;   a - color
+; Output
+;   bank in slot 7 corrupted
+PutPixel
+        push    af
+        call    MoveTo
+        pop     af
+        ld      (hl), a
+        ret
+
+; ========================================================
+; Input
+;   de - col
+;   h - row
+;   bc - width
+;   a - color
+; Output
+;   bank in slot 7 corrupted
+DrawHLine
+        ld      l, 1            ; height
+        jp      FillRect
+
+; ========================================================
+; Input
+;   de - col
+;   l - row
+; Output
+;   hl - address
+;   correct bank in slot 7
+MoveTo
+        call    GetAddrBank7
+        nextreg Reg.MMU_7, a
+        ret
+
+; ========================================================
+; Input
+;   de - col
+;   l - row
+; Output
+;   hl - address between $e000..$ffff
+;   a - bank in slot 7
+GetAddrBank7
+        ; h = address MSB, l = already valid
+        ld      a, e
+        and     $1f
+        add     $e0
+        ld      h, a
+
+        ; a = bank in slot 7
+        ld      b, 5
+        bsrl    de, b
+        ld      a, e
+        add     $12
+        nextreg Reg.MMU_7, a
         ret
 
         endmodule

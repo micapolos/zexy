@@ -36,6 +36,17 @@ Main
         ld      a, 165
         call    L2_320.FillRect
 
+        ld      de, $42         ; x
+        ld      l, $32          ; y
+        ld      a, $ff          ; color
+        call    L2_320.PutPixel
+
+        ld      de, $42         ; x
+        ld      h, $34          ; y
+        ld      bc, $20         ; width
+        ld      a, $ff          ; color
+        call    L2_320.DrawHLine
+
 .loop
         ; shift = DMA, no shift = CPU
         call    Keyboard.GetModifier
