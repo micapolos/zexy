@@ -14,9 +14,9 @@ Main
 
         ld      de, 320
         ld      hl, BlitRainbow
-        ld      (Blit.BankLines256UntilZ.blitLineProc), hl
+        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
         ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
-        call    Blit.BankLines256UntilZ
+        call    Blit.Bank7Lines256UntilZ
 
         ld      de, $20
         ld      bc, $100
@@ -47,9 +47,9 @@ Main
         ld      hl, ScrollDma
 .blit
         ld      de, 320
-        ld      (Blit.BankLines256UntilZ.blitLineProc), hl
+        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
         ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
-        call    Blit.BankLines256UntilZ
+        call    Blit.Bank7Lines256UntilZ
 
         jp      .loop
 

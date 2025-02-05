@@ -64,7 +64,7 @@ FillRect
 
         ; Write blitLineProc
         ld      hl, .fillLine
-        ld      (Blit.BankLines256UntilZ.blitLineProc), hl
+        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
 
         ; h = start address
         ld      a, e
@@ -81,7 +81,7 @@ FillRect
         ld      l, a
         pop     bc
 
-        jp      Blit.BankLines256UntilZ
+        jp      Blit.Bank7Lines256UntilZ
 
 .fillLine
 .row+*          ld      l, 0

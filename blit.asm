@@ -101,7 +101,7 @@ BlitLines
 ; Blits 256-aligned lines starting from the given bank.
 ;
 ; Input
-;   h - line address MSB
+;   h - line address MSB in bank 7, $e0..$ff
 ;   l - bank number
 ;   (.blitLineProc) - blit line proc
 ;     Input
@@ -114,7 +114,7 @@ BlitLines
 ;       f - z to stop, nz to continue
 ; Output
 ;     z - stop
-BankLines256UntilZ
+Bank7Lines256UntilZ
 .bankLoop
         ; set bank "e" in slot 7
         ld      a, l
@@ -133,9 +133,7 @@ BankLines256UntilZ
         jp      nz, .lineLoop
 
 .nextBank
-        ld      a, h
-        sub     $20
-        ld      h, a
+        ld      h, $e0
         inc     l
         jp      .bankLoop
 
