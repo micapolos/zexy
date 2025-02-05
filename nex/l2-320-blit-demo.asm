@@ -10,7 +10,6 @@
         include keyboard.asm
 
 Main
-        nextreg Reg.CPU_SPEED, 3
         call    L2_320.Init
 
         ld      de, 320
