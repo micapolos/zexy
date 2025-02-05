@@ -125,6 +125,17 @@ DrawHLine
 ; ========================================================
 ; Input
 ;   de - col
+;   hl - row / height
+;   a - color
+; Output
+;   bank in slot 7 corrupted
+DrawVLine
+        ld      bc, 1           ; width
+        jp      FillRect
+
+; ========================================================
+; Input
+;   de - col
 ;   l - row
 ; Output
 ;   hl - address
