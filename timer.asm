@@ -20,7 +20,7 @@ Init
 ; =========================================================
 ; Input
 ;   hl - Timer ptr
-;   a - timeout
+;   a - timeout, 0 = stop
 Start
         ldi     (hl), a
         inc     hl
