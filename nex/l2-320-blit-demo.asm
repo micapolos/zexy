@@ -5,28 +5,79 @@
         include l2-320.asm
         include glyph.asm
         include reg.asm
+        include mem.asm
+        include dma.asm
+        include keyboard.asm
 
 Main
+        nextreg Reg.CPU_SPEED, 3
         call    L2_320.Init
-.loop
+
         ld      de, 320
-        ld      hl, BlitLine
+        ld      hl, BlitRainbow
         ld      (L2_320.BlitUntilZ.blitLineProc), hl
         ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
         call    L2_320.BlitUntilZ
 
-        ld      hl, BlitLine.offset
-        inc     (hl)
+.loop
+        ; shift = DMA, no shift = CPU
+        call    Keyboard.GetModifier
+        and     %00000001
+        jp      nz, .dma
+        ld      hl, ScrollCpu
+        jp      .blit
+.dma
+        ld      hl, ScrollDma
+.blit
+        ld      de, 320
+        ld      (L2_320.BlitUntilZ.blitLineProc), hl
+        ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
+        call    L2_320.BlitUntilZ
 
         jp      .loop
 
-BlitLine
-.offset+*       ld      l, 0
+BlitRainbow
         ld      b, 0
 .loop
+        ld      l, b
         ld      (hl), b
-        inc     l
         djnz    .loop
+
+        dec     de
+        ld      a, d
+        or      e
+        ret
+
+ScrollCpu
+        push    hl
+        push    de
+
+        ld      l, 0
+        ld      de, hl
+        inc     hl
+        ld      bc, $00ff
+        ldir
+
+        pop     de
+        pop     hl
+
+        dec     de
+        ld      a, d
+        or      e
+        ret
+
+ScrollDma
+        push    hl
+        push    de
+
+        ld      l, 0
+        ld      de, hl
+        inc     hl
+        ld      bc, $00ff
+        call    Dma.Copy
+
+        pop     de
+        pop     hl
 
         dec     de
         ld      a, d
