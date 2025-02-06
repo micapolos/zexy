@@ -13,12 +13,13 @@ color           db
 
         module  UIPainter
 
+; =========================================================
 ; Input
 ;   hl - UIPainter ptr
 ; Output
 ;   hl - advanced
 Fill
-        push    hl
+        push    hl              ; push UIPainter ptr
 
         ldi     de, (hl)
         push    de              ; push offsetX
