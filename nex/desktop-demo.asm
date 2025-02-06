@@ -14,6 +14,13 @@
         call    L2_320.FillRect
         endm
 
+        macro   point left, top, color
+        ld      de, left
+        ld      l, top
+        ld      a, color
+        call    L2_320.PutPixel
+        endm
+
 Main
         call    L2_320.Init
         call    InitPalette
@@ -21,6 +28,12 @@ Main
         fillrect 0, 0, 320, 0, 0
         fillrect 0, 0, 320, 10, 1
         fillrect 0, 10, 320, 1, 2
+        point    0, 0, 0
+        point    1, 0, 0
+        point    318, 0, 0
+        point    319, 0, 0
+        point    0, 1, 0
+        point    319, 1, 0
 .loop
         jr      .loop
 
