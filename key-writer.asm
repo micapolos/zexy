@@ -4,6 +4,7 @@
         include char.asm
         include writer.asm
         include key-event.asm
+        include key-modifier.asm
 
         struct  KeyWriter
 ; delay after first press

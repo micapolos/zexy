@@ -1,6 +1,8 @@
         ifndef  Timer_asm
         define  Timer_asm
 
+        include call.asm
+
         struct  Timer
 counter         db      0
 callback        dw      0

@@ -1,6 +1,8 @@
         ifndef  KeyScanner_asm
         define  KeyScanner_asm
 
+        include call.asm
+
         struct  KeyScanner
 keyEventCallback        dw
         ends

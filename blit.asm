@@ -2,6 +2,7 @@
         define  Blit_asm
 
         include call.asm
+        include reg.asm
 
         module  Blit
 
