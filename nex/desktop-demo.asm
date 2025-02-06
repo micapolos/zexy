@@ -29,10 +29,21 @@
         endm
 
         macro   zexy_logo left, top
-        zexy_stripe left+0, top, 5
-        zexy_stripe left+2, top, 6
-        zexy_stripe left+4, top, 7
-        zexy_stripe left+6, top, 8
+        zexy_stripe left+0, top, 6
+        zexy_stripe left+2, top, 7
+        zexy_stripe left+4, top, 8
+        zexy_stripe left+6, top, 9
+        endm
+
+        macro   draw_label addr, left, top, width, color
+        ld      de, left
+        ld      hl, L2_320.DrawLabel.top
+        ld      (hl), top
+        ld      hl, L2_320.DrawLabel.color
+        ld      (hl), color
+        ld      hl, addr
+        ld      bc, width
+        call    L2_320.DrawLabel
         endm
 
 Main
@@ -40,7 +51,7 @@ Main
         call    InitPalette
 
         ; background
-        fillrect 0, 0, 320, 0, 4
+        fillrect 0, 0, 320, 0, 5
 
         ; menu background
         fillrect 0, 0, 320, 9, 1
@@ -64,6 +75,9 @@ Main
         point    319, 2, 2
 
         zexy_logo 6, 2
+
+        draw_label text, 22, 1, text.width, 4
+        draw_label rightText, 294, 1, rightText.width, 4
 .loop
         jr      .loop
 
@@ -79,33 +93,162 @@ palette
         RGB_333 5, 4, 5  ; white
         RGB_333 4, 3, 4  ; shadow white
         RGB_333 2, 1, 2  ; dark white
-        RGB_333 1, 0, 1  ; desktop background
+        RGB_333 1, 0, 1  ; dark
+        RGB_333 0, 0, 1  ; desktop background
 .red    RGB_333 7, 0, 0
 .yellow RGB_333 7, 7, 0
 .green  RGB_333 0, 7, 0
 .cyan   RGB_333 0, 7, 7
 
 text
+        ; F
+        db      %01111110
+        db      %01111110
+        db      %01010000
+        db      %01010000
+        db      %01000000
+        db      0
+        db      %01011110
+        db      %01011110
+        db      0
         db      %00111110
-        db      %01001000
-        db      %01001000
         db      %00111110
+        db      %00100000
+        db      %00111110
+        db      %00011110
+        db      0
+        db      %00001100
+        db      %00011110
+        db      %00010010
+        db      %01111110
+        db      %01111110
+        db      0
+        db      %00011100
+        db      %00111110
+        db      %00101010
+        db      %00111010
+        db      %00011000
+        db      0
+        db      %00111110
+        db      %00111110
+        db      %00010000
+        db      %00100000
+        db      0
+        db      0
+        ;db      0
+        db      0
+        db      0
+        db      0
+        db      0
+        db      %01111110
+        db      %01010000
+        db      %01010000
+        db      %01000000
+        db      0
+        db      %01011110
+        db      0
+        db      %01111100
+        db      %00000010
+        db      0
+        db      %00011100
+        db      %00101010
+        db      %00101010
+        db      %00011000
+        db      0
+        db      0
+        ;db      0
+        db      0
+        db      0
+        db      0
         db      0
         db      %01111110
         db      %01010010
         db      %01010010
-        db      %00101100
+        db      %01000010
+        db      0
+        db      %00001100
+        db      %00010010
+        db      %00010010
+        db      %01111110
+        db      0
+        db      %01011110
+        db      0
+        db      %01111100
+        db      %00100010
+        db      0
+        db      0
+        db      0
+        ;db      0
+        db      0
+        db      0
+        db      0
+        db      %01111000
+        db      %00000100
+        db      %00000010
+        db      %00000100
+        db      %01111000
+        db      0
+        db      %01011110
+        db      0
+        db      %00011100
+        db      %00101010
+        db      %00101010
+        db      %00011000
         db      0
         db      %00111100
-        db      %01000010
-        db      %01000010
-        db      %01000010
+        db      %00000010
+        db      %00001100
+        db      %00000010
+        db      %00111100
+        db      0
+        db      0
+        db      0
+        db      0
+        ;db      0
+        db      0
         db      0
         db      %01111110
-        db      %01000010
-        db      %01000010
-        db      %00111100
+        db      %00010000
+        db      %00010000
+        db      %01111110
+        db      0
+        db      %00011100
+        db      %00101010
+        db      %00101010
+        db      %00011000
+        db      0
+        db      %01111100
+        db      %00000010
+        db      0
+        db      %00111111
+        db      %00100100
+        db      %00100100
+        db      %00011000
 .width  equ     $ - text
+
+rightText
+        db      %00111100
+        db      %01000010
+        db      %01000010
+        db      %00111100
+        db      0
+        db      %01000110
+        db      %01001010
+        db      %01001010
+        db      %00110010
+        db      0
+        db      %00100100
+        db      0
+        db      %01110100
+        db      %01010010
+        db      %01010010
+        db      %01001100
+        db      0
+        db      %00000000
+        db      %00100000
+        db      %01111110
+        db      %00000000
+.width  equ     $ - rightText
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto

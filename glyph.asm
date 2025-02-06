@@ -1,6 +1,8 @@
         ifndef  Glyph_asm
         define  Glyph_asm
 
+        include blit.asm
+
         module  Glyph
 
 ; =========================================================

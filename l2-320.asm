@@ -150,9 +150,8 @@ MoveTo
 ; ========================================================
 ; Input
 ;   de - col
-;   l - row
 ; Output
-;   hl - address between $e000..$ffff
+;   h - address MSB between $e0..$ff
 ;   a - bank in slot 7
 GetAddrBank7
         ; h = address MSB, l = already valid
@@ -167,6 +166,84 @@ GetAddrBank7
         ld      a, e
         add     $12
         nextreg Reg.MMU_7, a
+        ret
+
+; =========================================================
+; Input
+;   de - col
+;   bc - width
+;   hl - run addr
+;   (.color) - color
+;   (.top) - top
+DrawLabel
+        ; Write blitLineProc
+        push    hl
+        ld      hl, .blitLine
+        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
+
+        ; h = start address MSB for blit
+        ; a = bank number
+        push    bc
+        call    GetAddrBank7
+        pop     bc
+
+        ; de - run addr
+        pop     de
+
+        ; l = start bank number for blit
+        ld      l, a
+
+        jp      Blit.Bank7Lines256UntilZ
+
+.blitLine
+        ldi     a, (de)
+        push    de
+.color+*        ld      e, 0
+.bit7
+.top+*  ld      l, 0            ; self-modified code
+        rlca
+        jp      nc, .bit6
+        ld      (hl), e
+.bit6
+        inc     l
+        rlca
+        jp      nc, .bit5
+        ld      (hl), e
+.bit5
+        inc     l
+        rlca
+        jp      nc, .bit4
+        ld      (hl), e
+.bit4
+        inc     l
+        rlca
+        jp      nc, .bit3
+        ld      (hl), e
+.bit3
+        inc     l
+        rlca
+        jp      nc, .bit2
+        ld      (hl), e
+.bit2
+        inc     l
+        rlca
+        jp      nc, .bit1
+        ld      (hl), e
+.bit1
+        inc     l
+        rlca
+        jp      nc, .bit0
+        ld      (hl), e
+.bit0
+        inc     l
+        rlca
+        jp      nc, .nextLine
+        ld      (hl), e
+.nextLine
+        pop     de
+        dec     bc
+        ld      a, b
+        or      c
         ret
 
         endmodule
