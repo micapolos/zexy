@@ -25,6 +25,20 @@
 
 ; =========================================================
 ; Input
+;   hl - struct ptr
+        macro   StructLd reg
+        ld      reg, (hl)
+        endm
+
+; =========================================================
+; Input
+;   hl - struct ptr
+        macro   StructLdi reg
+        ldi     reg, (hl)
+        endm
+
+; =========================================================
+; Input
 ;   ix - struct ptr
         macro   StructPush name
         ld      hl, ix
