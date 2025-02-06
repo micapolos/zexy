@@ -3,6 +3,7 @@
 
         include l2-320.asm
         include frame.asm
+        include struct.asm
 
         struct  UIPainter
 frame           UIFrame
@@ -18,35 +19,11 @@ color           db
 ;   hl - advanced
 Fill
         push    hl              ; push UIPainter ptr
-
-        ldi     de, (hl)
-        push    de              ; push frame.coord.x
-
-        ldi     de, (hl)
-        push    de              ; push frame.coord.y
-
-        ldi     de, (hl)
-        push    de              ; push frame.size.width
-
-        ldi     de, (hl)
-        push    de              ; push frame.size.height
-
-        ldi     a, (hl)         ; a = color
-
-        pop     bc              ; bc = pop height
-        ld      l, c            ; l = height MSB
-        pop     bc              ; bc = pop width
-        pop     de              ; de = pop y
-        ld      h, e            ; h = offsetY MSB
-        pop     de              ; bc = pop x
-
-        call    L2_320.FillRect
-
-        pop     hl
-        dup     UIPainter
-        inc     hl
-        edup
-
+        StructSkip UIFrame      ; skip frame
+        ld      a, (hl)         ; a = color
+        pop     hl              ; hl = restore UIPainter ptr
+        call    UIFrame.Fill    ; fill frame
+        inc     hl              ; skip color
         ret
 
         endmodule

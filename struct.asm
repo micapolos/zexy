@@ -7,6 +7,15 @@
 
 ; =========================================================
 ; Input
+;   hl - struct ptr
+        macro   StructSkip name
+        dup     name
+        inc     hl
+        edup
+        endm
+
+; =========================================================
+; Input
 ;   ix - struct ptr
         macro   StructPush name
         ld      hl, ix

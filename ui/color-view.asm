@@ -1,11 +1,11 @@
         ifndef  UIColorView_asm
         define  UIColorView_asm
 
+        include ui/view.asm
+
         module  UIColorView
 
 class   UIViewClass { NeedsDraw, Draw }
-
-        endm
 
 NeedsDraw
         ret
