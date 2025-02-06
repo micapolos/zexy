@@ -19,7 +19,8 @@ flags   db
 
 flag
 .visible        equ     %10000000
-.needsDraw      equ     %10000000
+.opaque         equ     %00100000
+.dirty          equ     %01000000
 
 ; =========================================================
 ; Input
@@ -30,9 +31,35 @@ NeedsDraw
         dup     UIView - UIView.flags
         inc     hl
         edup
-        ldi     a, (hl)
-        or      flag.needsDraw
-        ; TODO: Propagate to parent
+        ld      a, (hl)
+
+        ; Do nothing if not visible
+        test    flag.visible
+        jp      z, .saveFlagsAndRet
+
+        ; Do nothing if already dirty
+        test    flag.dirty
+        jp      nz, .saveFlagsAndRet
+
+        ; Set dirty flag
+        or      flag.dirty
+
+        ; Save flags
+        ldi     (hl), flags
+
+        ; Propagate dirty if not opaque.
+        test    flag.opaque
+        ret     z
+        jp      PropagateNeedsDraw
+
+.saveFlagsAndRet
+        ldi     (hl), a
+        ret
+
+@PropagateNeedsDraw
+        dup     UIView
+        inc     hl
+        edup
         ret
 
 ; =========================================================
@@ -41,7 +68,6 @@ NeedsDraw
 ; Output
 ;   hl - advanced
 Draw
-        break
         dup     UIView
         inc     hl
         edup
