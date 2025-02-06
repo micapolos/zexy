@@ -27,6 +27,21 @@ Fill
         inc     hl              ; skip color
         ret
 
+; =========================================================
+; Input
+;   hl - UIPainter ptr
+; Output
+;   hl - advanced
+Stroke
+        ; TODO: Should we re-order `color` and `frame` fields to optimize call sequence?
+        push    hl              ; push UIPainter ptr
+        StructSkip UIFrame      ; skip frame
+        ld      a, (hl)         ; a = color
+        pop     hl              ; hl = restore UIPainter ptr
+        call    UIFrame.Stroke  ; stroke frame
+        inc     hl              ; skip color
+        ret
+
         endmodule
 
         endif

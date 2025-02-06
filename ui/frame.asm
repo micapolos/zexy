@@ -20,7 +20,32 @@ size    UISize
 ;   hl - advanced
 Fill
         push    hl              ; push UIFrame ptr
+        call    LoadRectFrame   ; Load frame into registers compatible with L2_320 call
+        call    L2_320.FillRect
+        pop     hl
+        dup     UIFrame
+        inc     hl
+        edup
+        ret
 
+; =========================================================
+; Input
+;   hl - UIFrame ptr
+;   a - color
+; Output
+;   hl - advanced
+Stroke
+        push    hl              ; push UIFrame ptr
+        call    LoadRectFrame   ; Load frame into registers compatible with L2_320 call
+        call    L2_320.DrawRect
+        pop     hl
+        dup     UIFrame
+        inc     hl
+        edup
+        ret
+
+; a - preserved
+@LoadRectFrame
         ldi     de, (hl)
         push    de              ; push frame.coord.x
 
@@ -39,13 +64,6 @@ Fill
         pop     de              ; de = pop y
         ld      h, e            ; h = offsetY MSB
         pop     de              ; bc = pop x
-
-        call    L2_320.FillRect
-
-        pop     hl
-        dup     UIFrame
-        inc     hl
-        edup
 
         ret
 

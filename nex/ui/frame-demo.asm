@@ -16,11 +16,15 @@ Main
         ld      a, 145
         call    UIFrame.Fill  ; should use advanced frame
 
+        ld      a, 67
+        call    UIFrame.Stroke  ; should use advanced frame
+
 .loop   jr      .loop
 
 frame
         UIFrame { { 0, 0 }, { 320, 256 } }
         UIFrame { 20, 20, 280, 216 }
+        UIFrame { 30, 30, 260, 196 }
 
         savenex open "built/ui/frame-demo.nex", Main, $bfe0
         savenex auto

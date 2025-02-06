@@ -138,6 +138,43 @@ DrawVLine
 ; ========================================================
 ; Input
 ;   de - col
+;   h - row
+;   bc - width
+;   l - height
+;   a - color
+DrawRect
+        push    bc, de, hl, af
+        ld      l, 1
+        call    DrawHLine
+        pop     af, hl, de, bc
+
+        push    bc, de, hl, af
+        push    af
+        ld      a, h
+        add     l
+        ld      h, a
+        ld      l, 1
+        pop     af
+        call    DrawHLine
+        pop     af, hl, de, bc
+
+        push    bc, de, hl, af
+        ld      bc, 1
+        call    DrawVLine
+        pop     af, hl, de, bc
+
+        push    hl
+        ld      hl, bc
+        add     hl, de
+        dec     hl
+        ex      de, hl
+        pop     hl
+        ld      bc, 1
+        jp      DrawVLine
+
+; ========================================================
+; Input
+;   de - col
 ;   l - row
 ; Output
 ;   hl - address

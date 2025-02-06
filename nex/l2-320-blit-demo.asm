@@ -52,6 +52,12 @@ Main
         ld      a, $ff          ; color
         call    L2_320.DrawVLine
 
+        ld      de, $50
+        ld      bc, $a0
+        ld      hl, $4080
+        ld      a, 111
+        call    L2_320.DrawRect
+
 .loop
         ; shift = DMA, no shift = CPU
         call    Keyboard.GetModifier
