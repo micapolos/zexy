@@ -18,6 +18,7 @@ color           db
 ; Output
 ;   hl - advanced
 Fill
+        ; TODO: Should we re-order `color` and `frame` fields to optimize call sequence?
         push    hl              ; push UIPainter ptr
         StructSkip UIFrame      ; skip frame
         ld      a, (hl)         ; a = color
