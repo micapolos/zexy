@@ -10,8 +10,8 @@ Main
 
         ld      hl, painter
         call    UIPainter.Fill
-        call    UIPainter.Fill    ; should use advanced painter
-        call    UIPainter.Stroke  ; should use advanced painter
+        call    UIPainter.Fill    ; should use advanced ptr
+        call    UIPainter.Stroke  ; should use advanced ptr
 
 .loop   jr      .loop
 

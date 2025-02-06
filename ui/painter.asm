@@ -20,7 +20,7 @@ color           db
 Fill
         ; TODO: Should we re-order `color` and `frame` fields to optimize call sequence?
         push    hl              ; push UIPainter ptr
-        StructSkip UIFrame      ; skip frame
+        StructInc UIFrame      ; skip frame
         ld      a, (hl)         ; a = color
         pop     hl              ; hl = restore UIPainter ptr
         call    UIFrame.Fill    ; fill frame
@@ -35,7 +35,7 @@ Fill
 Stroke
         ; TODO: Should we re-order `color` and `frame` fields to optimize call sequence?
         push    hl              ; push UIPainter ptr
-        StructSkip UIFrame      ; skip frame
+        StructInc UIFrame      ; skip frame
         ld      a, (hl)         ; a = color
         pop     hl              ; hl = restore UIPainter ptr
         call    UIFrame.Stroke  ; stroke frame

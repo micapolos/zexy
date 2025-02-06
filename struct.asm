@@ -8,9 +8,18 @@
 ; =========================================================
 ; Input
 ;   hl - struct ptr
-        macro   StructSkip name
-        dup     name
+        macro   StructInc size
+        dup     size
         inc     hl
+        edup
+        endm
+
+; =========================================================
+; Input
+;   hl - struct ptr
+        macro   StructDec size
+        dup     size
+        dec     hl
         edup
         endm
 
