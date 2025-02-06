@@ -51,8 +51,8 @@ PAL_CTRL                equ     $43
 .palAutoIncOff          equ     %10000000
 .rwUlaPal1              equ     %00000000
 .rwUlaPal2              equ     %00010000
-.rwL2PalL1              equ     %00100000
-.rwL2PalL2              equ     %00110000
+.rwL2Pal1               equ     %00100000
+.rwL2Pal2               equ     %00110000
 .rwSprPal1              equ     %01000000
 .rwSprPal2              equ     %01010000
 .rwTmPal1               equ     %01100000

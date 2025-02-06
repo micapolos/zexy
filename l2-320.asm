@@ -83,6 +83,7 @@ FillRect
 
         jp      Blit.Bank7Lines256UntilZ
 .fillLine
+        push    bc
 .row+*          ld      l, 0
 .height+*       ld      b, 0
 .color+*        ld      a, 0
@@ -90,6 +91,7 @@ FillRect
         ld      (hl), a
         inc     l
         djnz    .loop
+        pop     bc
 
         dec     bc
         ld      a, b
