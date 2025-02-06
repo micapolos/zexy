@@ -12,13 +12,14 @@ drawProc        dw
 class   UIViewClass
 parent  dw
 frame   Frame
-; bit 7: visible
-; bit 6: needsDraw
-; bit 5..0: unused, must be 0
 flags   db
         ends
 
         module  UIView
+
+flag
+.visible        equ     %10000000
+.needsDraw      equ     %10000000
 
 ; =========================================================
 ; Input
@@ -26,9 +27,12 @@ flags   db
 ; Output
 ;   hl - advanced
 NeedsDraw
-        dup     UIView
+        dup     UIView - UIView.flags
         inc     hl
         edup
+        ldi     a, (hl)
+        or      flag.needsDraw
+        ; TODO: Propagate to parent
         ret
 
 ; =========================================================
@@ -37,6 +41,7 @@ NeedsDraw
 ; Output
 ;   hl - advanced
 Draw
+        break
         dup     UIView
         inc     hl
         edup
