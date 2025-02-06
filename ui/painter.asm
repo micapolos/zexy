@@ -2,12 +2,10 @@
         define  UIPainter_asm
 
         include l2-320.asm
+        include frame.asm
 
         struct  UIPainter
-offsetX         dw
-offsetY         dw
-clipWidth       dw
-clipHeight      dw
+frame           UIFrame
 color           db
         ends
 
@@ -22,25 +20,25 @@ Fill
         push    hl              ; push UIPainter ptr
 
         ldi     de, (hl)
-        push    de              ; push offsetX
+        push    de              ; push frame.coord.x
 
         ldi     de, (hl)
-        push    de              ; push offsetY
+        push    de              ; push frame.coord.y
 
         ldi     de, (hl)
-        push    de              ; push width
+        push    de              ; push frame.size.width
 
         ldi     de, (hl)
-        push    de              ; push height
+        push    de              ; push frame.size.height
 
-        ldi     a, (hl)
+        ldi     a, (hl)         ; a = color
 
         pop     bc              ; bc = pop height
         ld      l, c            ; l = height MSB
         pop     bc              ; bc = pop width
-        pop     de              ; de = pop offsetY
+        pop     de              ; de = pop y
         ld      h, e            ; h = offsetY MSB
-        pop     de              ; bc = pop offsetX
+        pop     de              ; bc = pop x
 
         call    L2_320.FillRect
 

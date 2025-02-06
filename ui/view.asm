@@ -1,7 +1,7 @@
         ifndef  UIView_asm
         define  UIView_asm
 
-        include frame.asm
+        include ui/frame.asm
 
         struct  UIViewClass
 needsDrawProc   dw
@@ -11,7 +11,7 @@ drawProc        dw
         struct  UIView
 class           UIViewClass
 parent          dw
-frame           Frame
+frame           UIFrame
 flags           db
         ends
 

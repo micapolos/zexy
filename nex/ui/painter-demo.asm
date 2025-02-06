@@ -15,7 +15,7 @@ Main
 .loop   jr      .loop
 
 painter
-        UIPainter { 0, 0, 320, 256, 1 }
+        UIPainter { { { 0, 0 }, { 320, 256 } }, 1 }
         UIPainter { 20, 20, 280, 216, 145 }
 
         savenex open "built/ui/painter-demo.nex", Main, $bfe0
