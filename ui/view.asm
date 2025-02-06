@@ -9,10 +9,10 @@ drawProc        dw
         ends
 
         struct  UIView
-class   UIViewClass
-parent  dw
-frame   Frame
-flags   db
+class           UIViewClass
+parent          dw
+frame           Frame
+flags           db
         ends
 
         module  UIView
@@ -28,9 +28,12 @@ flag
 ; Output
 ;   hl - advanced
 NeedsDraw
+        ; Skip metadata
         dup     UIView - UIView.flags
         inc     hl
         edup
+
+        ; Load flags
         ld      a, (hl)
 
         ; Do nothing if not visible
@@ -56,7 +59,7 @@ NeedsDraw
         ldi     (hl), a
         ret
 
-@PropagateNeedsDraw
+.propagateNeedsDraw
         dup     UIView
         inc     hl
         edup
@@ -67,10 +70,30 @@ NeedsDraw
 ;   hl - UIView ptr
 ; Output
 ;   hl - advanced
-Draw
-        dup     UIView
+Clean
+        ; Skip metadata
+        dup     UIView - UIView.flags
         inc     hl
         edup
+
+        ; Load flags
+        ld      a, (hl)
+
+        ; Do nothing if already clean
+        test    flag.dirty
+        jp      z, .saveFlagsAndRet
+
+        ; Clean dirty flag
+        and     ~flag.dirty
+
+        ; Save flags
+        ldi     (hl), flags
+
+        ; Redraw children
+        break
+
+.saveFlagsAndRet
+        ldi     (hl), a
         ret
 
         endmodule
