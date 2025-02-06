@@ -5,6 +5,7 @@
         include l2-320.asm
         include color.asm
         include palette.asm
+        include glyph.asm
 
         macro   fillrect left, top, width, height, color
         ld      de, left
@@ -21,6 +22,19 @@
         call    L2_320.PutPixel
         endm
 
+        macro   zexy_stripe left, top, color
+        fillrect left + 2, top    , 2, 2, color
+        fillrect left + 1, top + 2, 2, 2, color
+        fillrect left    , top + 4, 2, 2, color
+        endm
+
+        macro   zexy_logo left, top
+        zexy_stripe left+0, top, 5
+        zexy_stripe left+2, top, 6
+        zexy_stripe left+4, top, 7
+        zexy_stripe left+6, top, 8
+        endm
+
 Main
         call    L2_320.Init
         call    InitPalette
@@ -29,9 +43,9 @@ Main
         fillrect 0, 0, 320, 0, 4
 
         ; menu background
-        fillrect 0, 0, 320, 10, 1
-        fillrect 0, 10, 320, 1, 2
-        fillrect 0, 11, 320, 1, 0
+        fillrect 0, 0, 320, 9, 1
+        fillrect 0, 9, 320, 1, 2
+        fillrect 0, 10, 320, 1, 0
 
         ; rounded corner
         point    0, 0, 0
@@ -49,6 +63,7 @@ Main
         point    0, 2, 2
         point    319, 2, 2
 
+        zexy_logo 6, 2
 .loop
         jr      .loop
 
@@ -65,6 +80,32 @@ palette
         RGB_333 4, 3, 4  ; shadow white
         RGB_333 2, 1, 2  ; dark white
         RGB_333 1, 0, 1  ; desktop background
+.red    RGB_333 7, 0, 0
+.yellow RGB_333 7, 7, 0
+.green  RGB_333 0, 7, 0
+.cyan   RGB_333 0, 7, 7
+
+text
+        db      %00111110
+        db      %01001000
+        db      %01001000
+        db      %00111110
+        db      0
+        db      %01111110
+        db      %01010010
+        db      %01010010
+        db      %00101100
+        db      0
+        db      %00111100
+        db      %01000010
+        db      %01000010
+        db      %01000010
+        db      0
+        db      %01111110
+        db      %01000010
+        db      %01000010
+        db      %00111100
+.width  equ     $ - text
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto
