@@ -29,7 +29,7 @@
         macro   StructPush_tail name
         ld      hl, ix
         ld      b, (name + 1) >> 1
-        jp     Stack.Push16
+        jp      Stack.Push16
         endm
 
 ; =========================================================
