@@ -69,8 +69,6 @@ Main
 
         point    2, 0, 2
         point    317, 0, 2
-        point    1, 1, 2
-        point    318, 1, 2
         point    0, 2, 2
         point    319, 2, 2
 
