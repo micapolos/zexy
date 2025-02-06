@@ -14,10 +14,10 @@ Main
         call    UIFrame.Fill
 
         ld      a, 145
-        call    UIFrame.Fill  ; should use advanced frame
+        call    UIFrame.Fill  ; should use advanced ptr
 
         ld      a, 67
-        call    UIFrame.Stroke  ; should use advanced frame
+        call    UIFrame.Stroke  ; should use advanced ptr
 
 .loop   jr      .loop
 
