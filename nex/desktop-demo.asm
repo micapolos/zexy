@@ -25,15 +25,30 @@ Main
         call    L2_320.Init
         call    InitPalette
 
-        fillrect 0, 0, 320, 0, 0
+        ; background
+        fillrect 0, 0, 320, 0, 4
+
+        ; menu background
         fillrect 0, 0, 320, 10, 1
         fillrect 0, 10, 320, 1, 2
+        fillrect 0, 11, 320, 1, 0
+
+        ; rounded corner
         point    0, 0, 0
-        point    1, 0, 0
-        point    318, 0, 0
         point    319, 0, 0
-        point    0, 1, 0
-        point    319, 1, 0
+
+        point    1, 0, 3
+        point    318, 0, 3
+        point    0, 1, 3
+        point    319, 1, 3
+
+        point    2, 0, 2
+        point    317, 0, 2
+        point    1, 1, 2
+        point    318, 1, 2
+        point    0, 2, 2
+        point    319, 2, 2
+
 .loop
         jr      .loop
 
@@ -41,12 +56,15 @@ InitPalette
         nextreg Reg.PAL_CTRL, Reg.PAL_CTRL.rwL2Pal1
         nextreg Reg.PAL_IDX, 0
         ld      hl, palette
-        ld      b, 2
+        ld      b, 0
         jp      Palette.Load9Bit
 
 palette
-        RGB_333 0, 0, 0
-        RGB_333 7, 7, 7
+.black  RGB_333 0, 0, 0  ; black
+        RGB_333 5, 4, 5  ; white
+        RGB_333 4, 3, 4  ; shadow white
+        RGB_333 2, 1, 2  ; dark white
+        RGB_333 1, 0, 1  ; desktop background
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto
