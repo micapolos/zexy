@@ -12,11 +12,8 @@ NeedsDraw
 
 ; Input
 ;   hl - UIView ptr
-;   de - x
-;   c - y
-
+;   de - UIPainter ptr
 Draw
-
         ret
 
         endmodule
