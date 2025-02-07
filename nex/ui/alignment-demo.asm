@@ -12,6 +12,8 @@ Main
 
         ld      ix, Terminal.writer
 
+        ; === AlignValue
+
         WriteStringDZ "start: 1000h\n"
         WriteStringDZ "length: 2000h\n"
         WriteStringDZ "value: 0300h\n"
@@ -34,8 +36,12 @@ Main
         call    Writer.NewLine
         call    Writer.NewLine
 
+        ; === AlignCoord
+
         ld      hl, frames
         call    UIFrameWriter.Writeln
+        WriteStringDZ   "point: $0010 $0008\n"
+        WriteStringDZ   "aligned left-top: "
 
         ld      hl, frames
         ld      de, $0010
@@ -53,8 +59,7 @@ Main
 
 .loop   jr      .loop
 
-frames
-        UIFrame { $0100, $0200, $0300, $0400 }
+frames   UIFrame { $0100, $0200, $0300, $0400 }
 
         savenex open "built/ui/alignment-demo.nex", Main, $bfe0
         savenex auto
