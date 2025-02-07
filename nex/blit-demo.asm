@@ -61,7 +61,7 @@ line2   db      $01, $ff, $ff, $ff, $ff, $ff, $ff, $01
 line3   db      $01, $ff, $44, $44, $44, $44, $ff, $01
 .stride db      0, 0
 
-line4  db       $01, $ff, $ff, $ff, $ff, $ff, $ff, $01
+line4   db      $01, $ff, $ff, $ff, $ff, $ff, $ff, $01
 .stride db      0, 0
 
 line5   db      $01, $01, $01, $01, $01, $01, $01, $01
