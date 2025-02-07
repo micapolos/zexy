@@ -82,6 +82,104 @@ CopyRect8Dec
 
 ; =========================================================
 ; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - src stride / length
+; Output
+;   hl - advanced
+;   de - advanced
+;   bc - preserved
+CopyLineStride256
+        push    bc
+        push    de
+
+        ld      a, b
+        ld      b, 0
+        ldir
+
+        pop     de
+        pop     bc
+
+        add     hl, a           ; hl += srcStride
+        inc     d               ; de = next dstLine
+
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - src stride / length
+; Output
+;   hl - preserved
+;   de - advanced
+;   bc - preserved
+CopyLineStride256PreserveSrc
+        push    hl
+        push    bc
+        push    de
+
+        ld      a, b
+        ld      b, 0
+        ldir
+
+        pop     de
+        inc     d               ; de = next dstLine
+
+        pop     bc
+        pop     hl
+
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - src stride / length
+;   bc' - line count
+; Output
+;   hl - advanced
+;   de - advanced
+;   bc - preserved
+;   bc' - 0
+CopyLinesStride256
+.loop
+        call    CopyLineStride256
+
+        exx
+        dec     bc
+        ld      a, b
+        or      c
+        exx
+
+        jp      nz, .loop
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - src stride / length
+;   bc' - line count
+; Output
+;   hl - advanced
+;   de - advanced
+;   bc - preserved
+CopyLineStride256Repeat
+.loop
+        call    CopyLineStride256PreserveSrc
+
+        exx
+        dec     bc
+        ld      a, b
+        or      c
+        exx
+
+        jp      nz, .loop
+        ret
+
+; =========================================================
+; Input
 ;   h - line MSB
 ;   c - count
 ;   a, b, de, l - passed to callback
@@ -137,6 +235,7 @@ Bank7Lines256UntilZ
         ld      h, $e0
         inc     l
         jp      .bankLoop
+
 
         endmodule
 

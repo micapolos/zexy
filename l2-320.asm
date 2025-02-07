@@ -20,13 +20,12 @@ Init
         nextreg Reg.CLIP_WND_L2, 159
         nextreg Reg.CLIP_WND_L2, 0
         nextreg Reg.CLIP_WND_L2, 255
-
-        ret
+        ; fall through to Clear
 
 ; =========================================================
 Clear
         ld      a, 0
-        ; fall-through
+        ; fall through to Fill
 
 ; =========================================================
 ; Input
