@@ -50,22 +50,31 @@ Main
         exx
         call    Blit.CopyLinesStride256
 
+        ; 3-patch
+        ld      hl, a3patch
+        ld      de, $e030
+        ld      bc, $2208
+        ld      a, %11100000
+        call    Blit.Copy3PatchLine
+
 .loop   jr      .loop
 
-line1   db      $01, $01, $01, $01, $01, $01, $01, $01
+line1   db      $12, $12, $12, $12, $12, $12, $12, $12
 .stride db      0, 0
 
-line2   db      $01, $ff, $ff, $ff, $ff, $ff, $ff, $01
+line2   db      $12, $ff, $ff, $ff, $ff, $ff, $ff, $12
 .stride db      0, 0
 
-line3   db      $01, $ff, $44, $44, $44, $44, $ff, $01
+line3   db      $12, $ff, $44, $44, $44, $44, $ff, $12
 .stride db      0, 0
 
-line4   db      $01, $ff, $ff, $ff, $ff, $ff, $ff, $01
+line4   db      $12, $ff, $ff, $ff, $ff, $ff, $ff, $12
 .stride db      0, 0
 
-line5   db      $01, $01, $01, $01, $01, $01, $01, $01
+line5   db      $12, $12, $12, $12, $12, $12, $12, $12
 .stride db      0, 0
+
+a3patch db      $12, $ff, $44, $ff, $12
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto

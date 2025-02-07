@@ -109,6 +109,65 @@ CopyLineStride256
 ; Input
 ;   hl - src addr
 ;   de - dst addr
+;   b -
+;     bit 7..4: endLength, 0 => 16
+;     bit 3..0: startLength, 0 => 16
+;   c - middleLength, 0 => 256
+;   a - flags
+;     bit 7..3: unused, must be 0
+;     bit 2: endEnabled
+;     bit 1: middleEnabled
+;     bit 0: startEnabled
+; Output
+;   hl - advanced
+;   de - advanced
+;   bc, af, af' - corrupt
+Copy3PatchLine
+        rlca
+        jp      nc, .noStart
+.start
+        exa
+        push    bc
+        ld      a, b
+        swapnib
+        and     $0f
+        ld      c, a
+        ld      b, 0
+        ldir
+        pop     bc
+        exa
+.noStart
+        rlca
+        jp      nc, .noMiddle
+.middle
+        exa
+        push    bc
+        ld      b, c
+.middleLoop
+        ld      a, (hl)
+        ldi     (de), a
+        djnz    .middleLoop
+        inc     hl
+        pop     bc
+        exa
+.noMiddle
+        rlca
+        jp      nc, .noEnd
+.end
+        exa
+        ld      a, b
+        and     $0f
+        ld      c, a
+        ld      b, 0
+        ldir
+        exa
+.noEnd
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
 ;   bc - src stride / length
 ; Output
 ;   hl - preserved
