@@ -33,6 +33,11 @@ Char
         pop     ix
         ret
 
+        macro   WriteChar ch
+        ld      a, ch
+        call    Writer.Char
+        endm
+
 ; =========================================================
 ; Input
 ;   ix - Writer ptr
@@ -51,6 +56,11 @@ String
         pop     iy
         ret
 
+        macro   WriteString ptr
+        ld      hl, ptr
+        call    Writer.String
+        endm
+
 ; =========================================================
 ; Input
 ;   ix - Writer ptr
@@ -58,6 +68,29 @@ String
 StringLine
         call    String
         jp      NewLine
+
+        macro   WriteStringLine ptr
+        ld      hl, ptr
+        call    Writer.StringLine
+        endm
+
+StringDZ
+; =========================================================
+; Input
+;   ix - Writer ptr
+;   (sp) - null-terminated string
+        pop     hl
+        push    iy
+        ld      iy, Char
+        call    String.ForEach
+        pop     iy
+        jp      (hl)
+        ret
+
+        macro   WriteStringDZ string
+        call    Writer.StringDZ
+        dz      string
+        endm
 
 ; =========================================================
 ; Input
