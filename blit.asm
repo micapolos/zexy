@@ -269,17 +269,14 @@ Skip3PatchLine
 ;     bit 6: middleEnabled
 ;     bit 5: middleOpaque
 ;     bit 4: endEnabled
-;     bit 3: unused, must be 0
+;     bit 3: lineStartEnabled
+;     bit 2: lineMiddleEnabled
+;     bit 1: lineMiddleLength, bit 8
+;     bit 0: lineEndEnabled
 ;   b' -
 ;     bit 7..4: lineStartLength, 0 => 16
 ;     bit 3..0: lineEndLength, 0 => 16
 ;   c' - lineMiddleLength MSB, 0 => 256
-;   a' - line flags
-;     bit 7: lineStartEnabled
-;     bit 6: lineMiddleEnabled
-;     bit 5: lineMiddleLength, bit 8
-;     bit 4: lineEndEnabled
-;     bit 3..0: unused, must be 0
 ; Output
 ;   hl - advanced
 ;   de - advanced
@@ -503,7 +500,6 @@ Bank7Lines256UntilZ
         ld      h, $e0
         inc     l
         jp      .bankLoop
-
 
         endmodule
 

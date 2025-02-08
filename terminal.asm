@@ -78,7 +78,7 @@ printer         Printer { { tileMap, { height, width }, 0 }, { 0, 0 }, %11100010
 @tileSize        equ     2
 
 @tileMap         equ     $4000
-.size           equ     width * height * tileSize
+.size            equ     width * height * tileSize
 @tileDefs        equ     $4000 + tileMap.size
 
 @font    include data/topaz-8.asm

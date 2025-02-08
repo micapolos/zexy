@@ -94,11 +94,10 @@ Main
         ld      hl, a3patch
         ld      de, $e050       ; start address
         ld      bc, $3210       ; top bottom middle
-        ld      a, %11110000    ; enable: top, bottom, opaque, middle
-        exa : exx
+        ld      a, %11111101    ; enable: top, bottom, opaque, middle, left, right, 8-bit length, right
+        exx
         ld      bc, $4260       ; left right middle
-        ld      a, %11010000    ; enable: top, bottom, 8-bitMSB, middle
-        exx : exa
+        exx
         call    Blit.Copy9Patch
 
 .loop   jr      .loop
