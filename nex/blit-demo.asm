@@ -93,7 +93,7 @@ Main
         ld      a, %11110000
         exa
         exx
-        ld      bc, $2210
+        ld      bc, $2260
         ld      a, %11010000
         exx
         exa

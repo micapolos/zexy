@@ -123,18 +123,51 @@ INT_EN_2                equ     $c6
 .uart0RxHalfFull        equ     %00000010
 .uart0RxAvail           equ     %00000001
 
-; Input:
-;   A - register
-; Output:
-;   A - value
-;   BC, DE, HL - preserved
-Read:
+; =========================================================
+; Input
+;   a - register
+; Output
+;   a - value
+;   bc, de, hl - preserved
+Read
         push    bc
         ld      bc, Port.ACTIVE_REG
         out     (c), a
         inc     b
         in      a, (c)
         pop     bc
+        ret
+
+; =========================================================
+; Input
+;   a - register
+;   e - value
+; Output
+;   bc, de, hl - preserved
+Write
+        push    bc
+        ld      bc, Port.ACTIVE_REG
+        out     (c), a
+        inc     b
+        ld      a, e
+        out     (c), a
+        pop     bc
+        ret
+
+; =========================================================
+; Input
+;   a - register
+; Output
+;   bc, de, hl - preserved
+Inc
+        push    de
+        push    af
+        call    Read
+        inc     a
+        ld      e, a
+        pop     af
+        call    Write
+        pop     de
         ret
 
         endmodule

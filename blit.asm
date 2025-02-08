@@ -107,6 +107,32 @@ CopyLineStride256
 
 ; =========================================================
 ; Input
+;   d - addr
+; Output
+;   d - incremented
+;   other - preserved
+BankedIncD
+        push    af
+        ld      a, d
+        inc     a
+        test    $1f
+        jp      nz, .noBankWrap
+.bankWrap
+        sub     $20
+        ld      d, a
+        swapnib
+        rrca
+        add     Reg.MMU_0
+        call    Reg.Inc
+        jp      .ret
+.noBankWrap
+        ld      d, a
+.ret
+        pop     af
+        ret
+
+; =========================================================
+; Input
 ;   hl - src addr
 ;   de - dst addr
 ;   b -
@@ -187,8 +213,7 @@ Copy3PatchLine
         pop     bc
         pop     af
 
-        inc     d
-        ret
+        jp      BankedIncD
 
 ; Same as above, but src addr is restored
 Copy3PatchLineRepeat
