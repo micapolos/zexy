@@ -112,6 +112,7 @@ CopyLineStride256
 ; Output
 ;   d - incremented
 ;   other - preserved
+;   mmu - advanced
 BankedIncD
         push    af
         ld      a, d
@@ -149,6 +150,7 @@ BankedIncD
 ; Output
 ;   hl - advanced
 ;   de - advanced
+;   mmu - advanced
 Copy3PatchLine
         push    af
         push    bc
@@ -286,6 +288,7 @@ Skip3PatchLine
 ;   hl - advanced
 ;   de - advanced
 ;   bc, af, af' - corrupt
+;   mmu - advanced
 Copy9Patch
 .init
         exa : exb               ; switch to line widths and flags
