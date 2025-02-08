@@ -2,6 +2,7 @@
         define  UIAlignment_asm
 
         include ui/frame.asm
+        include struct.asm
 
         module  UIAlignment
 
