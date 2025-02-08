@@ -284,6 +284,7 @@ Skip3PatchLine
 ;   hl - advanced
 ;   de - advanced
 ;   bc, af, af' - corrupt
+; FIXIT: Somehow bc and bc' gets mixed together.
 Copy9Patch
         exa
         rlca
@@ -310,17 +311,34 @@ Copy9Patch
         rlca
         jp      nc, .noMiddle
 .middle
+        rlca
+        jp      nc, .noMiddleMsb
+.middleMsb
         push    bc
         exx : push bc : exx : pop bc    ; ld bc, bc'
         push    af
-        ld      b, c
+        ld      b, 1
+        jp      .middleMsbDone
+.noMiddleMsb
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        push    af
+        ld      b, 0
+.middleMsbDone
         exa
+        push    af
 .middleLoop
+        pop     af
         push    bc
         exx : push bc : exx : pop bc    ; ld bc, bc'
         call    Copy3PatchLineRepeat
         pop     bc
-        djnz    .middleLoop
+        dec     bc
+        push    af
+        ld      a, b
+        or      c
+        jp      nz, .middleLoop
+        pop     af
         push    bc
         exx : push bc : exx : pop bc    ; ld bc, bc'
         call    Skip3PatchLine
@@ -328,8 +346,10 @@ Copy9Patch
         exa
         pop     af
         pop     bc
+        jp      .middleDone
 .noMiddle
-        rlca
+        rlca    ; skip length MSB
+.middleDone
         rlca
         jp      nc, .noEnd
 .end
