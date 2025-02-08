@@ -89,18 +89,36 @@ Main
         draw_label rightText, 294, 1, rightText.width, 4
 
         ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), %10000010
+        ld      a, 'Z'
+        call    Printer.Put
+
+        ld      (ix + Printer.attr), %11000010
+        ld      a, 'E'
+        call    Printer.Put
+
+        ld      (ix + Printer.attr), %01000010
+        ld      a, 'X'
+        call    Printer.Put
+
+        ld      (ix + Printer.attr), %01100010
+        ld      a, 'Y'
+        call    Printer.Put
+
         ld      (ix + Printer.attr), %11100000
 
         ld      ix, Terminal.writer
-        WriteStringDZ "ZEXY, v0.1\n"
-        WriteStringDZ " \n"
+        WriteStringDZ " v0.1\n"
+        WriteStringDZ "\n"
         WriteStringDZ "> ls\n"
+        WriteStringDZ "\n"
         WriteStringDZ "  <DIR>            .\n"
         WriteStringDZ "  <DIR>            ..\n"
         WriteStringDZ "  <DIR>            bin\n"
         WriteStringDZ "  <DIR>            usr\n"
         WriteStringDZ "         0000ff21h system.bin\n"
         WriteStringDZ "         00000135h readme.txt\n"
+        WriteStringDZ "\n"
         WriteStringDZ "> \n"
 .loop
         jr      .loop
