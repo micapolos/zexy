@@ -54,6 +54,7 @@ Main
         ; background
         fillrect 0, 0, 320, 0, 5
 
+        ; Menu bar
         nextreg Reg.MMU_7, 18
         ld      de, $e000
         ld      hl, ninePatch.menuBar
@@ -65,6 +66,17 @@ Main
         exa : exx
         call    Blit.Copy9Patch
 
+        ; Menu frame
+        nextreg Reg.MMU_7, 19
+        ld      de, $f70a
+        ld      hl, ninePatch.menuFrame
+        ld      bc, $2250
+        ld      a, %11010000
+        exa : exx
+        ld      bc, $2230
+        ld      a, %11010000
+        exa : exx
+        call    Blit.Copy9Patch
 
         zexy_logo 6, 2
 
@@ -251,6 +263,12 @@ ninePatch
         dh      "020101010200"
         dh      "030101010200"
         dh      "000302010200"
+.menuFrame
+        dh      "0000000000"
+        dh      "0002020200"
+        dh      "0002010200"
+        dh      "0002020200"
+        dh      "0000000000"
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto
