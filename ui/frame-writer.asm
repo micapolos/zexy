@@ -4,6 +4,8 @@
         include ui/frame.asm
         include ui/coord.asm
         include ui/size.asm
+        include writer.asm
+        include struct.asm
 
         module  UIFrameWriter
 
