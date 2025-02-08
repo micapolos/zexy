@@ -241,10 +241,7 @@ Skip3PatchLine
         rlca
         jp      nc, .noMiddle
 .middle
-        push    af
-        ld      a, c    ; TODO: 0 = 256
-        add     hl, a
-        pop     af
+        inc     hl
 .noMiddle
         rlca            ; skip transparent flag
         rlca
