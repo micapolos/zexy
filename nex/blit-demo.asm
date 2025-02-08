@@ -69,7 +69,7 @@ Main
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
 
-        ; 3-patch transparent middle
+        ; 3-patch transparent
         ld      hl, a3patch
         ld      de, $f030
         ld      bc, $3210
@@ -90,17 +90,15 @@ Main
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
 
-        ; 9-patch transparent middle
+        ; 9-patch
         ld      hl, a3patch
-        ld      de, $e050
-        ld      bc, $3210
-        ld      a, %11110000
-        exa
-        exx
-        ld      bc, $4260
-        ld      a, %11010000
-        exx
-        exa
+        ld      de, $e050       ; start address
+        ld      bc, $3210       ; top bottom middle
+        ld      a, %11110000    ; enable: top, bottom, opaque, middle
+        exa : exx
+        ld      bc, $4260       ; left right middle
+        ld      a, %11010000    ; enable: top, bottom, 8-bitMSB, middle
+        exx : exa
         call    Blit.Copy9Patch
 
 .loop   jr      .loop
