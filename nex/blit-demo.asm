@@ -53,8 +53,10 @@ Main
         ; 3-patch opaque
         ld      hl, a3patch
         ld      de, $e030
-        ld      bc, $2210
+        ld      bc, $3210
         ld      a, %11110000
+        call    Blit.Copy3PatchLine
+        call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLineRepeat
@@ -70,8 +72,10 @@ Main
         ; 3-patch transparent middle
         ld      hl, a3patch
         ld      de, $f030
-        ld      bc, $2210
+        ld      bc, $3210
         ld      a, %11110000
+        call    Blit.Copy3PatchLine
+        call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         ld      a, %11010000
@@ -89,11 +93,11 @@ Main
         ; 9-patch transparent middle
         ld      hl, a3patch
         ld      de, $e050
-        ld      bc, $2210
+        ld      bc, $3210
         ld      a, %11110000
         exa
         exx
-        ld      bc, $2260
+        ld      bc, $4260
         ld      a, %11010000
         exx
         exa
@@ -116,11 +120,13 @@ line4   db      $12, $ff, $ff, $ff, $ff, $ff, $ff, $12
 line5   db      $12, $12, $12, $12, $12, $12, $12, $12
 .stride db      0, 0
 
-a3patch db      $12, $12, $12, $12, $12
-        db      $12, $ff, $ff, $ff, $12
-        db      $12, $ff, $44, $ff, $12
-        db      $12, $ff, $ff, $ff, $12
-        db      $12, $12, $12, $12, $12
+a3patch db      $12, $12, $12, $12, $12, $12
+        db      $12, $ee, $ee, $ee, $ee, $12
+        db      $12, $12, $12, $12, $12, $12
+        db      $12, $ff, $ff, $ff, $ff, $12
+        db      $12, $ff, $56, $45, $ff, $12
+        db      $12, $ff, $ff, $ff, $ff, $12
+        db      $12, $12, $12, $12, $12, $12
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto
