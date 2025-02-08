@@ -13,7 +13,7 @@ addr                    dw
 ; bit 4: right enabled
 ; bit 3: top enabled
 ; bit 2: middle enabled
-; bit 1: middle height MSB (8-th bit)
+; bit 1: transparent color enabled (not yet supported)
 ; bit 0: bottom enabled
 flags                   db
 
@@ -21,17 +21,18 @@ flags                   db
 ; bit 3..0: right width, 0 = 16
 leftRightWidths         db
 
-; middle width, 0 = 256
-middleWidth             db
+; middle width, 0 = 65536
+middleWidth             dw
 
 ; bit 7..4: top height, 0 = 16
 ; bit 3..0: bottom height, 0 = 16
 topBottomHeights        db
 
-; middle height, 0 = 256
-middleHeight            db
+; middle height, 0 = 65536
+middleHeight            dw
 
-unused                  db
+; transparent color index (not yet supported)
+transparentColor        db
         ends
 
         assert (NinePatch & 1) = 0
