@@ -144,7 +144,7 @@ BankedIncD
 ;   a - flags
 ;     bit 7: startEnabled
 ;     bit 6: middleEnabled
-;     bit 5: middleOpaque
+;     bit 5: middleTransparent
 ;     bit 4: startEnabled
 ;     bit 3..0: unused must be 0
 ; Output
@@ -177,7 +177,7 @@ Copy3PatchLine
         jp      nc, .noMiddle
 .middle
         rlca
-        jp      nc, .middleTransparent
+        jp      c, .middleTransparent
 .middleOpaque
         exa
         push    bc
@@ -271,7 +271,7 @@ Skip3PatchLine
 ;   a - flags
 ;     bit 7: startEnabled
 ;     bit 6: middleEnabled
-;     bit 5: middleOpaque
+;     bit 5: middleTransparent
 ;     bit 4: endEnabled
 ;     bit 3..0: unused, must be 0
 ;   b' -
@@ -305,7 +305,7 @@ Copy9Patch
         pop     af
         exa
         push    af              ; save flags
-        or      %00100000       ; set middleOpaque
+        and      %11011111      ; clear middleTransparent
         exa
 .startLoop
         exa : exb
@@ -362,7 +362,7 @@ Copy9Patch
         pop     af
         exa                     ; set middleOpaque
         push    af
-        or      %00100000
+        and      %11011111      ; clear middleTransparent
         exa
 .endLoop
         exa : exb

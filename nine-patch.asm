@@ -6,15 +6,17 @@
         struct  NinePatch
 addr                    dw
 
-; bit 1: 1 = enable transparent color, 0 = no transparent color
-; bit 0: 1 = middle opaque, 0 = middle transparent
+; bits 7..2: unused, must be 0
+; bit 1: enable transparent color
+; bit 0: transparent middle
 flags                   db
+
+; transparent color (if enabled)
 transparentColor        db
+
 leftWidth               dw
-middleWidth             dw
 rightWidth              dw
 topHeight               dw
-middleHeight            dw
 bottomHeight            dw
         ends
 
