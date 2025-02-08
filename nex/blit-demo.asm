@@ -50,7 +50,7 @@ Main
         exx
         call    Blit.CopyLinesStride256
 
-        ; 3-patch opaque
+        ; 3-patch opaque, line by line
         ld      hl, a3patch
         ld      de, $e030
         ld      bc, $3210
@@ -59,19 +59,43 @@ Main
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
 
+        ; 3px space
+        call    Blit.BankedIncD
+        call    Blit.BankedIncD
+        call    Blit.BankedIncD
+
+        ; 3-patch opaque, repeated lines
+        ld      hl, a3patch
+        exb
+        ld      bc, 4
+        exb
+        call    Blit.Copy3PatchLines
+        exb
+        ld      bc, 7
+        exb
+        call    Blit.Copy3PatchLineRepeat
+        exb
+        ld      bc, 2
+        exb
+        call    Blit.Copy3PatchLines
+
+        ; 3px space
+        call    Blit.BankedIncD
+        call    Blit.BankedIncD
+        call    Blit.BankedIncD
+
         ; 3-patch transparent
         ld      hl, a3patch
-        ld      de, $f030
         ld      bc, $3210
         ld      a, %11010000
         call    Blit.Copy3PatchLine
@@ -79,16 +103,18 @@ Main
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
         ld      a, %11110000
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
-        call    Blit.Copy3PatchLineRepeat
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
+        call    Blit.Copy3PatchLineRewind
         call    Blit.Copy3PatchLine
         ld      a, %11010000
         call    Blit.Copy3PatchLine
         call    Blit.Copy3PatchLine
+
+        nextreg Reg.MMU_7, 18
 
         ; 9-patch
         ld      hl, a3patch

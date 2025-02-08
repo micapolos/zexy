@@ -219,7 +219,7 @@ Copy3PatchLine
         jp      BankedIncD
 
 ; Same as above, but src addr is restored
-Copy3PatchLineRepeat
+Copy3PatchLineRewind
         push    hl
         call    Copy3PatchLine
         pop     hl
@@ -259,6 +259,74 @@ Skip3PatchLine
 .noEnd
         pop     af
         ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   b -
+;     bit 7..4: startLength, 0 => 16
+;     bit 3..0: endLength, 0 => 16
+;   c - middleLength, 0 => 256
+;   a - flags
+;     bit 7: startEnabled
+;     bit 6: middleEnabled
+;     bit 5: middleTransparent
+;     bit 4: startEnabled
+;     bit 3..0: unused must be 0
+;   bc' - width
+; Output
+;   hl, de, mmu - advanced
+;   af, bc - preserved
+;   bc' - 0
+Copy3PatchLines
+        push    af
+.loop
+        pop     af
+        call    Copy3PatchLine
+        push    af
+        exb
+        dec     bc
+        ld      a, b
+        or      c
+        exb
+        jp      nz, .loop
+        pop     af
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   b -
+;     bit 7..4: startLength, 0 => 16
+;     bit 3..0: endLength, 0 => 16
+;   c - middleLength, 0 => 256
+;   a - flags
+;     bit 7: startEnabled
+;     bit 6: middleEnabled
+;     bit 5: middleTransparent
+;     bit 4: startEnabled
+;     bit 3..0: unused must be 0
+;   bc' - width
+; Output
+;   hl, de, mmu - advanced
+;   af, bc - preserved
+;   bc' - 0
+Copy3PatchLineRepeat
+        push    af
+.loop
+        pop     af
+        call    Copy3PatchLineRewind
+        push    af
+        exb
+        dec     bc
+        ld      a, b
+        or      c
+        exb
+        jp      nz, .loop
+        pop     af
+        jp      Skip3PatchLine
 
 ; =========================================================
 ; Input
@@ -335,7 +403,7 @@ Copy9Patch
 .middleLoop
         pop     af
         exa : exb
-        call    Copy3PatchLineRepeat
+        call    Copy3PatchLineRewind
         exb : exa
         dec     bc
         push    af
