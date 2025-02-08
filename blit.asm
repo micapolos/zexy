@@ -110,19 +110,26 @@ CopyLineStride256
 ;   hl - src addr
 ;   de - dst addr
 ;   b -
-;     bit 7..4: endLength, 0 => 16
-;     bit 3..0: startLength, 0 => 16
+;     bit 7..4: startLength, 0 => 16
+;     bit 3..0: endLength, 0 => 16
 ;   c - middleLength, 0 => 256
 ;   a - flags
-;     bit 7..3: unused, must be 0
-;     bit 2: endEnabled
-;     bit 1: middleEnabled
-;     bit 0: startEnabled
+;     bit 7: startEnabled
+;     bit 6: middleEnabled
+;     bit 5: middleOpaque
+;     bit 4: startEnabled
+;     bit 3..0: unused must be 0
 ; Output
 ;   hl - advanced
 ;   de - advanced
-;   bc, af, af' - corrupt
 Copy3PatchLine
+        push    af
+        push    bc
+        push    de
+        exa
+        push    af
+        exa
+
         rlca
         jp      nc, .noStart
 .start
@@ -140,6 +147,9 @@ Copy3PatchLine
         rlca
         jp      nc, .noMiddle
 .middle
+        rlca
+        jp      nc, .middleTransparent
+.middleOpaque
         exa
         push    bc
         ld      b, c
@@ -149,6 +159,13 @@ Copy3PatchLine
         djnz    .middleLoop
         inc     hl
         pop     bc
+        exa
+        jp      .noMiddle
+.middleTransparent
+        exa
+        ld      a, c
+        add     de, a
+        inc     hl
         exa
 .noMiddle
         rlca
@@ -162,6 +179,153 @@ Copy3PatchLine
         ldir
         exa
 .noEnd
+        exa
+        pop     af
+        exa
+
+        pop     de
+        pop     bc
+        pop     af
+
+        inc     d
+        ret
+
+; Same as above, but src addr is restored
+Copy3PatchLineRepeat
+        push    hl
+        call    Copy3PatchLine
+        pop     hl
+        ret
+
+; Same as above, but skips over single src line
+Skip3PatchLine
+        push    af
+        rlca
+        jp      nc, .noStart
+.start
+        push    af
+        ld      a, b
+        swapnib
+        and     $0f
+        add     hl, a
+        pop     af
+.noStart
+        rlca
+        jp      nc, .noMiddle
+.middle
+        push    af
+        ld      a, c    ; TODO: What about c=0=256? Is it important?
+        add     hl, a
+        pop     af
+.noMiddle
+        rlca            ; skip transparent flag
+        rlca
+        jp      nc, .noEnd
+.end
+        push    af
+        ld      a, b
+        and     $0f
+        add     hl, a
+        pop     af
+.noEnd
+        pop     af
+        ret
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   b -
+;     bit 7..4: startLength, 0 => 16
+;     bit 3..0: endLength, 0 => 16
+;   c - middleLength, 0 => 256
+;   a - flags
+;     bit 7: startEnabled
+;     bit 6: middleEnabled
+;     bit 5: middleOpaque
+;     bit 4: endEnabled
+;     bit 3: unused, must be 0
+;   b' -
+;     bit 7..4: lineStartLength, 0 => 16
+;     bit 3..0: lineEndLength, 0 => 16
+;   c' - lineMiddleLength MSB, 0 => 256
+;   a' - line flags
+;     bit 7: lineStartEnabled
+;     bit 6: lineMiddleEnabled
+;     bit 5: lineMiddleLength, bit 8
+;     bit 4: lineEndEnabled
+;     bit 3..0: unused, must be 0
+; Output
+;   hl - advanced
+;   de - advanced
+;   bc, af, af' - corrupt
+Copy9Patch
+        exa
+        rlca
+        jp      nc, .noStart
+.start
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        push    af
+        ld      a, b
+        swapnib
+        and     $0f
+        ld      b, a
+        exa
+.startLoop
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        call    Copy3PatchLine
+        pop     bc
+        djnz    .startLoop
+        exa
+        pop     af
+        pop     bc
+.noStart
+        rlca
+        jp      nc, .noMiddle
+.middle
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        push    af
+        ld      b, c
+        exa
+.middleLoop
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        call    Copy3PatchLineRepeat
+        pop     bc
+        djnz    .middleLoop
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        call    Skip3PatchLine
+        pop     bc
+        exa
+        pop     af
+        pop     bc
+.noMiddle
+        rlca
+        rlca
+        jp      nc, .noEnd
+.end
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        push    af
+        ld      a, b
+        and     $0f
+        ld      b, a
+        exa
+.endLoop
+        push    bc
+        exx : push bc : exx : pop bc    ; ld bc, bc'
+        call    Copy3PatchLine
+        pop     bc
+        djnz    .endLoop
+        exa
+        pop     af
+        pop     bc
+.noEnd
+        exa
         ret
 
 ; =========================================================
