@@ -1,6 +1,7 @@
         ifndef  Blit_asm
         define  Blit_asm
 
+        include ex.asm
         include call.asm
         include reg.asm
 
@@ -231,7 +232,9 @@ Skip3PatchLine
         push    af
         ld      a, b
         swapnib
+        dec     a
         and     $0f
+        inc     a
         add     hl, a
         pop     af
 .noStart
@@ -239,7 +242,7 @@ Skip3PatchLine
         jp      nc, .noMiddle
 .middle
         push    af
-        ld      a, c    ; TODO: What about c=0=256? Is it important?
+        ld      a, c    ; TODO: 0 = 256
         add     hl, a
         pop     af
 .noMiddle
@@ -249,7 +252,9 @@ Skip3PatchLine
 .end
         push    af
         ld      a, b
+        dec     a
         and     $0f
+        inc     a
         add     hl, a
         pop     af
 .noEnd
@@ -269,105 +274,108 @@ Skip3PatchLine
 ;     bit 6: middleEnabled
 ;     bit 5: middleOpaque
 ;     bit 4: endEnabled
-;     bit 3: lineStartEnabled
-;     bit 2: lineMiddleEnabled
-;     bit 1: lineMiddleLength, bit 8
-;     bit 0: lineEndEnabled
+;     bit 3..0: unused, must be 0
 ;   b' -
 ;     bit 7..4: lineStartLength, 0 => 16
 ;     bit 3..0: lineEndLength, 0 => 16
 ;   c' - lineMiddleLength MSB, 0 => 256
+;   a' - lineFlags
+;     bit 7: lineStartEnabled
+;     bit 6: lineMiddleEnabled
+;     bit 5: lineMiddleLength, bit 8
+;     bit 4: lineEndEnabled
+;     bit 3..0: unused, must be 0
 ; Output
 ;   hl - advanced
 ;   de - advanced
 ;   bc, af, af' - corrupt
-; FIXIT: Somehow bc and bc' gets mixed together.
 Copy9Patch
-        exa
+.init
+        exa : exb               ; switch to line widths and flags
+.checkStart
         rlca
         jp      nc, .noStart
 .start
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
-        push    af
+        push    bc              ; save lineWidths
+        push    af              ; b = line width
         ld      a, b
         swapnib
         and     $0f
         ld      b, a
+        pop     af
+        exa
+        push    af              ; save flags
+        or      %00100000       ; set middleOpaque
         exa
 .startLoop
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
+        exa : exb
         call    Copy3PatchLine
-        pop     bc
+        exb : exa
         djnz    .startLoop
         exa
-        pop     af
-        pop     bc
+        pop     af              ; restore flags
+        exa
+        pop     bc              ; restore lineWidths
 .noStart
+.checkMiddle
         rlca
         jp      nc, .noMiddle
 .middle
+.checkMiddleMsd
+        push    bc
         rlca
         jp      nc, .noMiddleMsb
 .middleMsb
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
-        push    af
         ld      b, 1
         jp      .middleMsbDone
 .noMiddleMsb
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
-        push    af
         ld      b, 0
 .middleMsbDone
-        exa
         push    af
 .middleLoop
         pop     af
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
+        exa : exb
         call    Copy3PatchLineRepeat
-        pop     bc
+        exb : exa
         dec     bc
         push    af
         ld      a, b
         or      c
         jp      nz, .middleLoop
         pop     af
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
+        pop     bc
+        exa : exb
         call    Skip3PatchLine
-        pop     bc
-        exa
-        pop     af
-        pop     bc
-        jp      .middleDone
+        exb : exa
+        jp      .checkEnd
 .noMiddle
         rlca    ; skip length MSB
-.middleDone
+.checkEnd
         rlca
         jp      nc, .noEnd
 .end
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
-        push    af
+        push    bc              ; save lineWidths
+        push    af              ; b = lineWidth
         ld      a, b
         and     $0f
         ld      b, a
+        pop     af
+        exa                     ; set middleOpaque
+        push    af
+        or      %00100000
         exa
 .endLoop
-        push    bc
-        exx : push bc : exx : pop bc    ; ld bc, bc'
+        exa : exb
         call    Copy3PatchLine
-        pop     bc
+        exb : exa
         djnz    .endLoop
         exa
-        pop     af
-        pop     bc
-.noEnd
+        pop     af              ; restore flags
         exa
+        pop     bc              ; restore lineWidths
+.noEnd
+.finalize
+        exb : exa
         ret
 
 ; =========================================================
