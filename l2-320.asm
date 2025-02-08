@@ -4,6 +4,8 @@
         include bank.asm
         include reg.asm
         include blit.asm
+        include nine-patch.asm
+        include struct.asm
 
         module  L2_320
 
@@ -286,8 +288,19 @@ DrawLabel
 ; Input
 ;   hl - NinePatch ptr
 ;   de - col
-;   b - row
+;   c - row
 DrawNinePatch
+        ; Push start address
+        push    hl
+        ld      l, c
+        call    MoveTo
+        ex      de, hl
+        pop     hl
+        push    de
+
+
+
+        ret
 
         endmodule
 

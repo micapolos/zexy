@@ -29,7 +29,11 @@ middleWidth             db
 topBottomHeights        db
 
 ; middle height, 0 = 256
-middleHeight
+middleHeight            db
+
+unused                  db
         ends
+
+        assert (NinePatch & 1) = 0
 
         endif
