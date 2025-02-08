@@ -13,6 +13,8 @@ PERIPH_1                equ     $05
 
 CPU_SPEED               equ     $07
 
+GLOB_TRANS              equ     $14
+
 SPR_LAY_SYS             equ     $15
 .sprOverBord            equ     %00000010
 .sprOn                  equ     %00000001

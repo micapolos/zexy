@@ -7,6 +7,7 @@
         include palette.asm
         include glyph.asm
         include blit.asm
+        include terminal.asm
 
         macro   fillrect left, top, width, height, color
         ld      de, left
@@ -49,10 +50,14 @@
 
 Main
         call    L2_320.Init
+        call    Terminal.Init
         call    InitPalette
 
+        nextreg Reg.GLOB_TRANS, $e3
+        nextreg Reg.TM_OFS_Y, 256-12
+
         ; background
-        fillrect 0, 0, 320, 0, 5
+        fillrect 0, 0, 320, 0, $e3
 
         ; Menu bar
         nextreg Reg.MMU_7, 18
@@ -76,12 +81,27 @@ Main
         ld      bc, $2230
         ld      a, %11010000
         exa : exx
-        call    Blit.Copy9Patch
+        ;call    Blit.Copy9Patch
 
         zexy_logo 6, 2
 
         draw_label text, 22, 1, text.width, 4
         draw_label rightText, 294, 1, rightText.width, 4
+
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), %11100000
+
+        ld      ix, Terminal.writer
+        WriteStringDZ "ZEXY, v0.1\n"
+        WriteStringDZ " \n"
+        WriteStringDZ "> ls\n"
+        WriteStringDZ "  <DIR>            .\n"
+        WriteStringDZ "  <DIR>            ..\n"
+        WriteStringDZ "  <DIR>            bin\n"
+        WriteStringDZ "  <DIR>            usr\n"
+        WriteStringDZ "         0000ff21h system.bin\n"
+        WriteStringDZ "         00000135h readme.txt\n"
+        WriteStringDZ "> \n"
 .loop
         jr      .loop
 
@@ -89,7 +109,7 @@ InitPalette
         nextreg Reg.PAL_CTRL, Reg.PAL_CTRL.rwL2Pal1
         nextreg Reg.PAL_IDX, 0
         ld      hl, palette
-        ld      b, 0
+        ld      b, 10
         jp      Palette.Load9Bit
 
 palette
@@ -105,27 +125,13 @@ palette
 .cyan   RGB_333 0, 7, 7
 
 text
-        ; F
-        db      %01111110
-        db      %01111110
-        db      %01010000
-        db      %01010000
+.terminal
         db      %01000000
-        db      0
-        db      %01011110
-        db      %01011110
-        db      0
-        db      %00111110
-        db      %00111110
-        db      %00100000
-        db      %00111110
-        db      %00011110
-        db      0
-        db      %00001100
-        db      %00011110
-        db      %00010010
+        db      %01000000
         db      %01111110
         db      %01111110
+        db      %01000000
+        db      %01000000
         db      0
         db      %00011100
         db      %00111110
@@ -138,12 +144,40 @@ text
         db      %00010000
         db      %00100000
         db      0
+        db      %00111110
+        db      %00111110
+        db      %00100000
+        db      %00111110
+        db      %00111110
+        db      %00100000
+        db      %00111110
+        db      %00011110
         db      0
-        ;db      0
+        db      %01011110
+        db      %01011110
+        db      0
+        db      %00111110
+        db      %00111110
+        db      %00100000
+        db      %00111110
+        db      %00011110
+        db      0
+        db      %00000100
+        db      %00101110
+        db      %00101010
+        db      %00111110
+        db      %00011110
+        db      0
+        db      %01111100
+        db      %01111110
+        db      %00000010
         db      0
         db      0
         db      0
         db      0
+        db      0
+        db      0
+.file
         db      %01111110
         db      %01010000
         db      %01010000
@@ -160,11 +194,11 @@ text
         db      %00011000
         db      0
         db      0
-        ;db      0
         db      0
         db      0
         db      0
         db      0
+.edit
         db      %01111110
         db      %01010010
         db      %01010010
@@ -182,10 +216,10 @@ text
         db      0
         db      0
         db      0
-        ;db      0
         db      0
         db      0
         db      0
+.view
         db      %01111000
         db      %00000100
         db      %00000010
@@ -208,9 +242,9 @@ text
         db      0
         db      0
         db      0
-        ;db      0
         db      0
         db      0
+.help
         db      %01111110
         db      %00010000
         db      %00010000
@@ -253,6 +287,47 @@ rightText
         db      %01111110
         db      %00000000
 .width  equ     $ - rightText
+
+unusedText
+.finder
+        db      %01111110
+        db      %01111110
+        db      %01010000
+        db      %01010000
+        db      %01000000
+        db      0
+        db      %01011110
+        db      %01011110
+        db      0
+        db      %00111110
+        db      %00111110
+        db      %00100000
+        db      %00111110
+        db      %00011110
+        db      0
+        db      %00001100
+        db      %00011110
+        db      %00010010
+        db      %01111110
+        db      %01111110
+        db      0
+        db      %00011100
+        db      %00111110
+        db      %00101010
+        db      %00111010
+        db      %00011000
+        db      0
+        db      %00111110
+        db      %00111110
+        db      %00010000
+        db      %00100000
+        db      0
+        db      0
+        db      0
+        db      0
+        db      0
+        db      0
+
 
 ninePatch
 .menuBar
