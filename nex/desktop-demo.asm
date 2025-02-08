@@ -6,6 +6,7 @@
         include color.asm
         include palette.asm
         include glyph.asm
+        include blit.asm
 
         macro   fillrect left, top, width, height, color
         ld      de, left
@@ -53,24 +54,17 @@ Main
         ; background
         fillrect 0, 0, 320, 0, 5
 
-        ; menu background
-        fillrect 0, 0, 320, 9, 1
-        fillrect 0, 9, 320, 1, 2
-        fillrect 0, 10, 320, 1, 0
+        nextreg Reg.MMU_7, 18
+        ld      de, $e000
+        ld      hl, ninePatch.menuBar
+        ld      bc, $3206
+        ld      a, %11010000
+        exa : exx
+        ld      bc, $333a
+        ld      a, %11110000
+        exa : exx
+        call    Blit.Copy9Patch
 
-        ; rounded corner
-        point    0, 0, 0
-        point    319, 0, 0
-
-        point    1, 0, 3
-        point    318, 0, 3
-        point    0, 1, 3
-        point    319, 1, 3
-
-        point    2, 0, 2
-        point    317, 0, 2
-        point    0, 2, 2
-        point    319, 2, 2
 
         zexy_logo 6, 2
 
@@ -247,6 +241,16 @@ rightText
         db      %01111110
         db      %00000000
 .width  equ     $ - rightText
+
+ninePatch
+.menuBar
+        dh      "000302010200"
+        dh      "030101010200"
+        dh      "020101010200"
+        dh      "010101010200"
+        dh      "020101010200"
+        dh      "030101010200"
+        dh      "000302010200"
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto
