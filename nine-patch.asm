@@ -14,10 +14,10 @@ flags                   db
 ; transparent color (if enabled)
 transparentColor        db
 
-leftWidth               dw
-rightWidth              dw
-topHeight               dw
-bottomHeight            dw
+leftWidth               db      ; 0..16
+rightWidth              db      ; 0..16
+topHeight               db      ; 0..16
+bottomHeight            db      ; 0..16
         ends
 
         assert (NinePatch & 1) = 0
