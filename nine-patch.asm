@@ -1,6 +1,8 @@
         ifndef  NinePatch_asm
         define  NinePatch_asm
 
+; TODO: add support for transparent color
+
         struct  NinePatch
 ; data address
 addr                    dw

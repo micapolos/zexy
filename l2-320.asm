@@ -282,6 +282,13 @@ DrawLabel
         or      c
         ret
 
+; =========================================================
+; Input
+;   hl - NinePatch ptr
+;   de - col
+;   b - row
+DrawNinePatch
+
         endmodule
 
         endif
