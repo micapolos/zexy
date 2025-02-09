@@ -255,6 +255,72 @@ GetAddrBank7
 
 ; =========================================================
 ; Input
+;   de, mmu - dst addr
+;   hl - string ptr
+;   (font) - font pointer
+;   (textColor) - text color
+; Output
+;   de, hl, mmu - advanced, with spacing added after last char
+DrawString
+.loop
+        ; a = next char, hl = advanved
+        ldi     a, (hl)
+        or      a
+        ret     z
+
+        push    hl
+
+        ; hl = index ptr
+        ld      hl, (fontPtr)
+        rlca
+        add     hl, a
+
+        ; hl - glyph ptr
+        ldi     bc, (hl)
+        ld      a, b
+        or      c
+        jp      z, .nextChar
+        ld      hl, bc
+
+        ; bc = width, hl = blit src ptr
+        ld      b, 0
+        ldi     c, (hl)
+
+        ; a = blit bit 1 value
+        ld      a, (textColor)
+
+        call    Blit.Copy8BitLines
+        call    Blit.BankedIncD
+
+.nextChar
+        pop     hl
+        jp      .loop
+
+; =========================================================
+
+        macro   L2_320_DrawString x, y, s
+        ld      de, x
+        ld      l, y
+        call    L2_320.MoveTo
+        ex      de, hl
+        ld      hl, s
+        call    L2_320.DrawString
+        endm
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - width
+;   a - bit 1 value
+; Output
+;   hl, de, mmu - advanced
+;   af - preserved
+;   bc - 0
+Copy8BitLines
+
+; =========================================================
+; Input
 ;   de - col
 ;   bc - width
 ;   hl - run addr
@@ -343,6 +409,9 @@ DrawLabel
         endm
 
 ; =========================================================
+
+fontPtr         dw      0
+textColor       db      %11011010
 
         endmodule
 

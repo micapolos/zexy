@@ -656,7 +656,7 @@ Copy8BitLine
 ; =========================================================
 ; Input
 ;   hl - src addr
-;   de - dst addr
+;   de, mmu - dst addr
 ;   bc - width
 ;   a - bit 1 value
 ; Output
