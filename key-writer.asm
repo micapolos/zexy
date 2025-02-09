@@ -35,7 +35,6 @@ Init
 ; =========================================================
 ; Input
 ;   hl - KeyWriter ptr
-;   ix - Writer ptr
 ; Output
 ;   hl - advanced KeyWriter ptr
 Update
@@ -48,13 +47,10 @@ Update
         and     %10000000
         ret     z
 
-        ret
-
 ; =========================================================
 ; Input
 ;   hl - KeyWriter ptr
 ;   de - KeyEvent
-;   ix - Writer ptr
 ; Output
 ;   hl - advanced KeyWriter ptr
 HandleKeyEvent

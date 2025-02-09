@@ -8,26 +8,21 @@
         module  CmdLs
 
 ; Input
-;   ix - Writer ptr
 Exec
         ; open dir, A = dir handle
-        push    ix
         ld      a, '*'          ; current dir
         ld      ix, .dirString
         ld      bc, $1000       ; lfn
         rst     $08
         db      EsxDOS.openDir
-        pop     ix
         jp      c, .error
         ld      (.fileHandle), a
 
 .loop
-        push    ix
         ld      a, (.fileHandle)
         ld      ix, .dirBuffer
         rst     $08
         db      EsxDOS.readDir
-        pop     ix
         jp      c, .dirEntryError
 
         and     a

@@ -7,11 +7,9 @@
         module  CmdCat
 
 ; Input
-;   ix - Writer ptr
 ;   hl - filename ptr
 Exec
         ; open dir, A = dir handle
-        push    ix              ; writer ptr
         ld      a, '$'          ; system dir
         ld      ix, hl          ; filename
         ld      b, $01          ; read
@@ -28,7 +26,6 @@ Exec
         ld      bc, $0100       ; size
         rst     $08
         db      EsxDOS.read
-        pop     ix              ; writer ptr
         push    af              ; read flag
 
         ld      a, b
