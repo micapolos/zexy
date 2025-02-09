@@ -5,46 +5,56 @@
 ; The top of the stack is stored in HL.
 ; Registers are not preserved between calls.
 
+        ; Pushes constant value
         macro   SM_Const value
         push    hl
         ld      hl, value
         endm
 
+        ; Pushes constant value MSB / LSB
         macro   SM_ConstNM msb, lsb
         push    hl
         ld      hl, (msb << 8) | lsb
         endm
 
+        ; Duplicates top value
         macro   SM_Dup
         push    hl
         endm
 
+        ; Drops value from the top
         macro   SM_Drop
         pop     hl
         endm
 
+        ; Increments top value
         macro   SM_Inc
         inc     hl
         endm
 
+        ; Decrements top value
         macro   SM_Dec
         dec     hl
         endm
 
+        ; Adds constant to the top value
         macro   SM_AddConst value
         add     hl, value
         endm
 
+        ; Subtracts constant from the top value
         macro   SM_SubConst value
         xor     a
         sub     hl, value
         endm
 
+        ; Adds top value to the previous value
         macro   SM_Add
         pop     de
         add     hl, de
         endm
 
+        ; Subtracts previous value from the top value
         macro   SM_Sub
         pop     de
         xor     a
