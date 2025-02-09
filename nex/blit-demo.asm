@@ -160,6 +160,11 @@ Main
         nextreg Reg.MMU_7, 18
         BlitNinePatch ninePatch, $e080, 3, 8, 2, 4, $120, 2, 0
 
+        ; 9-patch with lua
+        lua allpass
+        draw_nine_patch("luaNinePatch", 10, 120, 40, 40, 0)
+        endlua
+
 .loop   jr      .loop
 
 line1   db      $12, $12, $12, $12, $12, $12, $12, $12
@@ -185,6 +190,19 @@ ninePatch
         db      $12, $ff, $56, $45, $ff, $12
         db      $12, $ff, $ff, $ff, $ff, $12
         db      $12, $12, $12, $12, $12, $12
+
+luaNinePatch
+        lua pass1
+        nine_patch(4, 2, 3, 2)
+        endlua
+        db      $12, $12, $12, $12, $12, $12
+        db      $12, $ee, $ee, $ee, $ee, $12
+        db      $12, $12, $12, $12, $12, $12
+        db      $12, $ff, $ff, $ff, $ff, $12
+        db      $12, $ff, $56, $45, $ff, $12
+        db      $12, $ff, $ff, $ff, $ff, $12
+        db      $12, $12, $12, $12, $12, $12
+.end
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto

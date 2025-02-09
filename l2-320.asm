@@ -345,20 +345,33 @@ DrawLabel
 
 ; =========================================================
 
-        macro   L2_320_NinePatch name, left, top, right, bottom
-name
-@.leftLabel          equ     left
-@.topLabel           equ     top
-@.rightLabel         equ     right
-@.bottomLabel        equ     bottom
-        endm
+        lua pass1
+          function nine_patch(left, right, top, bottom)
+            _pl(".left equ " .. left)
+            _pl(".top equ " .. top)
+            _pl(".right equ " .. right)
+            _pl(".bottom equ " .. bottom)
+            _pl(".data")
+          end
+        endlua
 
 ; =========================================================
 
-        macro   L2_320_DrawNinePatch name, x, y, width, height, transparent
-        nextreg Reg.MMU_7, (x >> 5) + 18
-        BlitNinePatch name, (x & $1f00) | y, name.top, height, name.bottom, name.left, width, name.right, transparent
-        endm
+        lua pass1
+          function draw_nine_patch(name, x, y, width, height, transparent)
+            _pc("nextreg Reg.MMU_7, (" .. x .. " >> 5) + 18")
+            _pc("BlitNinePatch " ..
+                name .. ".data, " ..
+                "(" .. x .. " & $1f00) | $e000 | " .. y .. "," ..
+                name .. ".top, " ..
+                height .. ", " ..
+                name .. ".bottom, " ..
+                name .. ".left, " ..
+                width .. ", " ..
+                name .. ".right, " ..
+                transparent)
+          end
+        endlua
 
 ; =========================================================
 
