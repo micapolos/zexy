@@ -30,7 +30,6 @@ Main
         call    Printer.Put
 
         ld      (ix + Printer.attr), %11100000
-        ld      ix, Terminal.writer
 
         ld      hl, string.os
         call    Writer.StringLine
@@ -38,8 +37,6 @@ Main
 
         ld      ix, Terminal.printer
         ld      (ix + Printer.attr), %11100000
-
-        ld      ix, Terminal.writer
 
         ; Set system drive
         ld      a, '$'

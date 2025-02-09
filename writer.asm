@@ -4,34 +4,10 @@
         include string.asm
         include call.asm
 
-        struct  Writer
-target          dw
-charProc        dw
-        ends
-
         module  Writer
 
-; =========================================================
-; Input
-;   ix - Writer ptr
-;   a - char
 Char
-        push    ix
-
-        ; hl = target
-        ld      hl, (ix + Writer.target)
-        push    hl
-
-        ; hl = proc
-        ld      hl, (ix + Writer.charProc)
-
-        ; ix = target
-        pop     ix
-
-        calli   hl
-
-        pop     ix
-        ret
+.proc+* jp      0
 
         macro   WriteChar ch
         ld      a, ch
@@ -39,8 +15,6 @@ Char
         endm
 
 ; =========================================================
-; Input
-;   ix - Writer ptr
 NewLine
         ld      a, $0a
         jp      Char
@@ -51,7 +25,6 @@ NewLine
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   hl - null-terminated string
 String
         push    iy
@@ -67,7 +40,6 @@ String
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   hl - null-terminated string
 StringLine
         call    String
@@ -81,7 +53,6 @@ StringLine
 StringDZ
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   (sp) - null-terminated string
         pop     hl
         push    iy
@@ -104,7 +75,6 @@ StringDZ
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   a - nibble in 0..3 bits
 Nibble
         cp      $0a
@@ -118,7 +88,6 @@ Nibble
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   a - value
 Hex8
         push    af
@@ -132,7 +101,6 @@ Hex8
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   a - value
 Hex8h
         call    Hex8
@@ -140,7 +108,6 @@ Hex8h
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   hl - value
 Hex16
         push    hl
@@ -153,7 +120,6 @@ Hex16
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   hl - value
 Hex16h
         call    Hex16
@@ -161,7 +127,6 @@ Hex16h
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   bcde - value
 Hex32
         push    de
@@ -173,7 +138,6 @@ Hex32
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   bcde - value
 Hex32h
         call    Hex32
@@ -181,14 +145,12 @@ Hex32h
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 @HexSuffix
         ld      a, 'h'
         jp      Char
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   a - value
 Bin8
         ld      b, 8

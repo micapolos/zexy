@@ -9,7 +9,6 @@
 Main
         call    Terminal.Init
 
-        ld      ix, Terminal.writer
         ld      hl, frames
         call    UIFrameWriter.Writeln
         call    UIFrameWriter.Writeln

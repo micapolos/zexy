@@ -15,7 +15,6 @@
 
 width           equ     80
 height          equ     32
-writer          Writer { printer, Printer.Put }
 
 ; ==========================================================
 Init
@@ -46,6 +45,16 @@ Init
         ld      hl, tilemapPalette
         ld      b, 0
         call    Palette.Load9Bit
+
+        ld      hl, WriteChar
+        ld      (Writer.Char.proc), hl
+        ret
+
+WriteChar
+        push    ix
+        ld      ix, Terminal.printer
+        call    Printer.Put
+        pop     ix
         ret
 
 tilebuffer

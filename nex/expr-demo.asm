@@ -11,7 +11,6 @@
 
 Main
         call    Terminal.Init
-        ld      ix, Terminal.writer
 
         lua allpass
         expr_demo()

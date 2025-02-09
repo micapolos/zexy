@@ -31,7 +31,6 @@ Fire
         call    Timer.Start
 
         ; write *
-        ld      ix, Terminal.writer
         ld      a, (char)
         inc     a
         ld      (char), a

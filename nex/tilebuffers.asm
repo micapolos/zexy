@@ -17,7 +17,6 @@ Main
         ld      hl, $0100
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      hl, string.tilebuffer1
         call    Writer.String
 
@@ -36,7 +35,6 @@ Main
         ld      hl, $0100
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      hl, string.tilebuffer2
         call    Writer.String
 
@@ -54,7 +52,6 @@ Main
         ld      hl, $0100
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      hl, string.tilebuffer3
         call    Writer.String
 
@@ -62,7 +59,6 @@ Main
         ld      hl, $0000
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      a, '*'
         call    Writer.Char
 
@@ -73,7 +69,6 @@ Main
         ld      hl, $0000
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      a, '*'
         call    Writer.Char
 
@@ -84,7 +79,6 @@ Main
         ld      hl, $0000
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         ld      a, '*'
         call    Writer.Char
 

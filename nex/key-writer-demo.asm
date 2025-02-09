@@ -18,7 +18,6 @@ Main
         ld      iy, HandleKeyEvent
         call    KeyTable.Scan
 
-        ld      ix, Terminal.writer
         call    KeyWriter.Update
 
         call    Raster.FrameWait
@@ -28,12 +27,8 @@ Main
 ; Input
 ;   de - KeyEvent
 HandleKeyEvent
-        push    ix
-        ld      ix, Terminal.writer
         ld      hl, keyWriter
-        call    KeyWriter.HandleKeyEvent
-        pop     ix
-        ret
+        jp      KeyWriter.HandleKeyEvent
 
 keyWriter       KeyWriter
 

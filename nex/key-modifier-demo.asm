@@ -17,7 +17,6 @@ Main
         ld      hl, $2408
         call    Printer.MoveTo
 
-        ld      ix, Terminal.writer
         call    Writer.Bin8
 
         jr      .loop

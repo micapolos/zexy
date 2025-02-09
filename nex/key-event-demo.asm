@@ -18,7 +18,7 @@ Main
         call    Printer.MoveTo
 
 .scanLoop
-        ld      ix, eventWriter
+        ld      ix, eventPrinter
         ld      iy, WriteKey
         call    KeyTable.Scan
 
@@ -46,7 +46,6 @@ Main
         ld      (ix + Printer.attr), a
         pop     af
         call    KeyName.GetChar
-        ld      ix, Terminal.writer
         call    Writer.Char
         pop     af
         pop     bc
@@ -86,7 +85,6 @@ eventPrinter
           { 0, 0 },
           %11100000
         }
-eventWriter            Writer { eventPrinter, Printer.Put }
 
         savenex open "built/key-event-demo.nex", Main, $bfe0
         savenex auto

@@ -11,7 +11,6 @@
 
 ; =========================================================
 ; Input
-;   ix - Writer ptr
 ;   hl - UIFrame ptr
 ; Output
 ;   hl - advanced

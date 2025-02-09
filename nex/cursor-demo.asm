@@ -15,6 +15,9 @@
 Main
         call    Terminal.Init
 
+        ld      hl, WriteChar
+        ld      (Writer.Char.proc), hl
+
         ld      hl, keyWriter
         ld      de, $0818       ; repeatDelay / initialDelay
         call    KeyWriter.Init
@@ -51,7 +54,7 @@ Main
         ld      hl, sprite
         call    Sprite.Load
 
-        ld      iy, HandleKeyEvent
+        ld      iy, KeyWriter.HandleKeyEvent
         call    KeyTable.Scan
 
 .noMove
@@ -59,23 +62,17 @@ Main
 
         jr      .loop
 
-; Input
-;   de - KeyEvent
-HandleKeyEvent
-        push    ix
-        ld      ix, writer
-        ld      hl, keyWriter
-        call    KeyWriter.HandleKeyEvent
-        pop     ix
-        ret
-
 ; =========================================================
 ; Input
 ;   ix - Printer ptr
 ;   a - char
 WriteChar
+        push    ix
+        ld      ix, Terminal.printer
         call    Printer.Put
-        jp      CursorMoveToPrinterCoord
+        call    CursorMoveToPrinterCoord
+        pop     ix
+        ret
 
 ; =========================================================
 ; Input
@@ -93,7 +90,6 @@ CursorMoveToPrinterCoord
         ld      e, a
         jp      Cursor.Move
 
-writer  Writer  { Terminal.printer, WriteChar }
 cursor  Cursor
 sprite  Sprite  { 0, 0, %11110000, %01000000, %10000000 }
 curX    dw      60

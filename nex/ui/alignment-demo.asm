@@ -10,8 +10,6 @@
 Main
         call    Terminal.Init
 
-        ld      ix, Terminal.writer
-
         ; === AlignValue
 
         WritelnString "start: 1000h"

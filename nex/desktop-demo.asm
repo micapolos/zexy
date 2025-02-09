@@ -66,7 +66,6 @@ Main
 
         ld      (ix + Printer.attr), %11100000
 
-        ld      ix, Terminal.writer
         WritelnString " v0.1"
         Writeln
         WritelnString "> ls"
