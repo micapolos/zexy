@@ -11,6 +11,27 @@
         ld      hl, value
         endm
 
+        ; Pushes two constant values
+        macro   SM_Const2 v1, v2
+        SM_Const v1
+        SM_Const v2
+        endm
+
+        ; Pushes three constant values
+        macro   SM_Const3 v1, v2, v3
+        SM_Const v1
+        SM_Const v2
+        SM_Const v3
+        endm
+
+        ; Pushes four constant values
+        macro   SM_Const4 v1, v2, v3, v4
+        SM_Const v1
+        SM_Const v2
+        SM_Const v3
+        SM_Const v4
+        endm
+
         ; Pushes constant value MSB / LSB
         macro   SM_ConstNM msb, lsb
         push    hl
