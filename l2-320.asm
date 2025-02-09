@@ -342,54 +342,25 @@ DrawLabel
         call    L2_320.DrawLabel
         endm
 
+
 ; =========================================================
 
-        ; Defines nine patch, followed by data
-        macro   L2_320_NinePatch left, top, right, bottom
-        dw      .data
-        db      ((left & $0f) << 4) | (right & $0f)
-        db      ((top & $0f) << 4) | (bottom & $0f)
-        db      %10010000       ; TODO: Compute from left/right
-        db      %10010000       ; TODO: Compute from top/bottom
-@.data
+        macro   L2_320_NinePatch name, left, top, right, bottom
+name
+@.leftLabel          equ     left
+@.topLabel           equ     top
+@.rightLabel         equ     right
+@.bottomLabel        equ     bottom
         endm
 
 ; =========================================================
-; Input
-;   hl - params ptr
-;     x         dw
-;     y         db
-;     width     dw
-;     height    db
-;     ninePatch dw
-;     flags     db
-DrawNinePatch
-        StructLdi de
-        StructLdi l
-        call    MoveTo  ; hl = address
-        ex      de, hl  ; de = address
-        StructLdi bc
 
-
-        ; Push start address
-        push    hl
-        ld      l, c
-        call    MoveTo
-        ex      de, hl
-        pop     hl
-        push    de
-
-        ; TODO
-
-        ret
-
-        macro   L2_320_DrawNinePatch ninePatch, x, y, width, height
-        SM_Const ninePatch
-        SM_Const x
-        SM_Const y
-        push    x
-        call    L2_320.DrawNinePatch
+        macro   L2_320_DrawNinePatch name, x, y, width, height, transparent
+        nextreg Reg.MMU_7, (x >> 5) + 18
+        BlitNinePatch name, (x & $1f00) | y, name.top, height, name.bottom, name.left, width, name.right, transparent
         endm
+
+; =========================================================
 
         endmodule
 
