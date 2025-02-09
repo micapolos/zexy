@@ -17,6 +17,33 @@
         ld      hl, (msb << 8) | lsb
         endm
 
+        ; Push value reading it from the given address
+        macro   SM_Read addr
+        push    hl
+        ld      hl, (addr)
+        endm
+
+        ; Pops value and writes to given addr
+        macro   SM_Write addr
+        ld      (addr), hl
+        pop     hl
+        endm
+
+        ; Push byte value reading it from the given address
+        macro   SM_Read8 addr
+        push    hl
+        ld      a, (addr)
+        ld      h, 0
+        ld      l, a
+        endm
+
+        ; Pops value, and writes LSB to given addr
+        macro   SM_Write8 addr
+        ld      a, l
+        ld      (addr), a
+        pop     hl
+        endm
+
         ; Duplicates top value
         macro   SM_Dup
         push    hl
