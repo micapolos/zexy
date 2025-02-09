@@ -4,6 +4,10 @@
 
         include l2-320.asm
 
+        lua allpass
+        require("l2-320")
+        endlua
+
 Main
         call    L2_320.Init
         nextreg Reg.MMU_7, 18

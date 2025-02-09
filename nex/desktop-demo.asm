@@ -8,6 +8,10 @@
         include blit.asm
         include terminal.asm
 
+        lua allpass
+        require("l2-320")
+        endlua
+
         macro   ZexyStripe left, top, color
         L2_320_FillRect left + 2, top    , 2, 2, color
         L2_320_FillRect left + 1, top + 2, 2, 2, color
