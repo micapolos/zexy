@@ -2,6 +2,8 @@
 
 *Zexy* is an experimental project which aims to deliver a modern looking operating system for ZX Spectrum Next.
 
+![Desktop](desktop.png)
+
 ## Calling convention
 
 * Unless specified differently, `af`, `bc`, `de` and `hl` are not callee-preserved
