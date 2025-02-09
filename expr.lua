@@ -1,25 +1,38 @@
 function exec(...)
   local args = {...}
+  local size = 0
   for i = 1, #args do
-    args[i]()
+    size = gen_of(args[i], "void")(size)
   end
 end
 
 function loop(...)
   local args = {...}
-  return function()
-    local addr = sj.current_address
-    for i = 1, #args do
-      args[i]()
-    end
-    _pc("jp " .. hex16(addr))
+  local gens = {}
+  for i = 1, #args do
+    gens[i] = gen_of(args[i], "void")
   end
+  return {
+    type = "void",
+    gen = function(size)
+      local addr = sj.current_address
+      for i = 1, #gens do
+        gens[i](0)
+      end
+      _pc("jp " .. hex16(addr))
+      return size
+    end
+  }
 end
 
 function waitSpace()
-  return function()
-    _pc("call Debug.WaitSpace")
-  end
+  return {
+    type = "void",
+    gen = function(size)
+      _pc("call Debug.WaitSpace")
+      return size
+    end
+  }
 end
 
 function u8(a)
@@ -29,7 +42,7 @@ function u8(a)
   else
     return {
       type = "u8",
-      fn = function(size)
+      gen = function(size)
         if size ~= 0 then
           _pc("push hl")
         end
@@ -47,7 +60,7 @@ function u16(a)
   else
     return {
       type = "u16",
-      fn = function(size)
+      gen = function(size)
         if size ~= 0 then
           _pc("push hl")
         end
@@ -60,24 +73,40 @@ end
 
 function write(a)
   if type(a) == "number" then
-    return function()
-      _pc("WriteString " .. str(hex(a)))
-    end
+    return {
+      type = "void",
+      gen = function(size)
+        _pc("WriteString " .. str(hex(a)))
+        return size
+      end
+    }
   elseif type(a) == "string" then
-    return function()
-      _pc("WriteString \"" .. a .. "\"")  -- escape?
-    end
+    return {
+      type = "void",
+      gen = function(size)
+        _pc("WriteString \"" .. a .. "\"")  -- escape?
+        return size
+      end
+    }
   elseif a.type == "u8" then
-    return function()
-      a.fn(0)
-      _pc("ld a, l")
-      _pc("call Writer.Hex8h")
-    end
+    return {
+      type = "void",
+      gen = function(size)
+        a.gen(0)
+        _pc("ld a, l")
+        _pc("call Writer.Hex8h")
+        return size
+      end
+    }
   elseif a.type == "u16" then
-    return function()
-      a.fn(0)
-      _pc("call Writer.Hex16h")
-    end
+    return {
+      type = "void",
+      gen = function(size)
+        a.gen(0)
+        _pc("call Writer.Hex16h")
+        return size
+      end
+    }
   else
     sj.error("write(" .. expr .. ")")
     sj.exit()
@@ -85,11 +114,15 @@ function write(a)
 end
 
 function writeln(a)
-  local fn = write(a)
-  return function()
-    fn()
-    _pc("Writeln")
-  end
+  local gen = gen_of(write(a), "void")
+  return {
+    type = "void",
+    gen = function(size)
+      size = gen(size)
+      _pc("Writeln")
+      return size
+    end
+  }
 end
 
 function inc(a)
@@ -98,8 +131,8 @@ function inc(a)
   elseif a.type == "u8" then
     return {
       type = "u8",
-      fn = function(size)
-        local size = a.fn(size)
+      gen = function(size)
+        local size = a.gen(size)
         _pc("inc l")
         return size
       end
@@ -107,8 +140,8 @@ function inc(a)
   elseif a.type == "u16" then
     return  {
       type = "u16",
-      fn = function(size)
-        local size = a.fn(size)
+      gen = function(size)
+        local size = a.gen(size)
         _pc("inc hl")
         return size
       end
@@ -125,8 +158,8 @@ function dec(a)
   elseif a.type == "u8" then
     return {
       type = "u8",
-      fn = function(size)
-        local size = a.fn(size)
+      gen = function(size)
+        local size = a.gen(size)
         _pc("dec l")
         return size
       end
@@ -134,8 +167,8 @@ function dec(a)
   elseif a.type == "u16" then
     return  {
       type = "u16",
-      fn = function(size)
-        local size = a.fn(size)
+      gen = function(size)
+        local size = a.gen(size)
         _pc("dec hl")
         return size
       end
@@ -153,8 +186,8 @@ function add(a, b)
     else
       return {
         type = b.type,
-        fn = function(size)
-          size = b.fn(size)
+        gen = function(size)
+          size = b.gen(size)
           _pc("add hl, " .. hex16(a))
           return size
         end
@@ -164,19 +197,19 @@ function add(a, b)
     if type(b) == "number" then
       return {
         type = a.type,
-        fn = function(size)
-          local size = a.fn(size)
+        gen = function(size)
+          local size = a.gen(size)
           _pc("add hl, " .. hex16(b))
           return size
         end
       }
     else
-      local bv = fn_of(b, a.type)
+      local genb = gen_of(b, a.type)
       return {
         type = a.type,
-        fn = function(size)
-          local size = a.fn(size)
-          size = b.fn(size)
+        gen = function(size)
+          local size = a.gen(size)
+          size = genb(size)
           _pc("pop de")
           _pc("add hl, de")
           return size - 1
@@ -191,7 +224,7 @@ function load(addr, typ)
   if typ == "u8" then
     return {
       type = typ,
-      fn = function(size)
+      gen = function(size)
         if size ~= 0 then
           _pc("push hl")
         end
@@ -203,7 +236,7 @@ function load(addr, typ)
   elseif typ == "u16" then
     return {
       type = typ,
-      fn = function(size)
+      gen = function(size)
         if size ~= 0 then
           _pc("push hl")
         end
@@ -229,30 +262,42 @@ function store(addr, expr, typ)
   local addrLit = addrLiteral(addr)
   if type(expr) == "number" then
     if typ == "u8" then
-      return function()
-        _pc("ld a, " .. hex8(expr))
-        _pc("ld (" .. addrLit .. "), a")
-      end
+      return {
+        type = "void",
+          gen = function()
+          _pc("ld a, " .. hex8(expr))
+          _pc("ld (" .. addrLit .. "), a")
+        end
+      }
     elseif typ == "u16" then
-      return function()
-        _pc("ld hl, " .. hex16(expr))
-        _pc("ld (" .. addrLit .. "), hl")
-      end
+      return {
+        type = "void",
+        gen = function()
+          _pc("ld hl, " .. hex16(expr))
+          _pc("ld (" .. addrLit .. "), hl")
+        end
+      }
     else
       sj.error("store(" .. addr .. ", " .. expr .. ", " .. typ .. ")")
       sj.exit()
     end
   else
     if expr.type == "u8" then
-      return function()
-        expr.fn(0)
-        _pc("ld (" .. addrLit .. "), l")
-      end
+      return {
+        type = "void",
+        gen = function()
+          expr.gen(0)
+          _pc("ld (" .. addrLit .. "), l")
+        end
+      }
     elseif expr.type == "u16" then
-      return function()
-        expr.fn(0)
-        _pc("ld (" .. addrLit .. "), hl")
-      end
+      return {
+        type = "void",
+        gen = function()
+          expr.gen(0)
+          _pc("ld (" .. addrLit .. "), hl")
+        end
+      }
     else
       sj.error("store(" .. addr .. ", " .. expr .. ", " .. typ .. ")")
       sj.exit()
@@ -260,11 +305,12 @@ function store(addr, expr, typ)
   end
 end
 
-function fn_of(expr, type)
+function gen_of(expr, typ)
   if expr.type ~= type then
-    sj.error("invalid type of " .. expr.fn .. ", expected " .. type .. ", was " .. expr.type)
+    sj.error("invalid type of " .. expr.gen .. ", expected " .. type .. ", was " .. expr.type)
     sj.exit()
   end
+  return expr.gen
 end
 
 function hex(a)
