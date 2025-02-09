@@ -3,7 +3,6 @@
         org     $8000
 
         include l2-320.asm
-        include glyph.asm
         include reg.asm
         include mem.asm
         include dma.asm

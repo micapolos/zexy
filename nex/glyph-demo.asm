@@ -3,7 +3,7 @@
         org     $8000
 
         include l2-320.asm
-        include glyph.asm
+        include blit.asm
         include reg.asm
 
 Main
@@ -13,11 +13,11 @@ Main
         call    L2_320.Fill
 
         nextreg Reg.MMU_7, 18
-
-        ld      de, text
-        ld      hl, $e100
-        ld      bc, (text.color << 8) | text.width
-        call    Glyph.Draw
+        ld      hl, text
+        ld      de, $e100
+        ld      bc, text.width
+        ld      a, text.color
+        call    Blit.Copy8BitLines
 
 .loop   jr      .loop
 

@@ -5,7 +5,6 @@
         include l2-320.asm
         include color.asm
         include palette.asm
-        include glyph.asm
         include blit.asm
         include terminal.asm
 

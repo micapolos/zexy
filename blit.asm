@@ -577,6 +577,93 @@ Bank7Lines256UntilZ
         inc     l
         jp      .bankLoop
 
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   a - bit 1 color
+; Output
+;   hl, de, mmu - advanced
+;   af - preserved
+;   bc - corrupted
+Copy8BitLine
+        push    af
+        push    de
+
+        ld      b, a            ; move color to b
+        ldi     a, (hl)         ; use a for 8-bit value
+        ex      de, hl          ; use hl for transfer
+.loop
+.bit7
+        rlca
+        jp      nc, .bit6
+        ld      (hl), b
+.bit6
+        inc     l
+        rlca
+        jp      nc, .bit5
+        ld      (hl), b
+.bit5
+        inc     l
+        rlca
+        jp      nc, .bit4
+        ld      (hl), b
+.bit4
+        inc     l
+        rlca
+        jp      nc, .bit3
+        ld      (hl), b
+.bit3
+        inc     l
+        rlca
+        jp      nc, .bit2
+        ld      (hl), b
+.bit2
+        inc     l
+        rlca
+        jp      nc, .bit1
+        ld      (hl), b
+.bit1
+        inc     l
+        rlca
+        jp      nc, .bit0
+        ld      (hl), b
+.bit0
+        inc     l
+        rlca
+        jp      nc, .nextLine
+        ld      (hl), b
+.nextLine
+        ex      de, hl
+        pop     de
+        pop     af
+        jp      BankedIncD
+
+; =========================================================
+; Input
+;   hl - src addr
+;   de - dst addr
+;   bc - width
+;   a - bit 1 value
+; Output
+;   hl, de, mmu - advanced
+;   af - preserved
+;   bc - 0
+Copy8BitLines
+        push    af
+.loop
+        pop     af
+        push    bc
+        call    Copy8BitLine
+        pop     bc
+        dec     bc
+        push    af
+        ld      a, b
+        or      c
+        jp      nz, .loop
+        pop     af
+        ret
+
         endmodule
 
         endif
