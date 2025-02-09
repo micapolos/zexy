@@ -6,6 +6,7 @@
         include blit.asm
         include nine-patch.asm
         include struct.asm
+        include sm.asm
 
         module  L2_320
 
@@ -29,6 +30,10 @@ Clear
         ld      a, 0
         ; fall through to Fill
 
+        macro   L2_320_Clear
+        call    L2_320.Clear
+        endm
+
 ; =========================================================
 ; Input
 ;   a - value
@@ -47,6 +52,11 @@ Fill
         inc     a
         djnz    .loop
         ret
+
+        macro   L2_320_Fill color
+        ld      a, color
+        call    L2_320.Fill
+        endm
 
 ; ========================================================
 ; Input
@@ -99,6 +109,14 @@ FillRect
         or      c
         ret
 
+        macro   L2_320_FillRect x, y, width, height, color
+        ld      de, x
+        ld      hl, (y << 8) | height
+        ld      bc, width
+        ld      a, color
+        call    L2_320.FillRect
+        endm
+
 ; ========================================================
 ; Input
 ;   de - col
@@ -113,6 +131,13 @@ PutPixel
         ld      (hl), a
         ret
 
+        macro   L2_320_PutPixel x, y, color
+        ld      de, x
+        ld      l, y
+        ld      a, color
+        SM_Call L2_320.PutPixel
+        endm
+
 ; ========================================================
 ; Input
 ;   de - col
@@ -125,6 +150,14 @@ DrawHLine
         ld      l, 1            ; height
         jp      FillRect
 
+        macro   L2_320_DrawHLine x, y, width, color
+        ld      de, x
+        ld      h, y
+        ld      bc, width
+        ld      a, color
+        call    L2_320.DrawHLine
+        endm
+
 ; ========================================================
 ; Input
 ;   de - col
@@ -135,6 +168,13 @@ DrawHLine
 DrawVLine
         ld      bc, 1           ; width
         jp      FillRect
+
+        macro   L2_320_DrawVLine x, y, height, color
+        ld      de, x
+        ld      hl, (y << 8) | height
+        ld      a, color
+        call    L2_320.DrawVLine
+        endm
 
 ; ========================================================
 ; Input
@@ -172,6 +212,14 @@ DrawRect
         pop     hl
         ld      bc, 1
         jp      DrawVLine
+
+        macro   L2_320_DrawRect x, y, width, height, color
+        ld      de, x
+        ld      hl, (y << 8) | height
+        ld      bc, width
+        ld      a, color
+        call    L2_320.DrawRect
+        endm
 
 ; ========================================================
 ; Input
@@ -283,6 +331,17 @@ DrawLabel
         ld      a, b
         or      c
         ret
+
+        macro   L2_320_DrawLabel label, x, y, width, color
+        ld      hl, L2_320.DrawLabel.color
+        ld      (hl), color
+        ld      hl, L2_320.DrawLabel.top
+        ld      (hl), y
+        ld      hl, label
+        ld      de, x
+        ld      bc, width
+        call    L2_320.DrawLabel
+        endm
 
 ; =========================================================
 ; Input

@@ -11,51 +11,16 @@
 Main
         call    L2_320.Init
 
-        ld      de, 320
-        ld      hl, BlitRainbow
-        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
-        ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
-        call    Blit.Bank7Lines256UntilZ
+        call    DrawRainbow
 
-        ld      de, $20
-        ld      bc, $100
-        ld      hl, $10e0
-        ld      a, 0
-        call    L2_320.FillRect
+        L2_320_FillRect $20, $10, $100, $e0, 0
+        L2_320_FillRect $30, $20, $e0, $c0, 56
+        L2_320_FillRect $40, $30, $c0, $a0, 165
+        L2_320_PutPixel $42, $32, $ff
 
-        ld      de, $30
-        ld      bc, $e0
-        ld      hl, $20c0
-        ld      a, 56
-        call    L2_320.FillRect
-
-        ld      de, $40
-        ld      bc, $c0
-        ld      hl, $30a0
-        ld      a, 165
-        call    L2_320.FillRect
-
-        ld      de, $42         ; x
-        ld      l, $32          ; y
-        ld      a, $ff          ; color
-        call    L2_320.PutPixel
-
-        ld      de, $42         ; x
-        ld      h, $34          ; y
-        ld      bc, $20         ; width
-        ld      a, $ff          ; color
-        call    L2_320.DrawHLine
-
-        ld      de, $42         ; x
-        ld      hl, $3620       ; y / height
-        ld      a, $ff          ; color
-        call    L2_320.DrawVLine
-
-        ld      de, $50
-        ld      bc, $a0
-        ld      hl, $4080
-        ld      a, 111
-        call    L2_320.DrawRect
+        L2_320_DrawHLine $42, $34, $20, $ff
+        L2_320_DrawVLine $42, $36, $20, $ff
+        L2_320_DrawRect  $50, $40, $a0, $80, 111
 
 .loop
         ; shift = DMA, no shift = CPU
@@ -73,6 +38,13 @@ Main
         call    Blit.Bank7Lines256UntilZ
 
         jp      .loop
+
+DrawRainbow
+        ld      de, 320
+        ld      hl, BlitRainbow
+        ld      (Blit.Bank7Lines256UntilZ.blitLineProc), hl
+        ld      hl, $e012       ; start from address $e000, bank $12 (start of L2)
+        jp     Blit.Bank7Lines256UntilZ
 
 BlitRainbow
         ld      b, 0
