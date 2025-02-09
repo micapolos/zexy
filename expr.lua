@@ -243,13 +243,14 @@ function store(addr, expr, typ)
       sj.exit()
     end
   else
-    expr.fn(0)
     if expr.type == "u8" then
       return function()
+        expr.fn(0)
         _pc("ld (" .. addrLit .. "), l")
       end
     elseif expr.type == "u16" then
       return function()
+        expr.fn(0)
         _pc("ld (" .. addrLit .. "), hl")
       end
     else
