@@ -365,11 +365,7 @@ DrawLabel
               end
             end
           end
-        endlua
 
-; =========================================================
-
-        lua pass1
           function l2_320_draw_nine_patch(name, x, y, width, height, transparent)
             _pc("nextreg Reg.MMU_7, (" .. x .. " >> 5) + 18")
             _pc("BlitNinePatch " ..
