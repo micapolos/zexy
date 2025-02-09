@@ -14,11 +14,14 @@ Main
 
 .loop
         lua allpass
-        ld_hl(store16("value", inc16(load16("value"))))
+        writeln("Hello, world!")
+        write("value is: ")
+        store("value", inc(load16("value")))
+        writeln(load16("value"))
         endlua
         jr      .loop
 
-value  dw      0
+value  dw      $1234
 
         savenex open "built/expr-demo.nex", Main, $bfe0
         savenex auto
