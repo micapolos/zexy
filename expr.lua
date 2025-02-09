@@ -1,3 +1,27 @@
+function exec(...)
+  local args = {...}
+  for i = 1, #args do
+    args[i]()
+  end
+end
+
+function loop(...)
+  local args = {...}
+  return function()
+    local addr = sj.current_address
+    for i = 1, #args do
+      args[i]()
+    end
+    _pc("jp " .. hex16(addr))
+  end
+end
+
+function waitSpace()
+  return function()
+    _pc("call Debug.WaitSpace")
+  end
+end
+
 function u8(a)
   if a < 0x00 or a > 0xff then
     sj.error("invalid i8 ", hex(a))
@@ -36,16 +60,24 @@ end
 
 function write(a)
   if type(a) == "number" then
-    _pc("WriteString " .. str(hex(a)))
+    return function()
+      _pc("WriteString " .. str(hex(a)))
+    end
   elseif type(a) == "string" then
-    _pc("WriteString \"" .. a .. "\"")  -- escape?
+    return function()
+      _pc("WriteString \"" .. a .. "\"")  -- escape?
+    end
   elseif a.type == "u8" then
-    a.fn(0)
-    _pc("ld a, l")
-    _pc("call Writer.Hex8h")
+    return function()
+      a.fn(0)
+      _pc("ld a, l")
+      _pc("call Writer.Hex8h")
+    end
   elseif a.type == "u16" then
-    a.fn(0)
-    _pc("call Writer.Hex16h")
+    return function()
+      a.fn(0)
+      _pc("call Writer.Hex16h")
+    end
   else
     sj.error("write(" .. expr .. ")")
     sj.exit()
@@ -53,8 +85,11 @@ function write(a)
 end
 
 function writeln(a)
-  write(a)
-  _pc("Writeln")
+  local fn = write(a)
+  return function()
+    fn()
+    _pc("Writeln")
+  end
 end
 
 function inc(a)
@@ -194,11 +229,15 @@ function store(addr, expr, typ)
   local addrLit = addrLiteral(addr)
   if type(expr) == "number" then
     if typ == "u8" then
-      _pc("ld a, " .. hex8(expr))
-      _pc("ld (" .. addrLit .. "), a")
+      return function()
+        _pc("ld a, " .. hex8(expr))
+        _pc("ld (" .. addrLit .. "), a")
+      end
     elseif typ == "u16" then
-      _pc("ld hl, " .. hex16(expr))
-      _pc("ld (" .. addrLit .. "), hl")
+      return function()
+        _pc("ld hl, " .. hex16(expr))
+        _pc("ld (" .. addrLit .. "), hl")
+      end
     else
       sj.error("store(" .. addr .. ", " .. expr .. ", " .. typ .. ")")
       sj.exit()
@@ -206,9 +245,13 @@ function store(addr, expr, typ)
   else
     expr.fn(0)
     if expr.type == "u8" then
-      _pc("ld (" .. addrLit .. "), l")
+      return function()
+        _pc("ld (" .. addrLit .. "), l")
+      end
     elseif expr.type == "u16" then
-      _pc("ld (" .. addrLit .. "), hl")
+      return function()
+        _pc("ld (" .. addrLit .. "), hl")
+      end
     else
       sj.error("store(" .. addr .. ", " .. expr .. ", " .. typ .. ")")
       sj.exit()

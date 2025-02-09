@@ -3,6 +3,7 @@
         org     $8000
 
         include terminal.asm
+        include debug.asm
 
         lua allpass
         require("expr")
@@ -12,14 +13,17 @@ Main
         call    Terminal.Init
         ld      ix, Terminal.writer
 
-.loop
         lua allpass
-        writeln("Hello, world!")
-        write("value is: ")
-        store("value", inc(load16("value")))
-        writeln(load16("value"))
+
+        exec(
+          loop(
+            writeln("Hello, world!"),
+            write("value is: "),
+            store("value", inc(load16("value"))),
+            writeln(load16("value")),
+            waitSpace()))
+
         endlua
-        jr      .loop
 
 value  dw      $1234
 
