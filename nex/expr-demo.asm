@@ -6,7 +6,7 @@
         include debug.asm
 
         lua allpass
-        require("expr")
+        require("nex/expr-demo")
         endlua
 
 Main
@@ -14,15 +14,7 @@ Main
         ld      ix, Terminal.writer
 
         lua allpass
-
-        exec(
-          loop(
-            writeln("Hello, world!"),
-            write("value is: "),
-            store("value", inc(load16("value"))),
-            writeln(load16("value")),
-            waitSpace()))
-
+        expr_demo()
         endlua
 
 value  dw      $1234
