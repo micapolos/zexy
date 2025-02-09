@@ -1,7 +1,7 @@
         ifndef  SM_asm
         define  SM_asm
 
-; SM = Stack Machine.
+; SM = Stack Machine of 16-bit values.
 ; The top of the stack is stored in HL.
 ; Registers are not preserved between calls.
 
