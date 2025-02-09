@@ -107,18 +107,18 @@ Main
         ld      (ix + Printer.attr), %11100000
 
         ld      ix, Terminal.writer
-        WriteStringDZ " v0.1\n"
-        WriteStringDZ "\n"
-        WriteStringDZ "> ls\n"
-        WriteStringDZ "\n"
-        WriteStringDZ "  <DIR>            .\n"
-        WriteStringDZ "  <DIR>            ..\n"
-        WriteStringDZ "  <DIR>            bin\n"
-        WriteStringDZ "  <DIR>            usr\n"
-        WriteStringDZ "         0000ff21h system.bin\n"
-        WriteStringDZ "         00000135h readme.txt\n"
-        WriteStringDZ "\n"
-        WriteStringDZ "> \n"
+        WritelnString " v0.1"
+        Writeln
+        WritelnString "> ls"
+        Writeln
+        WritelnString "  <DIR>            ."
+        WritelnString "  <DIR>            .."
+        WritelnString "  <DIR>            bin"
+        WritelnString "  <DIR>            usr"
+        WritelnString "         0000ff21h system.bin"
+        WritelnString "         00000135h readme.txt"
+        Writeln
+        WritelnString "> "
 .loop
         jr      .loop
 

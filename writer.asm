@@ -45,6 +45,10 @@ NewLine
         ld      a, $0a
         jp      Char
 
+        macro   Writeln
+        call    Writer.NewLine
+        endm
+
 ; =========================================================
 ; Input
 ;   ix - Writer ptr
@@ -56,7 +60,7 @@ String
         pop     iy
         ret
 
-        macro   WriteString ptr
+        macro   WriteStringAt ptr
         ld      hl, ptr
         call    Writer.String
         endm
@@ -69,7 +73,7 @@ StringLine
         call    String
         jp      NewLine
 
-        macro   WriteStringLine ptr
+        macro   WritelnStringAt ptr
         ld      hl, ptr
         call    Writer.StringLine
         endm
@@ -87,9 +91,15 @@ StringDZ
         jp      (hl)
         ret
 
-        macro   WriteStringDZ string
+        macro   WriteString string
         call    Writer.StringDZ
         dz      string
+        endm
+
+        macro   WritelnString string
+        call    Writer.StringDZ
+        dz      string
+        call    Writer.NewLine
         endm
 
 ; =========================================================

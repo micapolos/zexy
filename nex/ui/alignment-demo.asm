@@ -14,10 +14,10 @@ Main
 
         ; === AlignValue
 
-        WriteStringDZ "start: 1000h\n"
-        WriteStringDZ "length: 2000h\n"
-        WriteStringDZ "value: 0300h\n"
-        WriteStringDZ "left aligned: "
+        WritelnString "start: 1000h"
+        WritelnString "length: 2000h"
+        WritelnString "value: 0300h"
+        WriteString "left aligned: "
         ld      hl, $1000
         ld      de, $2000
         ld      bc, $0300
@@ -26,7 +26,7 @@ Main
         call    Writer.Hex16h
         call    Writer.NewLine
 
-        WriteStringDZ "right aligned: "
+        WriteString "right aligned: "
         ld      hl, $1000
         ld      de, $2000
         ld      bc, $0300
@@ -40,8 +40,8 @@ Main
 
         ld      hl, frames
         call    UIFrameWriter.Writeln
-        WriteStringDZ   "point: $0010 $0008\n"
-        WriteStringDZ   "aligned left-top: "
+        WritelnString   "point: $0010 $0008"
+        WriteString   "aligned left-top: "
 
         ld      hl, frames
         ld      de, $0010

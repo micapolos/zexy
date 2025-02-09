@@ -17,7 +17,7 @@
 ;   hl - advanced
 Write
         push    hl
-        WriteString string.name
+        WriteStringAt string.name
         WriteChar '('
         pop     hl
 
