@@ -156,6 +156,10 @@ Main
         exa
         call    Blit.Copy9Patch
 
+        ; 9-patch with macro
+        nextreg Reg.MMU_7, 18
+        BlitNinePatch ninePatch.data, $e080, 3, 8, 2, 4, $120, 2, 0
+
 .loop   jr      .loop
 
 line1   db      $12, $12, $12, $12, $12, $12, $12, $12

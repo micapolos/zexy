@@ -446,6 +446,20 @@ Copy9Patch
         exb : exa
         ret
 
+        macro   BlitNinePatch src, dst, start, middle, end, lineStart, lineMiddle, lineEnd, transparent
+        ld      hl, src
+        ld      de, dst
+        ld      a, ((start != 0) & %10000000) | ((middle != 0) & %01000000) | ((transparent != 0) & %00100000) | ((end != 0) & %00010000)
+        ld      bc, ((start & $0f) << 12) | ((end & $0f) << 8) | (middle & $ff)
+        exa
+        ld      a, ((lineStart != 0) & %10000000) | ((lineMiddle != 0) & %01000000) | ((lineMiddle > 255) & %00100000) | ((lineEnd != 0) & %00010000)
+        exa
+        exb
+        ld      bc, ((lineStart & $0f) << 12) | ((lineEnd & $0f) << 8) | (lineMiddle & $ff)
+        exb
+        call    Blit.Copy9Patch
+        endm
+
 ; =========================================================
 ; Input
 ;   hl - src addr
