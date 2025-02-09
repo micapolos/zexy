@@ -1,13 +1,10 @@
         ifndef  Font_asm
         define  Font_asm
 
-        struct  Font
-glyphs  dw
-widths  dw
-flags   dw
-        ends
-
         module  Font
+
+; Pointer to current font
+current         dw      0
 
         endmodule
 

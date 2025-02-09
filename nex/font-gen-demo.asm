@@ -26,7 +26,7 @@ Main
         ld      hl, string
         call    L2_320.DrawString
 
-        ; Do the same using macro
+        ; Use macros
         L2_320_DrawString 10, 16, uppercase
         L2_320_DrawString 10, 24, lowercase
         L2_320_DrawString 10, 32, digits

@@ -413,6 +413,16 @@ DrawLabel
 fontPtr         dw      0
 textColor       db      %11011010
 
+        macro   L2_320_SetFont ptr
+        ld      hl, ptr
+        ld      (L2_320.fontPtr), hl
+        endm
+
+        macro   L2_320_SetTextColor col
+        ld      a, col
+        ld      (L2_320.textColor), a
+        endm
+
         endmodule
 
         endif
