@@ -51,7 +51,7 @@ Main
         call    Blit.CopyLinesStride256
 
         ; 3-patch opaque, line by line
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         ld      de, $e030
         ld      bc, $3210
         ld      a, %11010000
@@ -75,7 +75,7 @@ Main
         call    Blit.BankedIncD
 
         ; 3-patch opaque, repeated lines
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         exb
         ld      bc, 4
         exb
@@ -95,7 +95,7 @@ Main
         call    Blit.BankedIncD
 
         ; 3-patch transparent
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         ld      bc, $3210
         ld      a, %11010000
         call    Blit.Copy3PatchLine
@@ -117,7 +117,7 @@ Main
         nextreg Reg.MMU_7, 18
 
         ; 9-patch
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         ld      de, $e050       ; start address
         ld      bc, $3208       ; top bottom middle
         ld      a, %11010000    ; enable: top, bottom, opaque, middle
@@ -130,7 +130,7 @@ Main
         call    Blit.Copy9Patch
 
         ; 9-patch wide
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         ld      de, $e060       ; start address
         ld      bc, $3208       ; top bottom middle
         ld      a, %11010000    ; enable: top, bottom, opaque, middle
@@ -144,7 +144,7 @@ Main
 
         ; 9-patch wide transparent
         nextreg Reg.MMU_7, 18
-        ld      hl, a3patch
+        ld      hl, ninePatch.data
         ld      de, $e070       ; start address
         ld      bc, $3208       ; top bottom middle
         ld      a, %11110000    ; enable: top, bottom, transparent, middle
@@ -173,7 +173,9 @@ line4   db      $12, $ff, $ff, $ff, $ff, $ff, $ff, $12
 line5   db      $12, $12, $12, $12, $12, $12, $12, $12
 .stride db      0, 0
 
-a3patch db      $12, $12, $12, $12, $12, $12
+ninePatch
+        L2_320_NinePatch 3, 4, 2, 2
+        db      $12, $12, $12, $12, $12, $12
         db      $12, $ee, $ee, $ee, $ee, $12
         db      $12, $12, $12, $12, $12, $12
         db      $12, $ff, $ff, $ff, $ff, $12

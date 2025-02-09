@@ -8,43 +8,17 @@
         include blit.asm
         include terminal.asm
 
-        macro   fillrect left, top, width, height, color
-        ld      de, left
-        ld      bc, width
-        ld      hl, (top << 8) | height
-        ld      a, color
-        call    L2_320.FillRect
+        macro   ZexyStripe left, top, color
+        L2_320_FillRect left + 2, top    , 2, 2, color
+        L2_320_FillRect left + 1, top + 2, 2, 2, color
+        L2_320_FillRect left    , top + 4, 2, 2, color
         endm
 
-        macro   point left, top, color
-        ld      de, left
-        ld      l, top
-        ld      a, color
-        call    L2_320.PutPixel
-        endm
-
-        macro   zexy_stripe left, top, color
-        fillrect left + 2, top    , 2, 2, color
-        fillrect left + 1, top + 2, 2, 2, color
-        fillrect left    , top + 4, 2, 2, color
-        endm
-
-        macro   zexy_logo left, top
-        zexy_stripe left+0, top, 6
-        zexy_stripe left+2, top, 7
-        zexy_stripe left+4, top, 8
-        zexy_stripe left+6, top, 9
-        endm
-
-        macro   draw_label addr, left, top, width, color
-        ld      de, left
-        ld      hl, L2_320.DrawLabel.top
-        ld      (hl), top
-        ld      hl, L2_320.DrawLabel.color
-        ld      (hl), color
-        ld      hl, addr
-        ld      bc, width
-        call    L2_320.DrawLabel
+        macro   ZexyLogo left, top
+        ZexyStripe left+0, top, 6
+        ZexyStripe left+2, top, 7
+        ZexyStripe left+4, top, 8
+        ZexyStripe left+6, top, 9
         endm
 
 Main
@@ -56,7 +30,7 @@ Main
         nextreg Reg.TM_OFS_Y, 256-12
 
         ; background
-        fillrect 0, 0, 320, 0, $e3
+        L2_320_FillRect 0, 0, 320, 0, $e3
 
         ; Menu bar
         nextreg Reg.MMU_7, 18
@@ -71,8 +45,8 @@ Main
         call    Blit.Copy9Patch
 
         ; Menu frame
-        nextreg Reg.MMU_7, 19
-        ld      de, $f70a
+        nextreg Reg.MMU_7, 22
+        ld      de, $e40a
         ld      hl, ninePatch.menuFrame
         ld      bc, $2250
         ld      a, %11010000
@@ -80,12 +54,12 @@ Main
         ld      bc, $2230
         ld      a, %11010000
         exa : exx
-        ;call    Blit.Copy9Patch
+        call    Blit.Copy9Patch
 
-        zexy_logo 6, 2
+        ZexyLogo 6, 2
 
-        draw_label text, 22, 1, text.width, 4
-        draw_label rightText, 294, 1, rightText.width, 4
+        L2_320_DrawLabel 22, 1, text, text.width, 4
+        L2_320_DrawLabel 294, 1, rightText, rightText.width, 4
 
         ld      ix, Terminal.printer
         ld      (ix + Printer.attr), %10000010

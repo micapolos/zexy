@@ -4,7 +4,6 @@
         include bank.asm
         include reg.asm
         include blit.asm
-        include nine-patch.asm
         include struct.asm
         include sm.asm
 
@@ -332,7 +331,7 @@ DrawLabel
         or      c
         ret
 
-        macro   L2_320_DrawLabel label, x, y, width, color
+        macro   L2_320_DrawLabel x, y, label, width, color
         ld      hl, L2_320.DrawLabel.color
         ld      (hl), color
         ld      hl, L2_320.DrawLabel.top
@@ -344,11 +343,34 @@ DrawLabel
         endm
 
 ; =========================================================
+
+        ; Defines nine patch, followed by data
+        macro   L2_320_NinePatch left, top, right, bottom
+        dw      .data
+        db      ((left & $0f) << 4) | (right & $0f)
+        db      ((top & $0f) << 4) | (bottom & $0f)
+        db      %10010000       ; TODO: Compute from left/right
+        db      %10010000       ; TODO: Compute from top/bottom
+@.data
+        endm
+
+; =========================================================
 ; Input
-;   hl - NinePatch ptr
-;   de - col
-;   c - row
+;   hl - params ptr
+;     x         dw
+;     y         db
+;     width     dw
+;     height    db
+;     ninePatch dw
+;     flags     db
 DrawNinePatch
+        StructLdi de
+        StructLdi l
+        call    MoveTo  ; hl = address
+        ex      de, hl  ; de = address
+        StructLdi bc
+
+
         ; Push start address
         push    hl
         ld      l, c
@@ -360,6 +382,14 @@ DrawNinePatch
         ; TODO
 
         ret
+
+        macro   L2_320_DrawNinePatch ninePatch, x, y, width, height
+        SM_Const ninePatch
+        SM_Const x
+        SM_Const y
+        push    x
+        call    L2_320.DrawNinePatch
+        endm
 
         endmodule
 
