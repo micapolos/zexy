@@ -32,29 +32,11 @@ Main
         ; background
         L2_320_FillRect 0, 0, 320, 0, $e3
 
-        ; Menu bar
-        nextreg Reg.MMU_7, 18
-        ld      de, $e000
-        ld      hl, ninePatch.menuBar
-        ld      bc, $3206
-        ld      a, %11010000
-        exa : exx
-        ld      bc, $333a
-        ld      a, %11110000
-        exa : exx
-        call    Blit.Copy9Patch
-
-        ; Menu frame
-        nextreg Reg.MMU_7, 22
-        ld      de, $e40a
-        ld      hl, ninePatch.menuFrame
-        ld      bc, $2250
-        ld      a, %11010000
-        exa : exx
-        ld      bc, $2230
-        ld      a, %11010000
-        exa : exx
-        call    Blit.Copy9Patch
+        ; Menu
+        lua allpass
+        l2_320_draw_nine_patch("menuBarNinePatch", 0, 0, 320, 11, 0)
+        l2_320_draw_nine_patch("menuFrameNinePatch", 133, 10, 60, 80, 0)
+        endlua
 
         ZexyLogo 6, 2
 
@@ -320,21 +302,25 @@ unusedText
         db      0
 
 
-ninePatch
-.menuBar
-        dh      "000302010200"
-        dh      "030101010200"
-        dh      "020101010200"
-        dh      "010101010200"
-        dh      "020101010200"
-        dh      "030101010200"
-        dh      "000302010200"
-.menuFrame
-        dh      "0000000000"
-        dh      "0002020200"
-        dh      "0002010200"
-        dh      "0002020200"
-        dh      "0000000000"
+        lua allpass
+        l2_320_nine_patch(
+                "menuBarNinePatch",
+                3, 3,
+                "00030201020300",
+                "03010101010103",
+                "02010101010102",
+                "01010101010101",
+                "02020202020202",
+                "00000000000000")
+        l2_320_nine_patch(
+                "menuFrameNinePatch",
+                2, 2,
+                "0000000000",
+                "0002020200",
+                "0002010200",
+                "0002020200",
+                "00000000000")
+        endlua
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto

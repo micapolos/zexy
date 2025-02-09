@@ -162,7 +162,8 @@ Main
 
         ; 9-patch with lua
         lua allpass
-        draw_nine_patch("luaNinePatch", 10, 120, 40, 40, 0)
+        l2_320_draw_nine_patch("luaNinePatch", 10, 0xa0, 7, 6, 1)
+        l2_320_draw_nine_patch("luaNinePatch", 20, 0xa0, 128, 16, 1)
         endlua
 
 .loop   jr      .loop
@@ -191,18 +192,15 @@ ninePatch
         db      $12, $ff, $ff, $ff, $ff, $12
         db      $12, $12, $12, $12, $12, $12
 
-luaNinePatch
-        lua pass1
-        nine_patch(4, 2, 3, 2)
+        lua allpass
+        l2_320_nine_patch("luaNinePatch", 4, 3,
+                "12121212121212",
+                "12ee12ffffff12",
+                "12ee12ff56ff12",
+                "12ee12ff45ff12",
+                "12ee12ffffff12",
+                "12121212121212")
         endlua
-        db      $12, $12, $12, $12, $12, $12
-        db      $12, $ee, $ee, $ee, $ee, $12
-        db      $12, $12, $12, $12, $12, $12
-        db      $12, $ff, $ff, $ff, $ff, $12
-        db      $12, $ff, $56, $45, $ff, $12
-        db      $12, $ff, $ff, $ff, $ff, $12
-        db      $12, $12, $12, $12, $12, $12
-.end
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto
