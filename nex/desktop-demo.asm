@@ -39,7 +39,7 @@ Main
         ; Menu
         lua allpass
         l2_320_draw_nine_patch("menuBarNinePatch", 0, 0, 320, 11, 0)
-        --l2_320_draw_nine_patch("menuFrameNinePatch", 133, 10, 60, 80, 0)
+        l2_320_draw_nine_patch("menuFrameNinePatch", 133, 10, 60, 80, 0)
         endlua
 
         ZexyLogo 6, 2
