@@ -48,6 +48,13 @@ Init
 
         ld      hl, WriteChar
         ld      (Writer.Char.proc), hl
+
+        ; Set white color (not bright)
+        push    ix
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), %11100000
+        pop     ix
+
         ret
 
 WriteChar
