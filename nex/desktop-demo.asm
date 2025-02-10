@@ -156,7 +156,7 @@ string
                 "0002020200",
                 "0002010200",
                 "0002020200",
-                "00000000000")
+                "0000000000")
 
         font_gen("sysFont", sys_font)
         font_gen("sysBoldFont", sys_bold_font)

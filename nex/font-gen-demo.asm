@@ -55,7 +55,7 @@ string  dz      "Hello, world!"
 uppercase       dz      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowercase       dz      "abcdefghijklmnopqrstuvwxyz"
 digits          dz      "0123456789"
-symbols         dz      "!@#$%^&*()`~_-+={[}]|\\:;\"'<,>>?/'"
+symbols         dz      "!@#$%^&*+-='`\"~_()[]{}<>\\|/:;.,?"
 
         savenex open "built/font-gen-demo.nex", Main, $bfe0
         savenex auto
