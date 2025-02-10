@@ -22,10 +22,10 @@
         endm
 
         macro   ZexyLogo left, top
-        ZexyStripe left+0, top, 6
-        ZexyStripe left+2, top, 7
-        ZexyStripe left+4, top, 8
-        ZexyStripe left+6, top, 9
+        ZexyStripe left+0, top, palette.red
+        ZexyStripe left+2, top, palette.yellow
+        ZexyStripe left+4, top, palette.green
+        ZexyStripe left+6, top, palette.cyan
         endm
 
 Main
@@ -48,7 +48,7 @@ Main
 
         ZexyLogo 6, 2
 
-        L2_320_SetTextColor 4
+        L2_320_SetTextColor palette.dark
 
         L2_320_SetFont sysBoldFont.index
         L2_320_DrawString 22, 1, string.terminal
@@ -57,9 +57,9 @@ Main
         L2_320_DrawString 73, 1, string.file
         L2_320_DrawString 93, 1, string.edit
         L2_320_DrawString 113, 1, string.view
-        L2_320_SetTextColor 10
+        L2_320_SetTextColor palette.white
         L2_320_DrawString 137, 1, string.help
-        L2_320_SetTextColor 4
+        L2_320_SetTextColor palette.dark
 
         L2_320_DrawString 294, 1, string.time
 
@@ -104,20 +104,24 @@ InitPalette
         ld      b, palette.count
         jp      Palette.Load9Bit
 
+        macro   color name, r, g, b
+@name   equ     ($ - palette) >> 1
+        RGB_333 r, g, b
+        endm
+
 palette
-.black  RGB_333 0, 0, 0  ; black
-        RGB_333 5, 4, 5  ; foreground
-        RGB_333 4, 3, 4  ; shadow white
-        RGB_333 2, 1, 2  ; dark white
-        RGB_333 1, 0, 1  ; dark
-        RGB_333 0, 0, 1  ; desktop background
-.red    RGB_333 7, 0, 0
-.yellow RGB_333 7, 7, 0
-.green  RGB_333 0, 7, 0
-.cyan   RGB_333 0, 7, 7
-.white  RGB_333 6, 5, 6
-.size           equ     $ - palette
-.count          equ     .size >> 1
+        color   .black,         0, 0, 0
+        color   .foreground,    5, 4, 5
+        color   .shadowWhite,   4, 3, 4
+        color   .darkWhite,     2, 1, 2
+        color   .dark,          1, 0, 1
+        color   .desktopBg,     0, 0, 1
+        color   .red,           7, 0, 0
+        color   .yellow,        7, 7, 0
+        color   .green,         0, 7, 0
+        color   .cyan,          0, 7, 7
+        color   .white,         6, 5, 6
+.count          equ     ($ - palette) >> 1
 
 string
 .terminal       dz      "Terminal"
