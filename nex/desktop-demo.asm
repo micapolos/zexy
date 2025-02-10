@@ -42,12 +42,13 @@ Main
         ; Menu
         lua allpass
         l2_320_draw_nine_patch("menuBarNinePatch", 0, 0, 320, 11, 0)
+        l2_320_draw_nine_patch("menuBarSelectedNinePatch", 134, 0, 21, 10, 0)
         l2_320_draw_nine_patch("menuFrameNinePatch", 133, 10, 60, 80, 0)
         endlua
 
         ZexyLogo 6, 2
 
-        L2_320_SetTextColor %00000100
+        L2_320_SetTextColor 4
 
         L2_320_SetFont sysBoldFont.index
         L2_320_DrawString 22, 1, string.terminal
@@ -56,7 +57,9 @@ Main
         L2_320_DrawString 73, 1, string.file
         L2_320_DrawString 93, 1, string.edit
         L2_320_DrawString 113, 1, string.view
+        L2_320_SetTextColor 10
         L2_320_DrawString 137, 1, string.help
+        L2_320_SetTextColor 4
 
         L2_320_DrawString 294, 1, string.time
 
@@ -98,12 +101,12 @@ InitPalette
         nextreg Reg.PAL_CTRL, Reg.PAL_CTRL.rwL2Pal1
         nextreg Reg.PAL_IDX, 0
         ld      hl, palette
-        ld      b, 10
+        ld      b, palette.count
         jp      Palette.Load9Bit
 
 palette
 .black  RGB_333 0, 0, 0  ; black
-        RGB_333 5, 4, 5  ; white
+        RGB_333 5, 4, 5  ; foreground
         RGB_333 4, 3, 4  ; shadow white
         RGB_333 2, 1, 2  ; dark white
         RGB_333 1, 0, 1  ; dark
@@ -112,6 +115,9 @@ palette
 .yellow RGB_333 7, 7, 0
 .green  RGB_333 0, 7, 0
 .cyan   RGB_333 0, 7, 7
+.white  RGB_333 6, 5, 6
+.size           equ     $ - palette
+.count          equ     .size >> 1
 
 string
 .terminal       dz      "Terminal"
@@ -132,6 +138,13 @@ string
                 "01010101010101",
                 "02020202020202",
                 "00000000000000")
+
+        l2_320_nine_patch(
+                "menuBarSelectedNinePatch",
+                0, 0,
+                "03",
+                "04")
+
         l2_320_nine_patch(
                 "menuFrameNinePatch",
                 2, 2,
