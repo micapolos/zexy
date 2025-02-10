@@ -27,17 +27,28 @@ Main
         call    L2_320.DrawString
 
         ; Use macros
-        L2_320_DrawString 10, 16, uppercase
-        L2_320_DrawString 10, 24, lowercase
-        L2_320_DrawString 10, 32, digits
-        L2_320_DrawString 10, 40, symbols
+        L2_320_SetTextColor %10110110
+        L2_320_DrawString 10, 24, uppercase
+        L2_320_DrawString 10, 32, lowercase
+        L2_320_DrawString 10, 40, digits
+        L2_320_DrawString 10, 48, symbols
+
+        L2_320_SetFont sysBoldFont.index
+        L2_320_SetTextColor %10011001
+        L2_320_DrawString 10, 64, uppercase
+        L2_320_DrawString 10, 72, lowercase
+        L2_320_DrawString 10, 80, digits
+        L2_320_DrawString 10, 88, symbols
+
 
 .loop   jr      .loop
 
         lua allpass
         require("sys-font")
+        require("sys-bold-font")
         require("font-gen")
         font_gen("sysFont", sys_font)
+        font_gen("sysBoldFont", sys_bold_font)
         endlua
 
 string  dz      "Hello, world!"
