@@ -6,9 +6,9 @@
         include font.asm
 
         lua     allpass
-        require("sys-font")
+        require("sys-bold-font")
         require("font-gen")
-        font_gen("sysFont", sys_font)
+        font_gen("sysFont", sys_bold_font)
         endlua
 
 Main
@@ -75,7 +75,6 @@ WritelnStringWidth
         ld      hl, sysFont.index
         or      a       ; clear carry
 
-        push    hl      ; push font ptr
         push    de      ; push string ptr
         call    Font.GetStringWidth
         push    af      ; push fc
@@ -88,8 +87,8 @@ WritelnStringWidth
 
         pop     af      ; pop fc
         pop     de      ; pop string ptr
-        pop     hl      ; pop font ptr
 
+        ld      hl, sysFont.index
         call    Font.GetStringWidth
         ld      hl, bc
         call    Writer.Hex16h
