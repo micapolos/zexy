@@ -15,13 +15,11 @@ Exec
         ld      b, $01          ; read
         rst     $08
         db      EsxDOS.open
-        pop     ix              ; writer ptr
         jr      c, .openError
 
 .loop
         ; a - file handle
         push    af              ; file handle
-        push    ix              ; writer ptr
         ld      ix, .buffer     ; buffer ptr
         ld      bc, $0100       ; size
         rst     $08
@@ -79,7 +77,6 @@ Exec
 .closeErrorString           dz      "Error closing file"
 
 ; Input
-;   ix - writer ptr
 ;   hl - addr
 ;   bc - count
 @PrintBuffer
