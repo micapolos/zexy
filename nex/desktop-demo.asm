@@ -7,13 +7,7 @@
         include palette.asm
         include blit.asm
         include terminal.asm
-
-        lua allpass
-        require("l2-320")
-        require("sys-font")
-        require("sys-bold-font")
-        require("font-gen")
-        endlua
+        include ui/sys/font.asm
 
         macro   ZexyStripe left, top, color
         L2_320_FillRect left + 2, top    , 2, 2, color
@@ -42,7 +36,7 @@ Main
         ; Menu
         lua allpass
         l2_320_draw_nine_patch("menuBarNinePatch", 0, 0, 320, 11, 0)
-        l2_320_draw_nine_patch("menuBarSelectedNinePatch", 134, 0, 21, 10, 0)
+        l2_320_draw_nine_patch("menuBarSelectedNinePatch", 134, 0, 22, 10, 0)
         l2_320_draw_nine_patch("menuFrameNinePatch", 133, 10, 60, 80, 0)
         endlua
 
@@ -50,10 +44,10 @@ Main
 
         L2_320_SetTextColor palette.dark
 
-        L2_320_SetFont sysBoldFont.index
+        L2_320_SetFont UISysFont.bold.index
         L2_320_DrawString 22, 1, string.terminal
 
-        L2_320_SetFont sysFont.index
+        L2_320_SetFont UISysFont.normal.index
         L2_320_DrawString 73, 1, string.file
         L2_320_DrawString 93, 1, string.edit
         L2_320_DrawString 113, 1, string.view
@@ -157,9 +151,6 @@ string
                 "0002010200",
                 "0002020200",
                 "0000000000")
-
-        font_gen("sysFont", sys_font)
-        font_gen("sysBoldFont", sys_bold_font)
 
         endlua
 
