@@ -9,11 +9,12 @@
         include terminal.asm
         include ui/sys/font.asm
         include ui/sys/menu.asm
+        include ui/sys/palette.asm
 
 Main
         call    L2_320.Init
         call    Terminal.Init
-        call    InitPalette
+        call    UISysPalette.Init
 
         nextreg Reg.GLOB_TRANS, $e3
         nextreg Reg.TM_OFS_Y, 256-12
@@ -56,32 +57,6 @@ Main
         WritelnString "> "
 .loop
         jr      .loop
-
-InitPalette
-        nextreg Reg.PAL_CTRL, Reg.PAL_CTRL.rwL2Pal1
-        nextreg Reg.PAL_IDX, 0
-        ld      hl, palette
-        ld      b, palette.count
-        jp      Palette.Load9Bit
-
-        macro   color name, r, g, b
-@name   equ     ($ - palette) >> 1
-        RGB_333 r, g, b
-        endm
-
-palette
-        color   .black,         0, 0, 0
-        color   .foreground,    5, 4, 5
-        color   .shadowWhite,   4, 3, 4
-        color   .darkWhite,     2, 1, 2
-        color   .dark,          1, 0, 1
-        color   .desktopBg,     0, 0, 1
-        color   .red,           7, 0, 0
-        color   .yellow,        7, 7, 0
-        color   .green,         0, 7, 0
-        color   .cyan,          0, 7, 7
-        color   .white,         6, 5, 6
-.count          equ     ($ - palette) >> 1
 
         savenex open "built/desktop-demo.nex", Main, $bfe0
         savenex auto

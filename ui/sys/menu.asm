@@ -1,6 +1,15 @@
         ifndef  UISysMenu_asm
         define  UISysMenu_asm
 
+        include l2-320.asm
+        include color.asm
+        include ../../palette.asm
+        include blit.asm
+        include terminal.asm
+        include ui/sys/font.asm
+        include ui/sys/menu.asm
+        include ui/sys/palette.asm
+
         module  UISysMenu
 
         macro   ZexyStripe left, top, color
@@ -10,10 +19,10 @@
         endm
 
         macro   ZexyLogo left, top
-        ZexyStripe left+0, top, palette.red
-        ZexyStripe left+2, top, palette.yellow
-        ZexyStripe left+4, top, palette.green
-        ZexyStripe left+6, top, palette.cyan
+        ZexyStripe left+0, top, UISysPalette.color.red
+        ZexyStripe left+2, top, UISysPalette.color.yellow
+        ZexyStripe left+4, top, UISysPalette.color.green
+        ZexyStripe left+6, top, UISysPalette.color.cyan
         endm
 
         lua allpass
@@ -56,7 +65,7 @@ Draw
 
         ZexyLogo 6, 2
 
-        L2_320_SetTextColor palette.dark
+        L2_320_SetTextColor UISysPalette.color.dark
 
         L2_320_SetFont UISysFont.bold.index
         L2_320_DrawString 22, 1, string.terminal
@@ -65,9 +74,9 @@ Draw
         L2_320_DrawString 73, 1, string.file
         L2_320_DrawString 93, 1, string.edit
         L2_320_DrawString 113, 1, string.view
-        L2_320_SetTextColor palette.white
+        L2_320_SetTextColor UISysPalette.color.white
         L2_320_DrawString 137, 1, string.help
-        L2_320_SetTextColor palette.dark
+        L2_320_SetTextColor UISysPalette.color.dark
 
         L2_320_DrawString 294, 1, string.time
 
