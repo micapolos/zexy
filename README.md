@@ -16,7 +16,7 @@
 Run any executable in `nex` directory by its name, like:
 
 ```
-./run console
+./run desktop-demo
 ```
 
 ## Cleaning
