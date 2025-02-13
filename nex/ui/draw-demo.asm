@@ -76,28 +76,30 @@ Main
         ld      (UIDraw.frame.origin.x), hl
         ld      hl, 50
         ld      (UIDraw.frame.origin.y), hl
-        ld      hl, fontNormal.index
+        ld      hl, fontBold.index
         ld      (UIDraw.font), hl
         call    Debug.ClearRegs
-        ld      hl, string
+        ld      hl, string.line1
         call    UIDraw.Text
 
-        ; Text 1
+        ; Text 2
         ld      a, $18
         ld      (UIDraw.color), a
         ld      hl, 50
         ld      (UIDraw.frame.origin.x), hl
         ld      hl, 58
         ld      (UIDraw.frame.origin.y), hl
-        ld      hl, fontBold.index
+        ld      hl, fontNormal.index
         ld      (UIDraw.font), hl
         call    Debug.ClearRegs
-        ld      hl, string
+        ld      hl, string.line2
         call    UIDraw.Text
 
 .loop   jr      .loop
 
-string  dz      "Hello, world!"
+string
+.line1  dz      "Hello, world!"
+.line2  dz      "How are you doin'?"
 
         savenex open "built/ui/draw-demo.nex", Main, $bfe0
         savenex auto
