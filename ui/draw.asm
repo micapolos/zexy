@@ -7,8 +7,7 @@
 
         module  UIDraw
 
-; Layer 2 base bank
-; TODO: Make use of it!!!
+; Base framebuffer bank
 baseBank        db      18
 
 ; Draw frame
@@ -22,6 +21,12 @@ pattern         UIPattern
 
 ; Text font
 font            dw      0
+
+; =========================================================
+@LoadBank
+        ld      hl, (baseBank)
+        ld      (L2_320.baseBank8), hl
+        ret
 
 ; =========================================================
 ; Output
