@@ -2,6 +2,7 @@
 
         org     $8000
 
+        include debug.asm
         include l2-320.asm
         include ui/drawer.asm
         include ui/frame.asm
@@ -11,6 +12,27 @@
 Main
         call    L2_320.Init
 
+        ; Point 1
+        ld      a, $16
+        ld      (UIDrawer.color), a
+        ld      hl, 0
+        ld      (UIDrawer.frame.origin.x), hl
+        ld      hl, 0
+        ld      (UIDrawer.frame.origin.y), hl
+        call    Debug.ClearRegs
+        call    UIDrawer.PutPixel
+
+        ; Point 1
+        ld      a, $60
+        ld      (UIDrawer.color), a
+        ld      hl, 319
+        ld      (UIDrawer.frame.origin.x), hl
+        ld      hl, 255
+        ld      (UIDrawer.frame.origin.y), hl
+        call    Debug.ClearRegs
+        call    UIDrawer.PutPixel
+
+        ; Fill 1
         ld      a, $16
         ld      (UIDrawer.color), a
         ld      hl, 20
@@ -21,9 +43,10 @@ Main
         ld      (UIDrawer.frame.size.width), hl
         ld      hl, 8
         ld      (UIDrawer.frame.size.height), hl
+        call    Debug.ClearRegs
         call    UIDrawer.Fill
 
-        ; Draw through fill proc
+        ; Fill 2
         ld      a, $60
         ld      (UIDrawer.color), a
         ld      hl, 30
@@ -34,6 +57,7 @@ Main
         ld      (UIDrawer.frame.size.width), hl
         ld      hl, 8
         ld      (UIDrawer.frame.size.height), hl
+        call    Debug.ClearRegs
         call    UIDrawer.Fill
 
 .loop   jr      .loop

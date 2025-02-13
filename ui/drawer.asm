@@ -12,7 +12,17 @@ color   db      0
 image   UIImage
 
 ; =========================================================
+PutPixel
+        ld      hl, frame.origin
+        ldi     de, (hl)
+        ld      c, (hl)
+        ld      l, c
+        ld      a, (color)
+        jp      L2_320.PutPixel
+
+; =========================================================
 Fill
+        ld      a, (color)
         ld      hl, frame
         ldi     bc, (hl)        ; push x
         push    bc
