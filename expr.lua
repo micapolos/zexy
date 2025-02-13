@@ -307,7 +307,7 @@ end
 
 function gen_of(expr, typ)
   if expr.type ~= typ then
-    sj.error("invalid type of " .. expr.gen .. ", expected " .. typ .. ", was " .. expr.type)
+    sj.error("invalid type, expected " .. typ .. ", was " .. expr.type)
     sj.exit()
   end
   return expr.gen

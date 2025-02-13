@@ -10,6 +10,14 @@
         include ui/coord.asm
         include ui/size.asm
 
+        lua allpass
+        require("sys-font")
+        require("sys-bold-font")
+        require("font-gen")
+        font_gen("fontNormal", sys_font)
+        font_gen("fontBold", sys_bold_font)
+        endlua
+
 Main
         call    UI.Init
 
@@ -61,7 +69,35 @@ Main
         call    Debug.ClearRegs
         call    UIDraw.Rect
 
+        ; Text 1
+        ld      a, $12
+        ld      (UIDraw.color), a
+        ld      hl, 50
+        ld      (UIDraw.frame.origin.x), hl
+        ld      hl, 50
+        ld      (UIDraw.frame.origin.y), hl
+        ld      hl, fontNormal.index
+        ld      (UIDraw.font), hl
+        call    Debug.ClearRegs
+        ld      hl, string
+        call    UIDraw.Text
+
+        ; Text 1
+        ld      a, $18
+        ld      (UIDraw.color), a
+        ld      hl, 50
+        ld      (UIDraw.frame.origin.x), hl
+        ld      hl, 58
+        ld      (UIDraw.frame.origin.y), hl
+        ld      hl, fontBold.index
+        ld      (UIDraw.font), hl
+        call    Debug.ClearRegs
+        ld      hl, string
+        call    UIDraw.Text
+
 .loop   jr      .loop
+
+string  dz      "Hello, world!"
 
         savenex open "built/ui/draw-demo.nex", Main, $bfe0
         savenex auto

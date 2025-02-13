@@ -257,7 +257,7 @@ GetAddrBank7
 ; Input
 ;   de, mmu - dst addr
 ;   hl - string ptr
-;   (font) - font pointer
+;   (fontPtr) - font pointer
 ;   (textColor) - text color
 ; Output
 ;   de, hl, mmu - advanced, with spacing added after last char

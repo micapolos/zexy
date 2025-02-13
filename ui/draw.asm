@@ -10,21 +10,25 @@
 frame   UIFrame
 color   db      0
 image   UIImage
+font    dw      0
 
 ; =========================================================
-; Puts pixel at frame.origin using color.
-Pixel
+; Output
+;   de - x
+;   l - y
+@LoadFrameOrigin
         ld      hl, frame.origin
         ldi     de, (hl)
         ld      c, (hl)
         ld      l, c
-        ld      a, (color)
-        jp      L2_320.PutPixel
+        ret
 
 ; =========================================================
-; Fills frame with color.
-Rect
-        ld      a, (color)
+; Output
+;   de - x
+;   bc - width
+;   hl - y / height
+@LoadFrame
         ld      hl, frame
         ldi     bc, (hl)        ; push x
         push    bc
@@ -36,12 +40,47 @@ Rect
         pop     de
         ld      h, e            ; h = y
         pop     de              ; pop x
+        ret
+
+; =========================================================
+; Puts pixel at frame.origin using color.
+Pixel
+        call    LoadFrameOrigin
+        ld      a, (color)
+        jp      L2_320.PutPixel
+
+; =========================================================
+; Fills frame with color.
+Rect
+        call    LoadFrame
+        ld      a, (color)
         jp      L2_320.FillRect
+
+; =========================================================
+; Input
+;    hl - string ptr
+Text
+        push    hl
+        ld      hl, (font)
+        ld      (L2_320.fontPtr), hl
+        ld      a, (color)
+        ld      (L2_320.textColor), a
+        call    LoadFrameOrigin
+        call    L2_320.MoveTo
+        ex      de, hl
+        pop     hl
+        jp      L2_320.DrawString
 
 ; =========================================================
 ; Draws image at frame.origin
 Image
-        ret
+        break   ; todo
+
+; =========================================================
+; Draws image pattern at frame
+ImagePattern
+        break   ; todo
+
         endmodule
 
         endif
