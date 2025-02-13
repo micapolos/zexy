@@ -32,7 +32,7 @@ Main
         call    Debug.ClearRegs
         call    UIDraw.Pixel
 
-        ; Fill 1
+        ; Rect 1
         ld      a, $16
         ld      (UIDraw.color), a
         ld      hl, 20
@@ -46,7 +46,7 @@ Main
         call    Debug.ClearRegs
         call    UIDraw.Rect
 
-        ; Fill 2
+        ; Rect 2
         ld      a, $60
         ld      (UIDraw.color), a
         ld      hl, 30
