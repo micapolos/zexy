@@ -2,15 +2,26 @@
         define  UIDraw_asm
 
         include ../l2-320.asm
-        include image.asm
+        include pattern.asm
         include frame.asm
 
         module  UIDraw
 
-frame   UIFrame
-color   db      0
-image   UIImage
-font    dw      0
+; Layer 2 base bank
+; TODO: Make use of it!!!
+baseBank        db      18
+
+; Draw frame
+frame           UIFrame
+
+; Color for point, fill and text
+color           db      0
+
+; Pattern for drawing
+pattern         UIPattern
+
+; Text font
+font            dw      0
 
 ; =========================================================
 ; Output
@@ -72,13 +83,8 @@ Text
         jp      L2_320.DrawString
 
 ; =========================================================
-; Draws image at frame.origin
-Image
-        break   ; todo
-
-; =========================================================
-; Fills frame with image
-FillImage
+; Draws pattern inside a frame
+Pattern
         break   ; todo
 
         endmodule

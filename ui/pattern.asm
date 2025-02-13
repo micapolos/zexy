@@ -1,9 +1,10 @@
-        ifndef  UIImage_asm
-        define  UIImage_asm
+        ifndef  UIPattern_asm
+        define  UIPattern_asm
 
         include size.asm
 
-        struct  UIImage
+        struct  UIPattern
+bank    db      0
 addr    dw      0
 size    UISize  { 0, 0 }
 stride  dw      0
