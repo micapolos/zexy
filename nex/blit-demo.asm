@@ -178,8 +178,12 @@ Main
         ld      (Blit.PatternLine.repeatSrcSize), a
         ld      hl, line
         ld      c, line.size
-        ld      de, $ff00
-        ld      b, 128
+        ld      de, $ff40
+        ld      b, $40
+        call    Blit.PatternLine
+
+        ; ...advanced
+        ld      b, $40
         call    Blit.PatternLine
 
 .loop   jr      .loop
