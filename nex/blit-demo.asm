@@ -170,7 +170,7 @@ Main
         l2_320_draw_nine_patch("luaNinePatch", 20, 0xa0, 128, 16, 1)
         endlua
 
-        ; vertical line
+        ; vertical pattern line
         nextreg Reg.MMU_7, 27
         ld      hl, line
         ld      (Blit.PatternLine.repeatSrcAddr), hl
