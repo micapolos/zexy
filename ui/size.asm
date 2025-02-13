@@ -3,7 +3,7 @@
 
         struct  UISize
 width   dw
-size    dw
+height  dw
         ends
 
         endif
