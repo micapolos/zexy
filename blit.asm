@@ -594,7 +594,7 @@ Bank7Lines256UntilZ
 ; =========================================================
 ; Input
 ;   hl - src addr
-;   de - dst addr
+;   de, mmu - dst addr
 ;   a - bit 1 color
 ; Output
 ;   hl, de, mmu - advanced
@@ -676,6 +676,32 @@ Copy8BitLines
         or      c
         jp      nz, .loop
         pop     af
+        ret
+
+; =========================================================
+; Input
+;   hl - start src addr
+;   c - start src size
+;   de - dst addr
+;   b - size
+;   (repeatSrcAddr)
+;   (repeatSrcSize)
+; Output
+;   hl, de, c - advanced
+;   b - 0
+;   af - corrupt
+PatternLine
+.loop
+        ld      a, (hl)
+        inc     hl
+        ld      (de), a
+        inc     e
+        dec     c
+        jp      nz, .noRepeat
+.repeatSrcAddr+* ld hl, 0
+.repeatSrcSize+* ld c, 0
+.noRepeat
+        djnz    .loop
         ret
 
         endmodule

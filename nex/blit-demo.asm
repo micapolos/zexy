@@ -170,6 +170,18 @@ Main
         l2_320_draw_nine_patch("luaNinePatch", 20, 0xa0, 128, 16, 1)
         endlua
 
+        ; vertical line
+        nextreg Reg.MMU_7, 27
+        ld      hl, line
+        ld      (Blit.PatternLine.repeatSrcAddr), hl
+        ld      a, line.size
+        ld      (Blit.PatternLine.repeatSrcSize), a
+        ld      hl, line
+        ld      c, line.size
+        ld      de, $ff00
+        ld      b, 128
+        call    Blit.PatternLine
+
 .loop   jr      .loop
 
 line1   db      $12, $12, $12, $12, $12, $12, $12, $12
@@ -205,6 +217,9 @@ ninePatch
                 "12ee12ffffff12",
                 "12121212121212")
         endlua
+
+line    dh      "0001020304050607"
+.size   equ     $ - line
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto
