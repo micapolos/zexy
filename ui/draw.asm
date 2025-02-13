@@ -51,7 +51,7 @@ Pixel
 
 ; =========================================================
 ; Fills frame with color.
-Rect
+Fill
         call    LoadFrame
         ld      a, (color)
         jp      L2_320.FillRect
@@ -77,8 +77,8 @@ Image
         break   ; todo
 
 ; =========================================================
-; Draws image pattern at frame
-ImagePattern
+; Fills frame with image
+FillImage
         break   ; todo
 
         endmodule

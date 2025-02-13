@@ -41,7 +41,7 @@ Main
         call    Debug.ClearRegs
         call    UIDraw.Pixel
 
-        ; Rect 1
+        ; Fill 1
         ld      a, $16
         ld      (UIDraw.color), a
         ld      hl, 20
@@ -53,9 +53,9 @@ Main
         ld      hl, 8
         ld      (UIDraw.frame.size.height), hl
         call    Debug.ClearRegs
-        call    UIDraw.Rect
+        call    UIDraw.Fill
 
-        ; Rect 2
+        ; Fill 2
         ld      a, $60
         ld      (UIDraw.color), a
         ld      hl, 30
@@ -67,7 +67,7 @@ Main
         ld      hl, 8
         ld      (UIDraw.frame.size.height), hl
         call    Debug.ClearRegs
-        call    UIDraw.Rect
+        call    UIDraw.Fill
 
         ; Text 1
         ld      a, $12
