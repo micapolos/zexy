@@ -12,6 +12,7 @@ color   db      0
 image   UIImage
 
 ; =========================================================
+; Puts pixel at frame.origin using color.
 PutPixel
         ld      hl, frame.origin
         ldi     de, (hl)
@@ -21,6 +22,7 @@ PutPixel
         jp      L2_320.PutPixel
 
 ; =========================================================
+; Fills frame with color.
 Fill
         ld      a, (color)
         ld      hl, frame
