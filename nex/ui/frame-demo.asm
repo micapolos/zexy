@@ -2,11 +2,11 @@
 
         org     $8000
 
-        include l2-320.asm
+        include ui.asm
         include ui/frame.asm
 
 Main
-        call    L2_320.Init
+        call    UI.Init
 
         ld      hl, frame
 

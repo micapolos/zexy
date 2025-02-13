@@ -4,13 +4,14 @@
 
         include debug.asm
         include l2-320.asm
+        include ui.asm
         include ui/draw.asm
         include ui/frame.asm
         include ui/coord.asm
         include ui/size.asm
 
 Main
-        call    L2_320.Init
+        call    UI.Init
 
         ; Point 1
         ld      a, $16

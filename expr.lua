@@ -306,8 +306,8 @@ function store(addr, expr, typ)
 end
 
 function gen_of(expr, typ)
-  if expr.type ~= type then
-    sj.error("invalid type of " .. expr.gen .. ", expected " .. type .. ", was " .. expr.type)
+  if expr.type ~= typ then
+    sj.error("invalid type of " .. expr.gen .. ", expected " .. typ .. ", was " .. expr.type)
     sj.exit()
   end
   return expr.gen
