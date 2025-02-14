@@ -680,29 +680,64 @@ Copy8BitLines
 
 ; =========================================================
 ; Input
-;   hl - start src addr
-;   c - start src size
-;   de - dst addr
+;   de - dst addr in slot 7
 ;   b - size
-;   (repeatSrcAddr)
-;   (repeatSrcSize)
+;   (patternAddr)
+;   (patternSize)
 ; Output
-;   hl, de, c - advanced
-;   b - 0
-;   af - corrupt
+;   hl, de - advanced
 PatternLine
+.startAddr+*    ld      hl, 0
+.startSize+*    ld      c, 0
+.loop           ld      a, (hl)
+                inc     hl
+                ld      (de), a
+                inc     e
+                dec     c
+                jp      nz, .noRepeat
+.repeatAddr+*   ld hl, 0
+.repeatSize+*   ld c, 0
+.noRepeat       djnz    .loop
+                ret
+
+; =========================================================
+; Input
+;   de, mmu - dst addr in slot 7
+;   bc - width
+;   (drawHeight)
+;   (addr)
+;   (width)
+;   (height)
+;   (stride)
+; Output
+;   hl, de, mmu - advanced
+Pattern
+.height+* ld a, 0
+        ld      (PatternLine.startSize), a
+.addr+* ld hl, 0
 .loop
-        ld      a, (hl)
-        inc     hl
-        ld      (de), a
-        inc     e
-        dec     c
-        jp      nz, .noRepeat
-.repeatSrcAddr+* ld hl, 0
-.repeatSrcSize+* ld c, 0
-.noRepeat
-        djnz    .loop
+        ld      (PatternLine.startAddr), hl
+
+        ; Draw pattern line
+        push    bc
+        push    de
+.drawHeight+*   ld      b, 0
+        call    PatternLine
+        pop     de
+        pop     bc
+
+        ; Advance pattern addr
+.stride+*       ld      a, 0
+        add     hl, a
+
+        ; Advance dst addr
+        call    BankedIncD
+        ld      a, b
+        or      c
+
+        jp      nz, .loop
         ret
+.width  db      0 ; todo
 
         endmodule
 

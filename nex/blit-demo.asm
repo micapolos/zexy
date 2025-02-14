@@ -173,12 +173,12 @@ Main
         ; vertical pattern line
         nextreg Reg.MMU_7, 27
         ld      hl, line
-        ld      (Blit.PatternLine.repeatSrcAddr), hl
+        ld      (Blit.PatternLine.startAddr), hl
+        ld      (Blit.PatternLine.repeatAddr), hl
         ld      a, line.size
-        ld      (Blit.PatternLine.repeatSrcSize), a
-        ld      hl, line
-        ld      c, line.size
-        ld      de, $fe40
+        ld      (Blit.PatternLine.startSize), a
+        ld      (Blit.PatternLine.repeatSize), a
+        ld      de, $e840
         ld      b, $40
         call    Blit.PatternLine
 
@@ -186,10 +186,49 @@ Main
         ld      b, $40
         call    Blit.PatternLine
 
-        ; ...advanced in next line
+        ; ...advanced in next line with offset 1
+        ld      hl, line + 1
+        ld      (Blit.PatternLine.startAddr), hl
+        ld      a, line.size - 1
+        ld      (Blit.PatternLine.startSize), a
         ld      b, $80
-        ld      de, $ff40
+        ld      de, $e940
         call    Blit.PatternLine
+
+        ; ...advanced in next line with offset 2
+        ld      hl, line + 2
+        ld      (Blit.PatternLine.startAddr), hl
+        ld      a, line.size - 2
+        ld      (Blit.PatternLine.startSize), a
+        ld      b, $80
+        ld      de, $ea40
+        call    Blit.PatternLine
+
+        ; ...advanced in next line with offset 3
+        ld      hl, line + 3
+        ld      (Blit.PatternLine.startAddr), hl
+        ld      a, line.size - 3
+        ld      (Blit.PatternLine.startSize), a
+        ld      b, $80
+        ld      de, $eb40
+        call    Blit.PatternLine
+
+        ; Pattern
+        ld      hl, pattern
+        ld      (Blit.Pattern.addr), hl
+        ld      hl, pattern.width
+        ld      (Blit.Pattern.width), a
+        ld      a, pattern.height
+        ld      (Blit.Pattern.height), a
+        ld      a, 0
+        ld      (Blit.Pattern.stride), a
+        ld      a, 128
+        ld      (Blit.Pattern.drawHeight), a
+        ld      de, $f040
+        ld      bc, $08         ; width
+        call    Blit.PatternLine
+
+
 
 .loop   jr      .loop
 
@@ -229,6 +268,14 @@ ninePatch
 
 line    dh      "0001020304050607"
 .size   equ     $ - line
+
+pattern
+        dh      "0001020304050607"
+.height equ     $ - pattern
+        dh      "1011121314151617"
+        dh      "2021222324252627"
+        dh      "3031323334353637"
+.width  equ     ($ - pattern) / pattern.height
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto
