@@ -763,10 +763,11 @@ ForEachLineMmu7
 
 ; =========================================================
 @FillLineCallback
+        ld      a, (hl)
+
         push    bc
         push    de
 
-        ld      a, (hl)
         ld      b, c
 .lineLoop
         ld      (de), a
@@ -776,6 +777,31 @@ ForEachLineMmu7
         pop     de
         pop     bc
 
+        ld      a, b
+        add     hl, a
+        ret
+
+; =========================================================
+@FillLineXCallback
+        ld      a, (hl)
+        exx
+        cp      d
+        exx
+        jp      z, .transparent
+
+        push    bc
+        push    de
+
+        ld      b, c
+.lineLoop
+        ld      (de), a
+        inc     e
+        djnz    .lineLoop
+
+        pop     de
+        pop     bc
+
+.transparent
         ld      a, b
         add     hl, a
         ret
@@ -811,6 +837,17 @@ CopyLinesXMmu7
 ;   e' - dst bank
 FillLinesMmu7
         ld      ix, FillLineCallback
+        jp      ForEachLineMmu7
+
+; =========================================================
+; Input
+;   hl - src
+;   de - dst
+;   bc - line increment / line size
+;   bc' - line count
+;   de' - transparent color / dst bank
+FillLinesXMmu7
+        ld      ix, FillLineXCallback
         jp      ForEachLineMmu7
 
         endmodule

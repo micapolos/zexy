@@ -210,6 +210,16 @@ Main
         exx
         call    Blit.FillLinesMmu7
 
+        ; === FillLinesX
+        ld      hl, ninePatch + 3  ; src
+        ld      de, $f800       ; dst
+        ld      bc, $0600       ; line increment / line height
+        exx
+        ld      bc, $0007       ; line count
+        ld      de, $451b       ; dst bank
+        exx
+        call    Blit.FillLinesXMmu7
+
 
 .loop   jr      .loop
 
