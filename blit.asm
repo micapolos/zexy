@@ -680,33 +680,28 @@ Copy8BitLines
 
 ; =========================================================
 ; Input
-;   hl - src
-;   de - dst in slot 7
-;   bc - line increment / line size
+;   d - dst high addr in slot 7
 ;   bc' - line count
 ;   e' - dst bank
-CopyLinesMmu7
+;   ix - line proc, where
+;     Input
+;       d - dst high addr
+;       hl, bc, e - passed through
+;     Output
+;       d - preserved
+;       hl, bc, e - passed through
+ForEachLineMmu7
 .setStartBank
         exx
         ld      a, e
         nextreg Reg.MMU_7, a
         exx
+
 .loop
-        push    bc
-        push    de
-        push    hl
-
-.copyLine
-        ld      b, 0
-        ldir
-
-        pop     hl
-        pop     de
-        pop     bc
-
-.nextSrcLine
-        ld      a, b
-        add     hl, a
+.line
+        push    .ret
+        jp      (ix)
+.ret
 
 .checkBank
         inc     d
@@ -730,23 +725,47 @@ CopyLinesMmu7
         ret
 
 ; =========================================================
-; Input
-;   hl - src
-;   de - dst
-;   bc - line increment / line size
-;   bc' - line count
-;   e' - dst bank
-FillLinesMmu7
-.setStartBank
+@CopyLineCallback
+        push    bc
+        push    de
+        push    hl
+
+        ld      b, 0
+        ldir
+
+        pop     hl
+        pop     de
+        pop     bc
+
+        ld      a, b
+        add     hl, a
+        ret
+
+; =========================================================
+@CopyLineXCallback
+        push    bc
+        push    de
+        push    hl
+
         exx
-        ld      a, e
-        nextreg Reg.MMU_7, a
+        ld      a, d
         exx
-.loop
+        ld      b, 0
+        ldirx
+
+        pop     hl
+        pop     de
+        pop     bc
+
+        ld      a, b
+        add     hl, a
+        ret
+
+; =========================================================
+@FillLineCallback
         push    bc
         push    de
 
-.copyLine
         ld      a, (hl)
         ld      b, c
 .lineLoop
@@ -757,30 +776,42 @@ FillLinesMmu7
         pop     de
         pop     bc
 
-.nextSrcLine
         ld      a, b
         add     hl, a
-
-.checkBank
-        inc     d
-        jp      nz, .bankValid
-.incBank
-        ld      d, $e0
-        exx
-        inc     e
-        ld      a, e
-        exx
-        nextreg Reg.MMU_7, a
-
-.bankValid
-        exx
-        dec     bc
-        ld      a, b
-        or      c
-        exx
-        jp      nz, .loop
-
         ret
+
+; =========================================================
+; Input
+;   hl - src
+;   de - dst in slot 7
+;   bc - line increment / line size
+;   bc' - line count
+;   e' - dst bank
+CopyLinesMmu7
+        ld      ix, CopyLineCallback
+        jp      ForEachLineMmu7
+
+; =========================================================
+; Input
+;   hl - src
+;   de - dst in slot 7
+;   bc - line increment / line size
+;   bc' - line count
+;   de' - transparent color / dst bank
+CopyLinesXMmu7
+        ld      ix, CopyLineXCallback
+        jp      ForEachLineMmu7
+
+; =========================================================
+; Input
+;   hl - src
+;   de - dst
+;   bc - line increment / line size
+;   bc' - line count
+;   e' - dst bank
+FillLinesMmu7
+        ld      ix, FillLineCallback
+        jp      ForEachLineMmu7
 
         endmodule
 

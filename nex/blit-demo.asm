@@ -180,6 +180,16 @@ Main
         exx
         call    Blit.CopyLinesMmu7
 
+        ; === CopyLines / transparent color
+        ld      hl, ninePatch   ; src
+        ld      de, $e8c0       ; dst
+        ld      bc, $0606       ; line increment / line height
+        exx
+        ld      bc, $0007       ; line count
+        ld      de, $ee12       ; transparent color / dst bank
+        exx
+        call    Blit.CopyLinesXMmu7
+
         ; === CopyLines - same line
         ld      hl, ninePatch + 24   ; src
         ld      de, $e0d0       ; dst
