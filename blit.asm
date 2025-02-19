@@ -680,64 +680,107 @@ Copy8BitLines
 
 ; =========================================================
 ; Input
-;   de - dst addr in slot 7
-;   b - size
-;   (patternAddr)
-;   (patternSize)
-; Output
-;   hl, de - advanced
-PatternLine
-.startAddr+*    ld      hl, 0
-.startSize+*    ld      c, 0
-.loop           ld      a, (hl)
-                inc     hl
-                ld      (de), a
-                inc     e
-                dec     c
-                jp      nz, .noRepeat
-.repeatAddr+*   ld hl, 0
-.repeatSize+*   ld c, 0
-.noRepeat       djnz    .loop
-                ret
-
-; =========================================================
-; Input
-;   de, mmu - dst addr in slot 7
-;   bc - width
-;   (drawHeight)
-;   (addr)
-;   (width)
-;   (height)
-;   (stride)
-; Output
-;   hl, de, mmu - advanced
-Pattern
-.height+* ld a, 0
-        ld      (PatternLine.startSize), a
-.addr+* ld hl, 0
+;   hl - src
+;   de - dst in slot 7
+;   bc - line increment / line size
+;   bc' - line count
+;   e' - dst bank
+CopyLinesMmu7
+.setStartBank
+        exx
+        ld      a, e
+        nextreg Reg.MMU_7, a
+        exx
 .loop
-        ld      (PatternLine.startAddr), hl
-
-        ; Draw pattern line
         push    bc
         push    de
-.drawHeight+*   ld      b, 0
-        call    PatternLine
+        push    hl
+
+.copyLine
+        ld      b, 0
+        ldir
+
+        pop     hl
         pop     de
         pop     bc
 
-        ; Advance pattern addr
-.stride+*       ld      a, 0
+.nextSrcLine
+        ld      a, b
         add     hl, a
 
-        ; Advance dst addr
-        call    BankedIncD
+.checkBank
+        inc     d
+        jp      nz, .bankValid
+.incBank
+        ld      d, $e0
+        exx
+        inc     e
+        ld      a, e
+        exx
+        nextreg Reg.MMU_7, a
+
+.bankValid
+        exx
+        dec     bc
         ld      a, b
         or      c
-
+        exx
         jp      nz, .loop
+
         ret
-.width  db      0 ; todo
+
+; =========================================================
+; Input
+;   hl - src
+;   de - dst
+;   bc - line increment / line size
+;   bc' - line count
+;   e' - dst bank
+FillLinesMmu7
+.setStartBank
+        exx
+        ld      a, e
+        nextreg Reg.MMU_7, a
+        exx
+.loop
+        push    bc
+        push    de
+
+.copyLine
+        ld      a, (hl)
+        ld      b, c
+.lineLoop
+        ld      (de), a
+        inc     e
+        djnz    .lineLoop
+
+        pop     de
+        pop     bc
+
+.nextSrcLine
+        ld      a, b
+        add     hl, a
+
+.checkBank
+        inc     d
+        jp      nz, .bankValid
+.incBank
+        ld      d, $e0
+        exx
+        inc     e
+        ld      a, e
+        exx
+        nextreg Reg.MMU_7, a
+
+.bankValid
+        exx
+        dec     bc
+        ld      a, b
+        or      c
+        exx
+        jp      nz, .loop
+
+        ret
 
         endmodule
 

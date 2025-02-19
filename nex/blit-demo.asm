@@ -170,64 +170,35 @@ Main
         l2_320_draw_nine_patch("luaNinePatch", 20, 0xa0, 128, 16, 1)
         endlua
 
-        ; vertical pattern line
-        nextreg Reg.MMU_7, 27
-        ld      hl, line
-        ld      (Blit.PatternLine.startAddr), hl
-        ld      (Blit.PatternLine.repeatAddr), hl
-        ld      a, line.size
-        ld      (Blit.PatternLine.startSize), a
-        ld      (Blit.PatternLine.repeatSize), a
-        ld      de, $e840
-        ld      b, $40
-        call    Blit.PatternLine
+        ; === CopyLines
+        ld      hl, ninePatch   ; src
+        ld      de, $e0c0       ; dst
+        ld      bc, $0606       ; line increment / line height
+        exx
+        ld      bc, $0007       ; line count
+        ld      e, 18           ; dst bank
+        exx
+        call    Blit.CopyLinesMmu7
 
-        ; ...advanced in same line
-        ld      b, $40
-        call    Blit.PatternLine
+        ; === CopyLines - same line
+        ld      hl, ninePatch + 24   ; src
+        ld      de, $e0d0       ; dst
+        ld      bc, $0006       ; line increment / line height
+        exx
+        ld      bc, 320         ; line count
+        ld      e, 18           ; dst bank
+        exx
+        call    Blit.CopyLinesMmu7
 
-        ; ...advanced in next line with offset 1
-        ld      hl, line + 1
-        ld      (Blit.PatternLine.startAddr), hl
-        ld      a, line.size - 1
-        ld      (Blit.PatternLine.startSize), a
-        ld      b, $80
-        ld      de, $e940
-        call    Blit.PatternLine
-
-        ; ...advanced in next line with offset 2
-        ld      hl, line + 2
-        ld      (Blit.PatternLine.startAddr), hl
-        ld      a, line.size - 2
-        ld      (Blit.PatternLine.startSize), a
-        ld      b, $80
-        ld      de, $ea40
-        call    Blit.PatternLine
-
-        ; ...advanced in next line with offset 3
-        ld      hl, line + 3
-        ld      (Blit.PatternLine.startAddr), hl
-        ld      a, line.size - 3
-        ld      (Blit.PatternLine.startSize), a
-        ld      b, $80
-        ld      de, $eb40
-        call    Blit.PatternLine
-
-        ; Pattern
-        ld      hl, pattern
-        ld      (Blit.Pattern.addr), hl
-        ld      hl, pattern.width
-        ld      (Blit.Pattern.width), a
-        ld      a, pattern.height
-        ld      (Blit.Pattern.height), a
-        ld      a, 0
-        ld      (Blit.Pattern.stride), a
-        ld      a, 128
-        ld      (Blit.Pattern.drawHeight), a
-        ld      de, $f040
-        ld      bc, $08         ; width
-        call    Blit.PatternLine
-
+        ; === FillLines
+        ld      hl, ninePatch + 3  ; src
+        ld      de, $f000       ; dst
+        ld      bc, $0600       ; line increment / line height
+        exx
+        ld      bc, $0007       ; line count
+        ld      e, 27           ; dst bank
+        exx
+        call    Blit.FillLinesMmu7
 
 
 .loop   jr      .loop
@@ -265,17 +236,6 @@ ninePatch
                 "12ee12ffffff12",
                 "12121212121212")
         endlua
-
-line    dh      "0001020304050607"
-.size   equ     $ - line
-
-pattern
-        dh      "0001020304050607"
-.height equ     $ - pattern
-        dh      "1011121314151617"
-        dh      "2021222324252627"
-        dh      "3031323334353637"
-.width  equ     ($ - pattern) / pattern.height
 
         savenex open "built/blit-demo.nex", Main, $bfe0
         savenex auto
