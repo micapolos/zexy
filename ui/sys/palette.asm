@@ -31,6 +31,7 @@ color
         cn   .green,         0, 7, 0
         cn   .cyan,          0, 7, 7
         cn   .white,         6, 5, 6
+        cn   .darkWhite2,    3, 2, 3
 .count  equ     ($ - color) >> 1
 
         endmodule

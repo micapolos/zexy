@@ -950,5 +950,15 @@ sys_font =
       " s  ",
       "s   ",
       "ssss",
-      "    ")
+      "    "),
+
+    glyph(01,
+      "                   ",
+      " sssssssssssss     ",
+      "ss   s s s   ss    ",
+      "ss sss s ss sss  s ",
+      "ss  sss sss sss sss",
+      "ss sss s ss sss  s ",
+      "ss   s s ss sss    ",
+      " sssssssssssss     ")
     )
