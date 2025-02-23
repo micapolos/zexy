@@ -256,6 +256,52 @@ GetAddrBank7
 ; =========================================================
 ; Input
 ;   de, mmu - dst addr
+;   a - char
+;   (fontPtr) - font pointer
+;   (textColor) - text color
+; Output
+;   de, hl, mmu - advanced, with spacing added after last char
+DrawChar
+        push    hl
+
+        ; hl = index ptr
+        ld      hl, (fontPtr)
+        rlca
+        add     hl, a
+
+        ; hl - glyph ptr
+        ldi     bc, (hl)
+        ld      a, b
+        or      c
+        jp      z, .noGlyph
+        ld      hl, bc
+
+        ; bc = width, hl = blit src ptr
+        ld      b, 0
+        ldi     c, (hl)
+
+        ; a = blit bit 1 value
+        ld      a, (textColor)
+
+        call    Blit.Copy8BitLines
+.noGlyph
+        pop     hl
+        ret
+
+; =========================================================
+
+        macro   L2_320_DrawChar x, y, char
+        ld      de, x
+        ld      l, y
+        call    L2_320.MoveTo
+        ex      de, hl
+        ld      a, char
+        call    L2_320.DrawChar
+        endm
+
+; =========================================================
+; Input
+;   de, mmu - dst addr
 ;   hl - string ptr
 ;   (fontPtr) - font pointer
 ;   (textColor) - text color

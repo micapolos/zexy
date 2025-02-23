@@ -87,12 +87,20 @@ Draw
         L2_320_DrawString 93, 47, string.copy
         L2_320_DrawString 93, 57, string.paste
 
+        L2_320_SetFont UISysFont.symb.index
         L2_320_SetTextColor UISysPalette.color.darkWhite2
-        L2_320_DrawString 129, 14, string.ext_z
-        L2_320_DrawString 129, 24, string.ext_yy
-        L2_320_DrawString 129, 37, string.ext_xx
-        L2_320_DrawString 129, 47, string.ext_c
-        L2_320_DrawString 129, 57, string.ext_v
+        L2_320_DrawString 125, 14, string.symb_plus
+        L2_320_DrawString 125, 24, string.symb_plus
+        L2_320_DrawString 125, 37, string.symb_plus
+        L2_320_DrawString 125, 47, string.symb_plus
+        L2_320_DrawString 125, 57, string.symb_plus
+
+        L2_320_SetFont UISysFont.normal.index
+        L2_320_DrawChar 149, 14, 'Z'
+        L2_320_DrawChar 149, 24, 'Y'
+        L2_320_DrawChar 149, 37, 'X'
+        L2_320_DrawChar 149, 47, 'C'
+        L2_320_DrawChar 149, 57, 'V'
         ret
 
 string
@@ -107,11 +115,7 @@ string
 .cut            dz      "Cut"
 .copy           dz      "Copy"
 .paste          dz      "Paste"
-.ext_z          dz      1, "Z"
-.ext_yy         dz      1, "Y"
-.ext_xx         dz      1, "X"
-.ext_c          dz      1, "C"
-.ext_v          dz      1, "V"
+.symb_plus      db      2, 4, 0
 
         endmodule
 
