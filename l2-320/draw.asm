@@ -95,12 +95,52 @@ DrawPatch
         pop     de                      ; de = dst
         jp      Blit.CopyLinesMmu7
 
+; =========================================================
+
+        struct  PatchX
+left    dw      0
+top     db      0
+xColor  db      0
+src     dw      0
+width   dw      0
+height  db      0
+advance db      0
+        ends
+
+; =========================================================
 ; Input
-;   hl - src
-;   de - dst in slot 7
-;   bc - line increment / line size
-;   bc' - line count
-;   e' - dst bank
+;   hl - PatchX*
+DrawPatchX
+        ldi     de, (hl)                ; de = left
+        ldi     a, (hl)                 ; a = top
+        push    hl                      ; push Patch*
+        ld      l, a                    ; l = top
+        call    L2_320.GetAddrBank7     ; hl = dst, a = bank
+        ex      de, hl                  ; de = dst
+        pop     hl                      ; pop Patch*
+        push    de                      ; push dst
+        ld      e, a                    ; e = bank
+        ldi     d, (hl)                 ; d = xColor
+        push    de                      ; push xColor / bank
+
+        ldi     de, (hl)                ; de = src
+        push    de                      ; push src
+        ldi     de, (hl)                ; de = width
+        push    de                      ; push width
+        ldi     bc, (hl)                ; bc = advance / height
+
+        exx
+        pop     bc                      ; bc' = width
+        exx
+
+        pop     hl                      ; hl = src
+
+        exx
+        pop     de                      ; de' = xColor / bank
+        exx
+
+        pop     de                      ; de = dst
+        jp      Blit.CopyLinesXMmu7
 
         endmodule
 
