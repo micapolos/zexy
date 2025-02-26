@@ -1,10 +1,11 @@
-        ifndef  L2_320_Draw_asm
-        define  L2_320_Draw_asm
+        ifndef  L2_320_Drawing_asm
+        define  L2_320_Drawing_asm
 
         include ../blit.asm
         include ../l2-320.asm
 
-        module  L2_320_Draw
+        module  L2_320
+        module  Drawing
 
 ; =========================================================
 Init
@@ -142,6 +143,7 @@ DrawPatchX
         pop     de                      ; de = dst
         jp      Blit.CopyLinesXMmu7
 
+        endmodule
         endmodule
 
         endif
