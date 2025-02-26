@@ -1,11 +1,11 @@
-        ifndef  L2_x320_Drawing_asm
-        define  L2_x320_Drawing_asm
+        ifndef  L2_X320_Drawing_asm
+        define  L2_X320_Drawing_asm
 
         include ../../blit.asm
         include ../../l2-320.asm
 
         module  L2
-        module  x320
+        module  X320
         module  Drawing
 
 ; =========================================================
