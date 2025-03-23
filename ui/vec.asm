@@ -13,15 +13,6 @@ y       dw
 ;   HL - lhs UIVec*
 ; Output
 ;   HL - advanced
-        macro   UIVec_Zero
-        IMath_Zero16
-        endm
-
-; ---------------------------------------------------------
-; Input
-;   HL - lhs UIVec*
-; Output
-;   HL - advanced
         macro   UIVec_Load x, y
         ld      bc, x
         call    IMath.LoadBC
@@ -30,6 +21,15 @@ y       dw
         endm
 
         module  UIVec
+
+; ---------------------------------------------------------
+; Input
+;   HL - UIVec*
+; Output
+;   HL - advanced
+Zero
+        call    IMath.Zero16
+        jp      IMath.Zero16
 
 ; ---------------------------------------------------------
 ; Input

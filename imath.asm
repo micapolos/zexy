@@ -9,6 +9,24 @@
         call    IMath.Zero16
         endm
 
+        macro   IMath_Skip8
+        inc     hl
+        endm
+
+        macro   IMath_Skip16
+        IMath_Skip8
+        IMath_Skip8
+        endm
+
+        macro   IMath_Rewind8
+        dec     hl
+        endm
+
+        macro   IMath_Rewind16
+        IMath_Rewind8
+        IMath_Rewind8
+        endm
+
         macro   IMath_Load8 n
         ld      c, n
         call    IMath.LoadC
@@ -144,8 +162,8 @@ Adc8
 ; Output
 ;   HL - advanced
 Zero16
-        call    Zero8
-        jp      Zero8
+        ld      c, 0
+        jp      LoadBC
 
 ; ---------------------------------------------------------
 ; Input
