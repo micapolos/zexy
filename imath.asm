@@ -2,11 +2,11 @@
         define  IMath_asm
 
         macro   IMath_Zero8
-        IMath_Load8 0
+        call    IMath.Zero8
         endm
 
         macro   IMath_Zero16
-        IMath_Load16 0
+        call    IMath.Zero16
         endm
 
         macro   IMath_Load8 n

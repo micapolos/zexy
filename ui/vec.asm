@@ -14,7 +14,7 @@ y       dw
 ; Output
 ;   HL - advanced
         macro   UIVec_Zero
-        call    IMath_Zero16
+        IMath_Zero16
         endm
 
 ; ---------------------------------------------------------
