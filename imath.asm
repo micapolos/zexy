@@ -88,6 +88,30 @@ Load8
 ; Input
 ;   HL - addr
 ; Output
+;   HL - advanced
+Push8
+        ld      a, (hl)
+        inc     hl
+        push    af
+        inc     sp
+        ret
+
+; ---------------------------------------------------------
+; Input
+;   HL - addr
+; Output
+;   HL - advanced
+Pop8
+        dec     sp
+        pop     af
+        ld      (hl), a
+        inc     hl
+        ret
+
+; ---------------------------------------------------------
+; Input
+;   HL - addr
+; Output
 ;   HL - advanced addr
 Inc8
         inc     (hl)
@@ -201,6 +225,25 @@ Load16
         ex      de, hl
         call    ReadBC
         ex      de, hl
+        jp      LoadBC
+
+; ---------------------------------------------------------
+; Input
+;   HL - addr
+; Output
+;   HL - advanced addr
+Push16
+        call    ReadBC
+        push    bc
+        ret
+
+; ---------------------------------------------------------
+; Input
+;   HL - addr
+; Output
+;   HL - advanced addr
+Pop16
+        pop     bc
         jp      LoadBC
 
 ; ---------------------------------------------------------
