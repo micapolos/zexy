@@ -13,7 +13,16 @@ y       dw
 ;   HL - lhs UIVec*
 ; Output
 ;   HL - advanced
-        macro   UIVec_Init x, y
+        macro   UIVec_Zero
+        call    IMath_Zero16
+        endm
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs UIVec*
+; Output
+;   HL - advanced
+        macro   UIVec_Load x, y
         ld      bc, x
         call    IMath.LoadBC
         ld      bc, y

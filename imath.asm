@@ -1,17 +1,35 @@
         ifndef  IMath_asm
         define  IMath_asm
 
-        macro   ILoad8 n
+        macro   IMath_Zero8
+        IMath_Load8 0
+        endm
+
+        macro   IMath_Zero16
+        IMath_Load16 0
+        endm
+
+        macro   IMath_Load8 n
         ld      c, n
         call    IMath.LoadC
         endm
 
-        macro   ILoad16 nm
+        macro   IMath_Load16 nm
         ld      bc, nm
         call    IMath.LoadBC
         endm
 
         module  IMath
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+; Output
+;   HL - advanced
+Zero8
+        ld      (hl), 0
+        inc     hl
+        ret
 
 ; ---------------------------------------------------------
 ; Input
@@ -31,7 +49,7 @@ ReadC
 ; Output
 ;   HL - advanced
 LoadC
-        ld      (hl), a
+        ld      (hl), c
         inc     hl
         ret
 
@@ -83,6 +101,19 @@ AddC
 
 ; ---------------------------------------------------------
 ; Input
+;   HL - addr
+;   C - value
+; Output
+;   HL - advanced addr
+AdcC
+        ld      a, (hl)
+        adc     c
+        ld      (hl), a
+        inc     hl
+        ret
+
+; ---------------------------------------------------------
+; Input
 ;   HL - lhs addr
 ;   DE - rhs addr
 ; Output
@@ -93,6 +124,28 @@ Add8
         call    ReadC
         ex      de, hl
         jp      AddC
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+;   DE - rhs addr
+; Output
+;   HL - advanced addr
+;   DE - advanced addr
+Adc8
+        ex      de, hl
+        call    ReadC
+        ex      de, hl
+        jp      AdcC
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+; Output
+;   HL - advanced
+Zero16
+        call    Zero8
+        jp      Zero8
 
 ; ---------------------------------------------------------
 ; Input
@@ -119,6 +172,18 @@ LoadBC
         ld      (hl), b
         inc     hl
         ret
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+;   DE - rhs addr
+; Output
+;   HL, DE - advanced addr
+Load16
+        ex      de, hl
+        call    ReadBC
+        ex      de, hl
+        jp      LoadBC
 
 ; ---------------------------------------------------------
 ; Input
