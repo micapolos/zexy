@@ -44,6 +44,24 @@ Load
 
 ; ---------------------------------------------------------
 ; Input
+;   HL - UIVec end addr
+; Output
+;   HL - UIVec start addr
+Push
+        call    IMath.Push16
+        jp      IMath.Push16
+
+; ---------------------------------------------------------
+; Input
+;   HL - UIVec start addr
+; Output
+;   HL - UIVec end addr
+Pop
+        call    IMath.Pop16
+        jp      IMath.Pop16
+
+; ---------------------------------------------------------
+; Input
 ;   HL - lhs UIVec*
 ;   DE - rhs UIVec*
 ; Output

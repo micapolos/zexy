@@ -86,12 +86,12 @@ Load8
 
 ; ---------------------------------------------------------
 ; Input
-;   HL - addr
+;   HL - end addr
 ; Output
-;   HL - advanced
+;   HL - start addr
 Push8
+        dec     hl
         ld      a, (hl)
-        inc     hl
         push    af
         inc     sp
         ret
@@ -229,11 +229,14 @@ Load16
 
 ; ---------------------------------------------------------
 ; Input
-;   HL - addr
+;   HL - end addr
 ; Output
-;   HL - advanced addr
+;   HL - start advanced
 Push16
-        call    ReadBC
+        dec     hl
+        ld      b, (hl)
+        dec     hl
+        ld      c, (hl)
         push    bc
         ret
 
