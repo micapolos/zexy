@@ -1,25 +1,50 @@
         ifndef  IMath_asm
         define  IMath_asm
 
+        macro   ILoad8 n
+        ld      c, n
+        call    IMath.LoadC
+        endm
+
+        macro   ILoad16 nm
+        ld      bc, nm
+        call    IMath.LoadBC
+        endm
+
         module  IMath
 
-        macro   IMath_Skip8
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+; Output
+;   C - value
+;   HL - advanced
+ReadC
+        ld      c, (hl)
         inc     hl
-        endm
-
-        macro   IMath_Skip16
-        inc     hl
-        inc     hl
-        endm
+        ret
 
 ; ---------------------------------------------------------
 ; Input
 ;   HL - addr
+;   C - value
 ; Output
-;   HL - advanced addr
-;   C - loaded
+;   HL - advanced
+LoadC
+        ld      (hl), a
+        inc     hl
+        ret
+
+; ---------------------------------------------------------
+; Input
+;   HL - lhs addr
+;   DE - rhs addr
+; Output
+;   HL, DE - advanced
 Load8
-        ld      c, (hl)
+        ld      a, (de)
+        ld      (hl), a
+        inc     de
         inc     hl
         ret
 
@@ -49,7 +74,7 @@ Dec8
 ;   C - value
 ; Output
 ;   HL - advanced addr
-AddConst8
+AddC
         ld      a, (hl)
         add     c
         ld      (hl), a
@@ -65,9 +90,22 @@ AddConst8
 ;   DE - advanced addr
 Add8
         ex      de, hl
-        call    Load8
+        call    ReadC
         ex      de, hl
-        jp      AddConst8
+        jp      AddC
+
+; ---------------------------------------------------------
+; Input
+;   HL - addr
+; Output
+;   HL - advanced addr
+;   BC - read value
+ReadBC
+        ld      c, (hl)
+        inc     hl
+        ld      b, (hl)
+        inc     hl
+        ret
 
 ; ---------------------------------------------------------
 ; Input
@@ -75,10 +113,10 @@ Add8
 ; Output
 ;   HL - advanced addr
 ;   BC - loaded
-Load16
-        ld      c, (hl)
+LoadBC
+        ld      (hl), c
         inc     hl
-        ld      b, (hl)
+        ld      (hl), b
         inc     hl
         ret
 
@@ -123,7 +161,7 @@ Dec16
 ; Output
 ;   HL - advanced addr
 ;   AF - corrupted
-AddConst16
+AddBC
         ld      a, (hl)
         add     a, c
         ld      (hl), a
@@ -143,9 +181,9 @@ AddConst16
 ;   DE - advanced addr
 Add16
         ex      de, hl
-        call    Load16
+        call    LoadBC
         ex      de, hl
-        jp      AddConst16
+        jp      AddBC
 
         endmodule
 
