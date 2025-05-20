@@ -7,48 +7,28 @@
 
         module  Symbol
 
-ID_BITS         equ 10
-ID_COUNT        equ 1 << ID_BITS
-ID_MASK         equ ID_COUNT - 1
-START_ADDR      equ $c000
-ADDR_MASK       equ $3FFF
+; Base address of symbol index table
+indexBaseAddr   dw 0
 
-@banks
-@bank6  db      0
-@bank7  db      0
+; Number of free entries in the index
+symbolsFree     dw 0
 
-@count      dw      0
-@nextAddr   dw      START_ADDR + ID_COUNT
+; Number of symbols already in the index
+symbolCount     dw 0
 
-; ======================================================
-; Output:
-;   FC: 0 = ok, 1 = error
-Init
-        call    Bank.Alloc
-        ret     c
-        ld      (bank6), a
-        call    Bank.Alloc
-        jp      c, .error
-        ld      (bank7), a
-        ret
-.error
-        ld      a, (bank6)
-        jp      Bank.Free
+; Next free address in the strings buffer
+freeStringsAddr  dw 0
+
+; Number of bytes free in the strings buffer
+stringsBytesFree dw 0
 
 ; ======================================================
 ; Input
 ;   HL - zero-terminated string
 ; Output
 ;   FC - 0 = OK, 1 = error
-;   HL - symbol ID
-GetId
-        call    MMU.Push_76
-        ld      hl, banks
-        ldi     a, (hl)
-        ldi     a, (hl)
-        jp      MMU.Set_76
-
-        call    MMU.Pop_76
+;   HL - symbol index
+FindSymbol
         ret
 
 ; ======================================================
