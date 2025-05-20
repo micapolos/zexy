@@ -1,11 +1,11 @@
-        ifndef  Symbol_asm
-        define  Symbol_asm
+        ifndef  SymbolTable_asm
+        define  SymbolTable_asm
 
         include bank.asm
         include mmu.asm
         include string.asm
 
-        module  Symbol
+        module  SymbolTable
 
 ; Base address of symbol index table
 indexBaseAddr   dw 0
