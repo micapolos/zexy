@@ -38,7 +38,6 @@ TotalBanks
         WriteString "Total number of banks: "
         call    Bank.Total
         jp      c, Error
-        ld      a, e
         call    Writer.Hex8h
         jp      Writer.NewLine
 
@@ -46,7 +45,6 @@ AvailableBanks
         WriteString "Number of available banks: "
         call    Bank.Available
         jp      c, Error
-        ld      a, e
         call    Writer.Hex8h
         jp      Writer.NewLine
 
@@ -54,7 +52,6 @@ AllocateBank
         WriteString "Allocating bank... "
         call    Bank.Alloc
         jp      c, Error
-        ld      a, e
 
         push    af
         WriteString "done: "
@@ -74,7 +71,6 @@ FreeBank
         WriteString "... "
         pop     af
 
-        ld      e, a
         call    Bank.Free
         jp      c, Error
 

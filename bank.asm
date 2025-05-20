@@ -31,8 +31,8 @@ Fill
 
 ; ======================================================
 ; Output:
-;   FC: 0 = ok, 1 = error
-;   E: total bank count
+;   FC - 0 = ok, 1 = error
+;   A - total bank count
 Total
         ld      hl, $0000
         exx
@@ -41,12 +41,13 @@ Total
         rst     $08
         db      EsxDOS.p3dos
         ccf
+        ld      a, e
         ret
 
 ; ======================================================
 ; Output:
-;   E: number of available banks
-;   FC: 0 = ok, 1 = error
+;   A - number of available banks
+;   FC - 0 = ok, 1 = error
 Available
         ld      hl, $0004
         exx
@@ -55,12 +56,13 @@ Available
         rst     $08
         db      EsxDOS.p3dos
         ccf
+        ld      a, e
         ret
 
 ; ======================================================
 ; Output:
-;   FC: 0 = ok, 1 = error
-;   E: bank
+;   FC - 0 = ok, 1 = error
+;   A - bank
 Alloc
         ld      hl, $0001
         exx
@@ -69,14 +71,16 @@ Alloc
         rst     $08
         db      EsxDOS.p3dos
         ccf
+        ld      a, e
         ret
 
 ; ======================================================
 ; Input:
-;   E - bank
+;   A - bank
 ; Output:
-;   FC: 0 = ok, 1 = error
+;   FC - 0 = ok, 1 = error
 Free
+        ld      e, a
         ld      hl, $0003
         exx
         ld      de, P3DOS.IDE_BANK
