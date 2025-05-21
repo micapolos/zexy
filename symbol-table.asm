@@ -7,34 +7,91 @@
 
         module  SymbolTable
 
-; Base address of symbol index table
-indexBaseAddr     dw 0
+BASE_ADDR         equ  $e000
 
-; Number of free entries in the index
-symbolsFree       dw 0
+bank              db  0
+baseAddr          dw  $e000
+capacity          dw  2048
 
 ; Number of symbols already in the index
-symbolCount       dw 0
+@symbolCount       dw  0
 
 ; Next free address in the strings buffer
-freeStringsAddr   dw 0
+@freeStringsAddr   dw 0
 
 ; Number of bytes free in the strings buffer
-stringsBytesFree  dw 0
+@stringsBytesFree  dw 0
+
+; ======================================================
+; Output
+;   FC - 0 = OK, 1 - error
+Init
+.allocStringBank0
+        call    Bank.Alloc
+        ret     c
+        ld      (bank0), a
+
+.allocStringBank1
+        call    Bank.Alloc
+        jr      c, .allocStringBank1Error
+        ld      (bank1), a
+
+.allocIndexBank
+        call    Bank.Alloc
+        jr      c, .allocIndedBankError
+        ld      (indexBank), a
+
+.initPointers
+        ld      hl, $c000
+        ld      (indexBaseAddr), hl
+
+        ld      hl, 2048
+        ld      (symbolsFree), hl
+
+        ld      hl, 0
+        ld      (symbolCount), hl
+
+        ret
+
+.allocIndedBankError
+        ld      a, (stringBank1)
+        call    Bank.Free
+
+.allocStringBank1Error
+        ld      a, (stringBank0)
+        jp      Bank.Free
+
+; ======================================================
+@PageInIndexBank
+        ld      a, (indexBank)
+        nextreg Reg.MMU_6, a
+        ret
+
+; ======================================================
+@PageInStringBank
+        ld      a, (stringBank0)
+        nextreg Reg.MMU_6, a
+        ld      a, (stringBank1)
+        nextreg Reg.MMU_7, a
+        ret
 
 ; ======================================================
 ; Input
 ;   HL - symbol index
 ; Output
 ;   HL - string
+;   MMU_6, MMU_7 - updated
 GetString
+        call    PageInIndexBank
+
         ex      de, hl
         ld      hl, (indexBaseAddr)
         add     hl, de
         add     hl, de
         ldi     de, (hl)
         ex      de, hl
-        ret
+
+        jp      PageInStringBank
 
 ; ======================================================
 ; Input
