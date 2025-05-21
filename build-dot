@@ -1,0 +1,7 @@
+set -e
+mkdir -p built
+mkdir -p built/dot
+mkdir -p ~/Documents/nextsync12
+mkdir -p ~/Documents/nextsync12/dot
+sjasmplus dot/$1.asm
+cp built/dot/$1 ~/Documents/nextsync12/dot/$1

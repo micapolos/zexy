@@ -1,4 +1,5 @@
 set -e
 find nex -name "*.asm" -print0 | xargs -0 -I {} sh -c 'filepath="{}"; filename="${filepath#nex/}"; filename="${filename%.*}"; ./build "$filename"'
+find dot -name "*.asm" -print0 | xargs -0 -I {} sh -c 'filepath="{}"; filename="${filepath#dot/}"; filename="${filename%.*}"; ./build-dot "$filename"'
 cp README.md ~/Documents/nextsync12/apps/zexy/readme.md
 cp README.md built/readme.md

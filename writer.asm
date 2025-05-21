@@ -16,7 +16,7 @@ Char
 
 ; =========================================================
 NewLine
-        ld      a, $0a
+.char+* ld      a, $0a
         jp      Char
 
         macro   Writeln
