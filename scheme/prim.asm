@@ -1,10 +1,4 @@
 ; ===============================================================
-; Calling convention:
-; - first argument is passed in DEHL
-; - second argument is passed in DEHL'
-; - following arguments are passed on the stack in reverse order
-; - return value is passed in DEHL
-;
 ; Value encoding:
 ; - L = value header
 ;   - bit 7 = GC type: 0 - primitive, 1 - reference
@@ -14,6 +8,12 @@
 ;     - 000001 - pair
 ; - H = 8-bit value / bank number
 ; - DE = 16-bit value / address / symbol
+;
+; Calling convention:
+; - first argument passed in DEHL
+; - second argument passed in DEHL'
+; - following arguments passed on the stack in reverse order
+; - return value passed in DEHL
 ; ===============================================================
 
         ifndef  SchemePrim_asm
