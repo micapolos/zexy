@@ -19,6 +19,8 @@
         ifndef  SchemePrim_asm
         define  SchemePrim_asm
 
+        include ../reg.asm
+
         module  SchemePrim
 
 REFERENCE       equ %10000000
@@ -162,6 +164,39 @@ Eq24
         ld      l, TRUE_TAG
         ret
 
+; =============================================================
+Cons
+        ; TODO
+        ret
+
+; =============================================================
+Car
+        ld      a, h
+        nextreg Reg.MMU_7, a
+        ex      de, hl
+        jp      Load
+
+; =============================================================
+Cdr
+        ld      a, h
+        nextreg Reg.MMU_7, a
+        ex      de, hl
+        add     hl, 4
+        jp      Load
+
+; =============================================================
+; hl - address
+Load
+        ld      c, (hl)
+        inc     hl
+        ld      b, (hl)
+        inc     hl
+        ld      e, (hl)
+        inc     hl
+        ld      d, (hl)
+        ld      h, b
+        ld      l, c
+        ret
 
         endmodule
 
