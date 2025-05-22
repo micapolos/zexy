@@ -6,8 +6,8 @@
 ;   - bit 5 = GC mark: 0 - not marked, 1 = marked
 ;   - bit 4 = unused
 ;   - bit 3..0 = 3-bit value / reference tag
-;     - 000000 - symbol
-;     - 000001 - pair
+;     - 0000 - symbol
+;     - 0001 - pair
 ; - H = 8-bit value / bank number
 ; - DE = 16-bit value / address / symbol
 ;
