@@ -76,7 +76,7 @@ function block_else()
     end)
 end
 
-function block(regs_def)
+function block_preserve(regs_def)
   local regs = split_underscore(regs_def)
   for i = 1, #regs do
     _pc("push " .. regs[i])

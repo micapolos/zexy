@@ -51,9 +51,9 @@ Main
     WritelnString "OK"
   _end
 
-  WriteString "Testing _block hl... "
+  WriteString "Testing _preserve hl... "
   ld hl, $1234
-  _block hl
+  _preserve hl
     ld hl, $5678
   _end
   ld de, $1234
@@ -65,8 +65,8 @@ Main
   _end
 
   ; TODO: Implement real checks, not only syntax
-  WriteString "Testing _block bc_de_hl_af... "
-  _block bc_de_hl_af
+  WriteString "Testing _preserve bc_de_hl_af... "
+  _preserve bc_de_hl_af
   _end
   WritelnString "OK"
 

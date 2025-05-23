@@ -24,9 +24,9 @@
     endlua
   endm
 
-  macro _block regs
+  macro _preserve regs
     lua allpass
-      block(sj.get_define("regs", true))
+      block_preserve(sj.get_define("regs", true))
     endlua
   endm
 
