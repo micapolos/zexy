@@ -70,8 +70,37 @@ Main
   _end
   WritelnString "OK"
 
+  WriteString "Testing _djnz... "
+  ld a, 0
+  ld b, 45
+  _djnz
+    inc a
+    inc a
+  _end
+  xor 90
+  _if z
+    WritelnString "OK"
+  _else
+    WritelnString "ERROR"
+  _end
+
+  WriteString "Testing _proc... "
+  ld a, 0
+  call Increment
+  xor 1
+  _if z
+    WritelnString "OK"
+  _else
+    WritelnString "ERROR"
+  _end
+
 .end
   jp      .end
+
+  _proc Increment
+    inc a
+    ret
+  _end
 
   savenex open "built/control-demo.nex", Main, $bfe0
   savenex auto

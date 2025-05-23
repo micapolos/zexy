@@ -30,4 +30,16 @@
     endlua
   endm
 
+  macro _djnz
+    lua allpass
+      block_djnz()
+    endlua
+  endm
+
+  macro _proc name
+    lua allpass
+      block_proc(sj.get_define("name", true))
+    endlua
+  endm
+
   endif

@@ -90,3 +90,24 @@ function block_preserve(regs_def)
       end
     end)
 end
+
+function block_djnz()
+  local label = gen_label("djnz")
+  _pl("@" .. label)
+  block_begin(
+    "djnz",
+    nil,
+    function()
+      _pc("djnz " .. label)
+    end)
+end
+
+
+function block_proc(name)
+  _pl(name)
+  block_begin(
+    "proc",
+    nil,
+    function()
+    end)
+end
