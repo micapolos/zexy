@@ -5,11 +5,16 @@
 ;   - bit 6 = value type: 0 - primitive (GC leaf), 1 - reference (subject to GC)
 ;   - bit 5 = GC mark: 0 - not marked, 1 = marked
 ;   - bit 4 = unused
-;   - bit 3..0 = 3-bit value / reference tag
-;     - 0000 - symbol
-;     - 0001 - pair
-; - H = 8-bit value / bank number
-; - DE = 16-bit value / address / symbol
+;   - bit 3..0 = allocation size: 1 << (n + 2) bytes
+;     - 0 = 4 bytes
+;     - 1 = 8 bytes
+;     - 2 = 16 bytes
+;     - ...
+;     - 11 = 8192 bytes
+; - HDE = 24-bit value
+;   - for references, bits 2..0 are reserved for tag:
+;     - 000 = cons
+;     - 001 = ???
 ; ===============================================================
 
         ifndef  SchemeValue_asm
