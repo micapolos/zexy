@@ -3,12 +3,14 @@ mkdir -p built
 mkdir -p built/ui
 mkdir -p built/l2
 mkdir -p built/l2/X320
+mkdir -p built/scheme
 mkdir -p ~/Documents/nextsync12
 mkdir -p ~/Documents/nextsync12/apps
 mkdir -p ~/Documents/nextsync12/apps/zexy
 mkdir -p ~/Documents/nextsync12/apps/zexy/ui
 mkdir -p ~/Documents/nextsync12/apps/zexy/l2
 mkdir -p ~/Documents/nextsync12/apps/zexy/l2/X320
+mkdir -p ~/Documents/nextsync12/apps/zexy/scheme
 sjasmplus --zxnext=cspect --lst=built/$1.lst nex/$1.asm
 cp built/$1.nex ~/Documents/nextsync12/apps/zexy/$1.nex
 cp README.md built/readme.md

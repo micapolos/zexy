@@ -8,17 +8,26 @@
 ; Block header:
 ; - bit 7: 0 = free, 1 = allocated
 ; - bit 6..4: user data, zero if not allocated
-; - bit 3..0: block size: 0..15, actual size = 1 << bitSize
+; - bit 3..0: block size: 0..15
+;   - actual size = 1 << (bitSize + 1)
+;   - 0 means 65536
 ; ===============================================================
 
-        ifndef  SchemeBlock_asm
-        define  SchemeBlock_asm
+        ifndef  SchemeAlloc_asm
+        define  SchemeAlloc_asm
 
-        include ../pot.asm
+        include ../ld.asm
 
-        module  SchemeBlock
+        module  SchemeAlloc
 
-SEGMENT_BIT_SIZE        db      12
+ALLOCATED_BIT   equ     7
+ALLOCATED_MASK  equ     $80
+DATA_MASK       equ     $70
+SIZE_MASK       equ     $0f
+
+segment
+.addrMask       dw      0
+.bitSize        db      0
 
 ; =========================================================
 ; Input:
@@ -64,22 +73,99 @@ SEGMENT_BIT_SIZE        db      12
 
 ; =========================================================
 ; Input:
-;   HL - top-level block address
-Init
-        ld      a, (SEGMENT_BIT_SIZE)
+;   HL - block address
+; Output:
+;   HL - block address
+;   DE - block size
+;   B - block header
+; =========================================================
+GetMetadata
+        push    hl              ; stack = [block address]
+        ld      a, (hl)         ; A - block header
+        push    af              ; stack = [block address, block header]
+        and     SIZE_MASK       ; A - block bit size
+        call    GetSize         ; DE - block size
+        pop     bc              ; B - block header
+        pop     hl              ; HL - block address
+        ret
+
+; =========================================================
+; Input:
+;   HL - segment address
+; =========================================================
+InitSegment
+        ld      a, (segment.bitSize)
         ld      (hl), a
         ret
 
 ; =========================================================
 ; Input:
-;   A - block size: 0..15, actual size = 1 << bitSize
+;   C - block header
+;     - bit 7: zero
+;     - bits 6..4: user data
+;     - bits 3..0: requested size, actual size = 1 << bitSize
 ;   HL - current block address (may be free or allocated)
 ; Output:
 ;   FC - 0 = OK, 1 = out of memory
 ;   HL - allocated block address
+; =========================================================
 Alloc
-        push    hl      ; push current block address, to detect cycle
+        call    GetMetadata
+
+        ; check if block is free
+        bit     ALLOCATED_BIT, b
+        jp      nz, .nextBlock
+
+.checkSize
+        ; check if the size is equal or larger than requested
+        ld      a, b
+        cp      c
+        jp      c, .nextBlock
+        jp      nz, .split
+
+.allocate
+        ld      (hl), c  ; carry is already zero
         ret
+
+.nextBlock
+        add     hl, de
+
+.applySegmentMask
+        dec     de
+        ld      a, h
+        and     d
+        ld      h, a
+        ld      a, l
+        and     e
+        ld      l, a
+        inc     de
+
+.checkBlockFull
+        ld      a, h
+        cp      0
+        jp      nz, .notFull
+        ld      a, e
+        cp      l
+        jp      nz, .notFull
+.full
+
+
+.notFull
+        exx
+
+.split
+        ; divide block size by 2
+        dec     b
+        rrc     d
+        rr      e
+
+        ; mark sibling block as free
+        _GetSiblingBlock
+        ld      (hl), b
+        _GetSiblingBlock
+
+        ; repeat search
+        jp      .checkSize
 
 ; =========================================================
 ; Input:
@@ -88,25 +174,19 @@ Alloc
 ;   HL - coalesced block address, not necessarily free
 ; =========================================================
 Free
-        push    hl              ; stack = [block address]
-        ld      a, (hl)         ; A - block header
-        push    af              ; stack = [block address, block header]
-        and     $0f             ; A - block size bits
-        call    POT.Get         ; DE - block size
-        pop     bc              ; B - block header
-        pop     hl              ; HL - block address
+        call    GetMetadata
 
 .coalesce
-        ; return if block is top-level (size >= SEGMENT_BIT_SIZE)
-        ld      a, b
-        cp      (SEGMENT_BIT_SIZE)
-        ret     nc
+        ; return if block is top-level (size >= segment.bitSize)
+        ld      a, (segment.bitSize)
+        cp      b
+        ret     z
 
         _GetSiblingBlock
         ld      c, (hl)        ; c = sibling block header
 
         ; return if sibling block is not free
-        bit     7, c
+        bit     ALLOCATED_BIT, c
         ret     nz
 
         ; return if sibling block has different size
@@ -126,6 +206,40 @@ Free
 
         ; bubble up
         jp      .coalesce
+
+; ------------------------------------------------------
+; Input:
+;   A - bit size, 0..15
+; Output:
+;   DE - size
+; =========================================================
+GetSize
+        ld      h, high .table
+        ld      l, low .table
+        rlca
+        or      l
+        ld      l, a
+        ldi     de, (hl)
+        ret
+
+        align   16 * 2
+.table
+        dw      %0000000000000010
+        dw      %0000000000000100
+        dw      %0000000000001000
+        dw      %0000000000010000
+        dw      %0000000000100000
+        dw      %0000000001000000
+        dw      %0000000010000000
+        dw      %0000000100000000
+        dw      %0000001000000000
+        dw      %0000010000000000
+        dw      %0000100000000000
+        dw      %0001000000000000
+        dw      %0010000000000000
+        dw      %0100000000000000
+        dw      %1000000000000000
+        dw      %0000000000000000
 
         endmodule
 
