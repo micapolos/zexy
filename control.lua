@@ -12,6 +12,14 @@ function inverted_cond(cond)
   end
 end
 
+function split_underscore(string)
+  local parts = {}
+  for part in string:gmatch("[^_]+") do
+    table.insert(parts, part)
+  end
+  return parts
+end
+
 function control_init()
   label_count = 0
   block_stack = {}
@@ -44,6 +52,8 @@ function block_end()
   end
 end
 
+-- Custom blocks
+
 function block_if(cond)
   local end_label = gen_label("if")
   _pc("jp " .. inverted_cond(cond) .. ", " .. end_label)
@@ -63,5 +73,20 @@ function block_else()
       _pc("jp " .. end_label_2)
       _pl("@" .. end_label)
       return end_label_2
+    end)
+end
+
+function block(regs_def)
+  local regs = split_underscore(regs_def)
+  for i = 1, #regs do
+    _pc("push " .. regs[i])
+  end
+  block_begin(
+    "push",
+    nil,
+    function()
+      for i = #regs, 1, -1 do
+        _pc("pop " .. regs[i])
+      end
     end)
 end

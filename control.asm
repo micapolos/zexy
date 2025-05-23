@@ -6,6 +6,12 @@
     control_init()
   endlua
 
+  macro _end
+    lua allpass
+      block_end()
+    endlua
+  endm
+
   macro _if cond
     lua allpass
       block_if(sj.get_define("cond", true))
@@ -18,9 +24,9 @@
     endlua
   endm
 
-  macro _end
+  macro _block regs
     lua allpass
-      block_end()
+      block(sj.get_define("regs", true))
     endlua
   endm
 

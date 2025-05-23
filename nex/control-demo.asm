@@ -9,32 +9,32 @@
 Main
   call    Terminal.Init
 
-  WriteString "Testing if z, positive... "
+  WriteString "Testing _if z, positive... "
   xor     a
   _if z
     WritelnString "OK"
   _end
 
-  WriteString "Testing if nz, positive... "
+  WriteString "Testing _if nz, positive... "
   ld a, 1
   or a
   _if nz
     WritelnString "OK"
   _end
 
-  WriteString "Testing if c, positive... "
+  WriteString "Testing _if c, positive... "
   scf
   _if c
     WritelnString "OK"
   _end
 
-  WriteString "Testing if nc, positive... "
+  WriteString "Testing _if nc, positive... "
   or a
   _if nc
     WritelnString "OK"
   _end
 
-  WriteString "Testing if / else, positive... "
+  WriteString "Testing _if / _else, positive... "
   xor a
   _if z
     WritelnString "OK"
@@ -42,7 +42,7 @@ Main
     WritelnString "ERROR"
   _end
 
-  WriteString "Testing if / else, negative... "
+  WriteString "Testing _if / _else, negative... "
   ld a, 1
   or a
   _if z
@@ -50,6 +50,25 @@ Main
   _else
     WritelnString "OK"
   _end
+
+  WriteString "Testing _block hl... "
+  ld hl, $1234
+  _block hl
+    ld hl, $5678
+  _end
+  ld de, $1234
+  sub hl, de
+  _if z
+    WritelnString "OK"
+  _else
+    WritelnString "ERROR (invalid H)"
+  _end
+
+  ; TODO: Implement real checks, not only syntax
+  WriteString "Testing _block bc_de_hl_af... "
+  _block bc_de_hl_af
+  _end
+  WritelnString "OK"
 
 .end
   jp      .end
