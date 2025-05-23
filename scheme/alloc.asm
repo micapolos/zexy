@@ -7,9 +7,8 @@
 ;
 ; Block header:
 ; - bit 7: 0 = free, 1 = allocated
-; - bit 6: GC mark flag: 0 = not marked, 1 = marked (must be zero if free)
-; - bit 5..4: zeros
-; - bit 3..0: bit size, actual size = 1 << bitSize
+; - bit 6..4: user data, zero if not allocated
+; - bit 3..0: block size: 0..15, actual size = 1 << bitSize
 ; ===============================================================
 
         ifndef  SchemeBlock_asm
@@ -24,7 +23,7 @@ SEGMENT_BIT_SIZE        db      12
 ; =========================================================
 ; Input:
 ;   hl - block address
-;   de - block size
+;   de - block size (power of two)
 ; Output:
 ;   hl - sibling block address
 ;   af - corrupted, other preserved
@@ -44,7 +43,7 @@ SEGMENT_BIT_SIZE        db      12
 ; =========================================================
 ; Input:
 ;   hl - block address
-;   de - block size
+;   de - block size (power of two)
 ; Output:
 ;   hl - sibling block address
 ;   af - corrupted, other preserved
@@ -73,12 +72,13 @@ Init
 
 ; =========================================================
 ; Input:
-;   A - allocation bit size: 0..15, size = 1 << bitSize
-;   HL - current allocation address
+;   A - block size: 0..15, actual size = 1 << bitSize
+;   HL - current block address (may be free or allocated)
 ; Output:
 ;   FC - 0 = OK, 1 = out of memory
-;   HL - allocated address
+;   HL - allocated block address
 Alloc
+        push    hl      ; push current block address, to detect cycle
         ret
 
 ; =========================================================
