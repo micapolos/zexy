@@ -11,59 +11,59 @@ Main
 
   WriteString "Testing _skip... "
   _skip
-    WritelnString "ERROR"
+    _error
   _end
-  WritelnString "OK"
+  _ok
 
   WriteString "Testing _block... "
   jp okBlock
   _block errorBlock
-    WritelnString "ERROR"
+    _error
   _end
   _block okBlock
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _if z, positive... "
   xor     a
   _if z
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _if nz, positive... "
   ld a, 1
   or a
   _if nz
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _if c, positive... "
   scf
   _if c
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _if nc, positive... "
   or a
   _if nc
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _if / _else, positive... "
   xor a
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _if / _else, negative... "
   ld a, 1
   or a
   _if z
-    WritelnString "ERROR"
+    _error
   _else
-    WritelnString "OK"
+    _ok
   _end
 
   WriteString "Testing _preserve hl... "
@@ -74,16 +74,16 @@ Main
   ld de, $1234
   sub hl, de
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR (invalid H)"
+    WritelnString "_error (invalid H)"
   _end
 
   ; TODO: Implement real checks, not only syntax
   WriteString "Testing _preserve bc_de_hl_af... "
   _preserve bc_de_hl_af
   _end
-  WritelnString "OK"
+  _ok
 
   WriteString "Testing _djnz... "
   ld a, 0
@@ -94,9 +94,9 @@ Main
   _end
   xor 90
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _do / _end... "
@@ -106,9 +106,9 @@ Main
   _end
   xor 1
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _loop / _end... "
@@ -123,9 +123,9 @@ Main
   _label !exit    ;  TODO: How to make it local to block?
   xor 24
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _loop / _while... "
@@ -138,9 +138,9 @@ Main
   _while nz
   xor 24
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _loop / _until... "
@@ -153,9 +153,9 @@ Main
   _until z
   xor 24
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _proc... "
@@ -169,9 +169,9 @@ Main
   call Increment
   xor 1
   _if z
-    WritelnString "OK"
+    _ok
   _else
-    WritelnString "ERROR"
+    _error
   _end
 
   WriteString "Testing _const / _var outside _data... "
@@ -185,7 +185,7 @@ Main
   ld hl, const16
   ld a, (var8)
   ld hl, (var16)
-  WritelnString "OK"
+  _ok
 
   WriteString "Testing _const / _var inside _data_... "
   _skip
@@ -200,14 +200,14 @@ Main
   ld hl, Segment.const16
   ld a, (Segment.var8)
   ld hl, (Segment.var16)
-  WritelnString "OK"
+  _ok
 
   WriteString "Testing _module... "
   _module Foo
     _const x, 10
   _end
   ld a, Foo.x
-  WritelnString "OK"
+  _ok
 
 .end
   jp      .end

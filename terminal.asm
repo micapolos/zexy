@@ -64,6 +64,25 @@ WriteChar
         pop     ix
         ret
 
+        macro   TerminalInk ink
+        push    ix
+        ld      ix, Terminal.printer
+        ld      (ix + Printer.attr), ink << 5
+        pop     ix
+        endm
+
+        macro   _ok
+        TerminalInk %010
+        WritelnString "OK"
+        TerminalInk %111
+        endm
+
+        macro   _error
+        TerminalInk %100
+        WritelnString "ERROR"
+.loop   jp      .loop
+        endm
+
 tilebuffer
 printer         Printer { { tileMap, { height, width }, 0 }, { 0, 0 }, %11100010 }
 
