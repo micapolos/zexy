@@ -7,14 +7,24 @@
     include segment.asm
     include bit-size.asm
 
-    module FxPage
+    _module FxPage
       ; -----------------------------------------------------------------
       ; Input:
-      ;   HL - page-aligned address
-      ;   A - size
+      ;   HL - segment address
+      ;   A - element bit size / TODO what about user meta data?
       ; -----------------------------------------------------------------
       _proc Init
-        call BitSize.GetSize   ; de = size
+        _preserve hl
+          call BitSize.GetSize  ; DE = size (power-of-two)
+        _end
+        _block loop
+          ld (hl), 0
+          add hl, de
+          _preserve de_hl
+            call Segment.IsZero
+          _end
+          jp nz, .loop
+        _end
       _end
-    endmodule
+    _end
   endif

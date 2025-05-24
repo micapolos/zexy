@@ -2,7 +2,7 @@
   define BitSize_asm
     include ../control.asm
 
-    module BitSize
+    _module BitSize
       ; ------------------------------------------------------
       ; Input:
       ;   A - bit size, 0..15
@@ -37,5 +37,5 @@
         dw      %1000000000000000
         dw      %0000000000000000
       _end
-    endmodule
+    _end
   endif

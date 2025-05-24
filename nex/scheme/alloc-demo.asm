@@ -42,7 +42,7 @@ Main
         call    Writer.NewLine
 
         ; Initialize segment config
-        ld      hl, SchemeAlloc.segment
+        ld      hl, Segment
         ldi_ihl_u16 SEGMENT_ADDR_MASK
         ldi_ihl_u8  SEGMENT_BIT_SIZE
 

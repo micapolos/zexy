@@ -35,10 +35,10 @@ IncHLWrapDE
 ; =========================================================
 and_hl_rr       macro   rr
         ld      a, l
-        and     high rr
+        and     low rr
         ld      l, a
         ld      a, h
-        and     low rr
+        and     high rr
         ld      h, a
         endm
 
