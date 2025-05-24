@@ -10,6 +10,7 @@
         include color.asm
         include debug.asm
         include mem.asm
+        include control.asm
 
         module  Terminal
 
@@ -89,6 +90,14 @@ WriteChar
         TerminalInk %100
         WritelnString "ERROR"
 .loop   jp      .loop
+        endm
+
+        macro   _okif cond
+        _if cond
+          _ok
+        _else
+          _error
+        _end
         endm
 
 tilebuffer

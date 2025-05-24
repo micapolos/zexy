@@ -73,11 +73,7 @@ Main
   _end
   ld de, $1234
   sub hl, de
-  _if z
-    _ok
-  _else
-    WritelnString "_error (invalid H)"
-  _end
+  _okif z
 
   ; TODO: Implement real checks, not only syntax
   _test "_preserve bc_de_hl_af"
@@ -93,11 +89,7 @@ Main
     inc a
   _end
   xor 90
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_do / _end"
   ld a, 0
@@ -105,11 +97,7 @@ Main
     inc a
   _end
   xor 1
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_loop / _end"
   ld a, 0
@@ -122,11 +110,7 @@ Main
   _end
   _label !exit    ;  TODO: How to make it local to block?
   xor 24
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_loop / _while"
   ld a, 0
@@ -137,11 +121,7 @@ Main
     dec b
   _while nz
   xor 24
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_loop / _until"
   ld a, 0
@@ -152,11 +132,7 @@ Main
     dec b
   _until z
   xor 24
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_proc"
   _skip
@@ -168,11 +144,7 @@ Main
   ld a, 0
   call Increment
   xor 1
-  _if z
-    _ok
-  _else
-    _error
-  _end
+  _okif z
 
   _test "_const / _var outside _data"
   _skip
