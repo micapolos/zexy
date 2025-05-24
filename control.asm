@@ -125,4 +125,10 @@
       endlua
     endm
 
+    macro _label name
+      lua allpass
+        control_label(sj.get_define("name", true))
+      endlua
+    endm
+
   endif

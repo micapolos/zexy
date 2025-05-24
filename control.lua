@@ -256,7 +256,7 @@ end
 
 function block_loop()
   local label = gen_label("loop")
-  _pl(label)
+  _pl("!" .. label)
   block_begin(
     "loop",
     label,
@@ -275,3 +275,7 @@ function control_until(cond)
   control_while(inverted_cond(cond))
 end
 
+function control_label(name)
+  local label = name_label(name)
+  _pl(label)
+end

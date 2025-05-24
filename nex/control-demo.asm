@@ -118,9 +118,9 @@ Main
     inc a
     inc a
     dec b
-    jp z, .exit
+    jp z, exit
   _end
-.exit
+  _label !exit
   xor 24
   _if z
     WritelnString "OK"
