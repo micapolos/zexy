@@ -9,13 +9,13 @@
 Main
   call    Terminal.Init
 
-  WriteString "Testing _skip... "
+  _test "_skip"
   _skip
     _error
   _end
   _ok
 
-  WriteString "Testing _block... "
+  _test "_block"
   jp okBlock
   _block errorBlock
     _error
@@ -24,32 +24,32 @@ Main
     _ok
   _end
 
-  WriteString "Testing _if z, positive... "
+  _test "_if z, positive"
   xor     a
   _if z
     _ok
   _end
 
-  WriteString "Testing _if nz, positive... "
+  _test "_if nz, positive"
   ld a, 1
   or a
   _if nz
     _ok
   _end
 
-  WriteString "Testing _if c, positive... "
+  _test "_if c, positive"
   scf
   _if c
     _ok
   _end
 
-  WriteString "Testing _if nc, positive... "
+  _test "_if nc, positive"
   or a
   _if nc
     _ok
   _end
 
-  WriteString "Testing _if / _else, positive... "
+  _test "_if / _else, positive"
   xor a
   _if z
     _ok
@@ -57,7 +57,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _if / _else, negative... "
+  _test "_if / _else, negative"
   ld a, 1
   or a
   _if z
@@ -66,7 +66,7 @@ Main
     _ok
   _end
 
-  WriteString "Testing _preserve hl... "
+  _test "_preserve hl"
   ld hl, $1234
   _preserve hl
     ld hl, $5678
@@ -80,12 +80,12 @@ Main
   _end
 
   ; TODO: Implement real checks, not only syntax
-  WriteString "Testing _preserve bc_de_hl_af... "
+  _test "_preserve bc_de_hl_af"
   _preserve bc_de_hl_af
   _end
   _ok
 
-  WriteString "Testing _djnz... "
+  _test "_djnz"
   ld a, 0
   ld b, 45
   _djnz
@@ -99,7 +99,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _do / _end... "
+  _test "_do / _end"
   ld a, 0
   _do
     inc a
@@ -111,7 +111,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _loop / _end... "
+  _test "_loop / _end"
   ld a, 0
   ld b, 12
   _loop
@@ -128,7 +128,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _loop / _while... "
+  _test "_loop / _while"
   ld a, 0
   ld b, 12
   _loop
@@ -143,7 +143,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _loop / _until... "
+  _test "_loop / _until"
   ld a, 0
   ld b, 12
   _loop
@@ -158,7 +158,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _proc... "
+  _test "_proc"
   _skip
     _proc Increment
       inc a
@@ -174,7 +174,7 @@ Main
     _error
   _end
 
-  WriteString "Testing _const / _var outside _data... "
+  _test "_const / _var outside _data"
   _skip
     _const const8, $ff
     _const const16, $ffff
@@ -187,7 +187,7 @@ Main
   ld hl, (var16)
   _ok
 
-  WriteString "Testing _const / _var inside _data_... "
+  _test "_const / _var inside _data_"
   _skip
     _data Segment
       _const const8, $ff
@@ -202,7 +202,7 @@ Main
   ld hl, (Segment.var16)
   _ok
 
-  WriteString "Testing _module... "
+  _test "_module"
   _module Foo
     _const x, 10
   _end

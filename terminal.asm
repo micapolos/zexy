@@ -71,6 +71,14 @@ WriteChar
         pop     ix
         endm
 
+        macro   _test name
+        WriteString "Testing "
+        TerminalInk %110
+        WriteString name
+        TerminalInk %111
+        WriteString "... "
+        endm
+
         macro   _ok
         TerminalInk %010
         WritelnString "OK"
