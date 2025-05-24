@@ -58,32 +58,32 @@ columns  db  16
       WriteString "   "
     _end
 
-    _preserve bc
-      ld a, (Dump.columns)
-      ld b, a
-      _djnz
-        ld d, (hl)
-        inc hl
-        _preserve hl
-          xor a
-          or c
-          _if z
-            _preserve bc
-              WriteString "   "
+    _preserve hl
+      _preserve bc
+        ld a, (Dump.columns)
+        ld b, a
+        _djnz
+          ld d, (hl)
+          inc hl
+          _preserve hl
+            xor a
+            or c
+            _if z
+              _preserve bc
+                WriteString "   "
+              _end
+            _else
+              _preserve bc
+                ld a, d
+                call Writer.Hex8
+                WriteString " "
+              _end
+              dec c
             _end
-          _else
-            _preserve bc
-              ld a, d
-              call Writer.Hex8
-              WriteString " "
-            _end
-            dec c
           _end
         _end
       _end
-    _end
 
-    _preserve hl
       WriteString "  "
     _end
 
