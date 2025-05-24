@@ -8,6 +8,7 @@
         include dump.asm
         include control.asm
         include scheme/fx-page.asm
+        include mem.asm
 
 SEGMENT_BIT_SIZE  equ     3
 SEGMENT_SIZE      equ     1 << (SEGMENT_BIT_SIZE + 1)
@@ -47,24 +48,28 @@ Main
         ldi_ihl_u8  SEGMENT_BIT_SIZE
 
         WritelnString "Init size 3"
+        call    Reset
         ld      hl, segment
         ld      a, 3
         call    FxPage.Init
         call    Dump
 
         WritelnString "Init size 2"
+        call    Reset
         ld      hl, segment
         ld      a, 2
         call    FxPage.Init
         call    Dump
 
         WritelnString "Init size 1"
+        call    Reset
         ld      hl, segment
         ld      a, 1
         call    FxPage.Init
         call    Dump
 
         WritelnString "Init size 0"
+        call    Reset
         ld      hl, segment
         ld      a, 0
         call    FxPage.Init
@@ -78,6 +83,12 @@ Dump
         call    Writer.Dump
         call    Writer.NewLine
         ret
+
+Reset
+        ld      hl, segment
+        ld      bc, SEGMENT_SIZE
+        ld      e, $ff
+        jp      Mem.Fill
 
         org     $c000
 segment         ds      SEGMENT_SIZE, $ff
