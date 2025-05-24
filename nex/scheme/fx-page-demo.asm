@@ -1,11 +1,11 @@
-  include control.asm
+  include zexy.asm
 
   _nex fx-page-demo
     include terminal.asm
     include writer.asm
     include ld.asm
     include dump.asm
-    include control.asm
+    include zexy.asm
     include scheme/fx-page.asm
     include mem.asm
 

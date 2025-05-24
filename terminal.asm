@@ -10,7 +10,7 @@
         include color.asm
         include debug.asm
         include mem.asm
-        include control.asm
+        include zexy.asm
 
         module  Terminal
 

@@ -1,6 +1,6 @@
   ifndef BitSize_asm
   define BitSize_asm
-    include ../control.asm
+    include ../zexy.asm
 
     _module BitSize
       ; ------------------------------------------------------

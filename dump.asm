@@ -2,7 +2,7 @@
   define Dump_asm
 
   include writer.asm
-  include control.asm
+  include zexy.asm
 
   module Dump
 columns  db  16

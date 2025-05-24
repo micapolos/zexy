@@ -1,4 +1,4 @@
-  include control.asm
+  include zexy.asm
 
   _nex nex-demo
     include terminal.asm

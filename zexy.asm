@@ -2,7 +2,7 @@
   define Control_asm
 
     lua allpass
-      require("control")
+      require("zexy")
       control_init()
     endlua
 

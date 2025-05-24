@@ -3,7 +3,7 @@
   ; =================================================================
   ifndef FxPage_asm
   define FxPage_asm
-    include ../control.asm
+    include ../zexy.asm
     include segment.asm
     include bit-size.asm
 

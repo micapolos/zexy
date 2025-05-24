@@ -6,7 +6,7 @@
         include writer.asm
         include ld.asm
         include dump.asm
-        include control.asm
+        include zexy.asm
         include scheme/alloc.asm
 
 SEGMENT_BIT_SIZE  equ     3

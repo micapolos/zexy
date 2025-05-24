@@ -1,6 +1,6 @@
   ifndef Segment_asm
   define Segment_asm
-    include ../control.asm
+    include ../zexy.asm
     include ../math.asm
 
     _data Segment

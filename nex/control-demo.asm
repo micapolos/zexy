@@ -1,8 +1,9 @@
-  include control.asm
+  include zexy.asm
+
   _nex control-demo
     include terminal.asm
     include writer.asm
-    include control.asm
+    include zexy.asm
 
     _const const8, $ff
     _const const16, $ffff
