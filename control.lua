@@ -63,6 +63,18 @@ end
 
 -- Custom blocks
 
+function block_skip(cond)
+  local end_label = gen_label("skip")
+  _pc("jp " .. end_label)
+  block_begin(
+    "skip",
+    nil,
+    end_label,
+    function(end_label)
+      _pl("@" .. end_label)
+    end)
+end
+
 function block_if(cond)
   local end_label = gen_label("if")
   _pc("jp " .. inverted_cond(cond) .. ", " .. end_label)

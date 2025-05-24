@@ -9,6 +9,12 @@
 Main
   call    Terminal.Init
 
+  WriteString "Testing _skip... "
+  _skip
+    WritelnString "ERROR"
+  _end
+  WritelnString "OK"
+
   WriteString "Testing _if z, positive... "
   xor     a
   _if z

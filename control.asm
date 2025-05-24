@@ -18,6 +18,12 @@
     endlua
   endm
 
+  macro _skip cond
+    lua allpass
+      block_skip(sj.get_define("cond", true))
+    endlua
+  endm
+
   macro _else
     lua allpass
       block_else()
