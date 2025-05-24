@@ -99,7 +99,6 @@ Main
 
   _proc Increment
     inc a
-    ret
   _end
 
   savenex open "built/control-demo.nex", Main, $bfe0

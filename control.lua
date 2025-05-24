@@ -109,5 +109,6 @@ function block_proc(name)
     "proc",
     nil,
     function()
+      _pc("ret")
     end)
 end
