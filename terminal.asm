@@ -73,22 +73,22 @@ WriteChar
         endm
 
         macro   _test name
-        WriteString "Testing "
+        _write "Testing "
         TerminalInk %110
-        WriteString name
+        _write name
         TerminalInk %111
-        WriteString "... "
+        _write "... "
         endm
 
         macro   _ok
         TerminalInk %010
-        WritelnString "OK"
+        _writeln "OK"
         TerminalInk %111
         endm
 
         macro   _error
         TerminalInk %100
-        WritelnString "ERROR"
+        _writeln "ERROR"
 .loop   jp      .loop
         endm
 

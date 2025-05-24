@@ -8,17 +8,17 @@
 suite   macro
         call    Terminal.Init
         WriteHeader
-        WritelnString "Starting test suite..."
+        _writeln "Starting test suite..."
         endm
 
 ; =========================================================
 endsuite        macro
         WriteHeader
-        WriteString "Done, passed: "
+        _write "Done, passed: "
         ld      hl, testCounter.passed
         ld      a, (hl)
         call    Writer.Hex8h
-        WriteString "failed: "
+        _write "failed: "
         ld      hl, testCounter.failed
         ld      a, (hl)
         call    Writer.Hex8h
@@ -30,20 +30,20 @@ endsuite        macro
 ; =========================================================
 test    macro message
         WriteHeader
-        WriteString message
-        WriteString "... "
+        _write message
+        _write "... "
         endm
 
 ; =========================================================
 endtest         macro
         jp      c, caseFail
         COLOR   %01000000
-        WritelnString "OK"
+        _writeln "OK"
         ld      hl, testCounter.passed
         jp      caseEnd
 @caseFail
         COLOR   %10000000
-        WritelnString "ERROR"
+        _writeln "ERROR"
         ld      hl, testCounter.failed
 @caseEnd
         inc     hl          ; increment test counter
@@ -72,7 +72,7 @@ SUCCESS macro
 ; =========================================================
 fail    macro   message
         COLOR   %10000000
-        WritelnString "ERROR"
+        _writeln "ERROR"
         COLOR   %11100000
 @failLoop
         jp      failLoop
@@ -88,7 +88,7 @@ ASSERT_EQ_R     macro   message, r, nn
         jp      z, eqOK
 @eqFail
         COLOR   %01000000
-        WritelnString "ERROR"
+        _writeln "ERROR"
         COLOR   %11100000
 
         FAIL
@@ -102,7 +102,7 @@ ASSERT_EQ_R     macro   message, r, nn
         macro   WriteHeader
 ;        ld      hl, __LINE__
 ;        call    Writer.Hex16h
-;        WriteString ": "
+;        _write ": "
         endm
 
 testCounter

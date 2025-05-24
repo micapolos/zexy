@@ -9,7 +9,7 @@
 Char
 .proc+* jp      0
 
-        macro   WriteChar ch
+        macro   _putc ch
         ld      a, ch
         call    Writer.Char
         endm
@@ -62,12 +62,12 @@ StringDZ
         jp      (hl)
         ret
 
-        macro   WriteString string
+        macro   _write string
         call    Writer.StringDZ
         dz      string
         endm
 
-        macro   WritelnString string
+        macro   _writeln string
         call    Writer.StringDZ
         dz      string
         call    Writer.NewLine

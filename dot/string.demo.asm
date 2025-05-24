@@ -11,18 +11,18 @@ Main
         ld      b, 30
 .loop
         push    bc
-        WriteString "Odliczam "
+        _write "Odliczam "
         pop     bc
 
         ld      a, b
         push    bc
         call    Writer.Hex8
-        WritelnString " do zera..."
+        _writeln " do zera..."
         pop     bc
 
         djnz    .loop
 
-        WritelnString "Koniec!!! Do widzenia."
+        _writeln "Koniec!!! Do widzenia."
 
         jp      Dot.Exit
 

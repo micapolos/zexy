@@ -30,31 +30,31 @@ Main
         call    FreeBank
         call    AvailableBanks
 
-        WritelnString "Goodbye!!!"
+        _writeln "Goodbye!!!"
 
         jp      End
 
 TotalBanks
-        WriteString "Total number of banks: "
+        _write "Total number of banks: "
         call    Bank.Total
         jp      c, Error
         call    Writer.Hex8h
         jp      Writer.NewLine
 
 AvailableBanks
-        WriteString "Number of available banks: "
+        _write "Number of available banks: "
         call    Bank.Available
         jp      c, Error
         call    Writer.Hex8h
         jp      Writer.NewLine
 
 AllocateBank
-        WriteString "Allocating bank... "
+        _write "Allocating bank... "
         call    Bank.Alloc
         jp      c, Error
 
         push    af
-        WriteString "done: "
+        _write "done: "
         pop     af
         push    af
         call    Writer.Hex8h
@@ -64,21 +64,21 @@ AllocateBank
 
 FreeBank
         push    af
-        WriteString "Freeing bank: "
+        _write "Freeing bank: "
         pop     af
         push    af
         call    Writer.Hex8h
-        WriteString "... "
+        _write "... "
         pop     af
 
         call    Bank.Free
         jp      c, Error
 
-        WritelnString "OK"
+        _writeln "OK"
         ret
 
 Error
-        WritelnString "Error!!!"
+        _writeln "Error!!!"
 
 End     jp      End
 

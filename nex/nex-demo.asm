@@ -5,7 +5,7 @@
 
     _main
       call Terminal.Init
-      WritelnString "Hello, NEX!!!"
+      _writeln "Hello, NEX!!!"
       _freeze
     _end
   _end

@@ -32,21 +32,21 @@ Main
 .end    jr      .end
 
 InsertString
-        WriteString "Inserting string "
+        _write "Inserting string "
         ld      hl, (string.count)
         inc     hl
         call    Writer.Hex16
-        WriteString "... "
+        _write "... "
 
         ld      hl, string.hello
         call    StringArea16k.Insert
 
         push    af
         push    hl
-        WriteString "done (addr: "
+        _write "done (addr: "
         pop     hl
         call    Writer.Hex16h
-        WriteString ") "
+        _write ") "
         pop     af
 
         jr      c, .error
@@ -55,11 +55,11 @@ InsertString
         inc     hl
         ld      (string.count), hl
 
-        WritelnString "OK"
+        _writeln "OK"
         or      a
         ret
 .error
-        WritelnString "out of memory!"
+        _writeln "out of memory!"
         scf
         ret
 

@@ -14,9 +14,9 @@
     _const SEGMENT_ADDR_MASK, SEGMENT_SIZE - 1
 
     macro PressSpaceTo msg
-      WriteString "<- Press SPACE to "
-      WriteString msg
-      WritelnString " ->"
+      _write "<- Press SPACE to "
+      _write msg
+      _writeln " ->"
       call    Debug.WaitSpace
       call    Writer.NewLine
     endm
@@ -24,17 +24,17 @@
     _main
       call    Terminal.Init
 
-      WriteString "Segment bit size: "
+      _write "Segment bit size: "
       ld      a, SEGMENT_BIT_SIZE
       call    Writer.Hex8
       call    Writer.NewLine
 
-      WriteString "Segment size: "
+      _write "Segment size: "
       ld      hl, SEGMENT_SIZE
       call    Writer.Hex16
       call    Writer.NewLine
 
-      WriteString "Segment mask: "
+      _write "Segment mask: "
       ld      hl, SEGMENT_ADDR_MASK
       call    Writer.Hex16
       call    Writer.NewLine
@@ -47,28 +47,28 @@
       ldi_ihl_u8  SEGMENT_BIT_SIZE
 
       call    Reset
-      WritelnString "Init size 3"
+      _writeln "Init size 3"
       ld      hl, segment
       ld      a, 3
       call    FxPage.Init
       call    Dump
 
       call    Reset
-      WritelnString "Init size 2"
+      _writeln "Init size 2"
       ld      hl, segment
       ld      a, 2
       call    FxPage.Init
       call    Dump
 
       call    Reset
-      WritelnString "Init size 1"
+      _writeln "Init size 1"
       ld      hl, segment
       ld      a, 1
       call    FxPage.Init
       call    Dump
 
       call    Reset
-      WritelnString "Init size 0"
+      _writeln "Init size 0"
       ld      hl, segment
       ld      a, 0
       call    FxPage.Init

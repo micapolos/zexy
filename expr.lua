@@ -76,7 +76,7 @@ function write(a)
     return {
       type = "void",
       gen = function(size)
-        _pc("WriteString " .. str(hex(a)))
+        _pc("_write " .. str(hex(a)))
         return size
       end
     }
@@ -84,7 +84,7 @@ function write(a)
     return {
       type = "void",
       gen = function(size)
-        _pc("WriteString \"" .. a .. "\"")  -- escape?
+        _pc("_write \"" .. a .. "\"")  -- escape?
         return size
       end
     }

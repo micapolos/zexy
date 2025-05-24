@@ -46,12 +46,12 @@ Main
 ;   a - char
 WritelnCharWidth
         push    af
-        WriteString "Width of '"
+        _write "Width of '"
         pop     af
 
         push    af
         call    Writer.Char
-        WriteString "' = "
+        _write "' = "
         ld      hl, sysFont.index
         pop     af
 
@@ -64,12 +64,12 @@ WritelnCharWidth
 ;   hl - string
 WritelnStringWidth
         push    hl
-        WriteString "Width of \""
+        _write "Width of \""
         pop     hl
 
         push    hl
         call    Writer.String
-        WriteString "\" = "
+        _write "\" = "
         pop     de              ; de = string ptr
 
         ld      hl, sysFont.index
@@ -83,7 +83,7 @@ WritelnStringWidth
         call    Writer.Hex16h
         call    Writer.NewLine
 
-        WriteString "- with carry = "
+        _write "- with carry = "
 
         pop     af      ; pop fc
         pop     de      ; pop string ptr

@@ -9,14 +9,14 @@ Main
         throw_handler Panic
         call    Terminal.Init
 
-        WritelnString "Start"
+        _writeln "Start"
         try aloc
-          WritelnString "Throw"
+          _writeln "Throw"
           throw
         finally aloc
-          WritelnString "Finally"
+          _writeln "Finally"
         endtry aloc
-        WritelnString "End"
+        _writeln "End"
 
 .end    jp      .end
 
@@ -24,7 +24,7 @@ Main
 Panic
         ld      ix, Terminal.printer
         ld      (ix + Printer.attr), %10000000
-        WritelnString "Panic attack!!! Guru meditation!!!"
+        _writeln "Panic attack!!! Guru meditation!!!"
 .loop   jp      .loop
 
         savenex open "built/throw-demo.nex", Main, $bfe0

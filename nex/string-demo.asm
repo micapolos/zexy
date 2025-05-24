@@ -42,24 +42,24 @@ CompareStrings
 
         push    hl
         push    de
-        WriteString "Comparing \""
+        _write "Comparing \""
         pop     hl
         call    Writer.String
-        WriteString "\" with \""
+        _write "\" with \""
         pop     hl
         call    Writer.String
-        WriteString "\" ... "
+        _write "\" ... "
 
         pop     de
         pop     hl
         call    String.Equal
         jp      nz, .notEqual
 
-        WritelnString "equal"
+        _writeln "equal"
         ret
 
 .notEqual
-        WritelnString "not equal"
+        _writeln "not equal"
         ret
 
 ; HL - string to copy
@@ -68,13 +68,13 @@ CopyString
         push    hl, bc
 
         push    bc, hl
-        WriteString "Copying \""
+        _write "Copying \""
         pop     hl
         call    Writer.String
-        WriteString "\" (max "
+        _write "\" (max "
         pop     hl
         call    Writer.Hex16h
-        WriteString " bytes)... "
+        _write " bytes)... "
 
         pop     bc, hl
 
@@ -82,14 +82,14 @@ CopyString
         call    String.CopyN
         jr      c, .partial
 .complete
-        WriteString " complete: \""
+        _write " complete: \""
         jr      .writeCopied
 .partial
-        WriteString " partial: \""
+        _write " partial: \""
 .writeCopied
         ld      hl, string.buffer
         call    Writer.String
-        WritelnString "\""
+        _writeln "\""
         ret
 
 string

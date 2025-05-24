@@ -17,35 +17,35 @@
 Write
         push    hl
         WriteStringAt string.name
-        WriteChar '('
+        _putc '('
         pop     hl
 
         StructLdi de     ; de = x
         push    hl
         ex      de, hl
         call    Writer.Hex16h
-        WriteChar ','
+        _putc ','
         pop     hl
 
         StructLdi de     ; de = y
         push    hl
         ex      de, hl
         call    Writer.Hex16h
-        WriteChar ','
+        _putc ','
         pop     hl
 
         StructLdi de     ; de = width
         push    hl
         ex      de, hl
         call    Writer.Hex16h
-        WriteChar ','
+        _putc ','
         pop     hl
 
         StructLdi de     ; de = height
         push    hl
         ex      de, hl
         call    Writer.Hex16h
-        WriteChar ')'
+        _putc ')'
         call    Writer.Char
         pop     hl
 

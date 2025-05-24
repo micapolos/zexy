@@ -43,18 +43,18 @@ Main
 
         ld      (ix + Printer.attr), %11100000
 
-        WritelnString " v0.1"
+        _writeln " v0.1"
         _newline
-        WritelnString "> ls"
+        _writeln "> ls"
         _newline
-        WritelnString "  <DIR>            ."
-        WritelnString "  <DIR>            .."
-        WritelnString "  <DIR>            bin"
-        WritelnString "  <DIR>            usr"
-        WritelnString "         0000ff21h system.bin"
-        WritelnString "         00000135h readme.txt"
+        _writeln "  <DIR>            ."
+        _writeln "  <DIR>            .."
+        _writeln "  <DIR>            bin"
+        _writeln "  <DIR>            usr"
+        _writeln "         0000ff21h system.bin"
+        _writeln "         00000135h readme.txt"
         _newline
-        WritelnString "> "
+        _writeln "> "
 .loop
         jr      .loop
 

@@ -14,9 +14,9 @@ SEGMENT_SIZE      equ     1 << (SEGMENT_BIT_SIZE + 1)
 SEGMENT_ADDR_MASK equ     SEGMENT_SIZE - 1
 
         macro   PressSpaceTo msg
-        WriteString "<- Press SPACE to "
-        WriteString msg
-        WritelnString " ->"
+        _write "<- Press SPACE to "
+        _write msg
+        _writeln " ->"
         call    Debug.WaitSpace
         call    Writer.NewLine
         endm
@@ -24,17 +24,17 @@ SEGMENT_ADDR_MASK equ     SEGMENT_SIZE - 1
 Main
         call    Terminal.Init
 
-        WriteString "Segment bit size: "
+        _write "Segment bit size: "
         ld      a, SEGMENT_BIT_SIZE
         call    Writer.Hex8
         call    Writer.NewLine
 
-        WriteString "Segment size: "
+        _write "Segment size: "
         ld      hl, SEGMENT_SIZE
         call    Writer.Hex16
         call    Writer.NewLine
 
-        WriteString "Segment mask: "
+        _write "Segment mask: "
         ld      hl, SEGMENT_ADDR_MASK
         call    Writer.Hex16
         call    Writer.NewLine
@@ -94,13 +94,13 @@ Main
 
 DumpSegment
         _if c
-          WritelnString "Out of memory!!!"
+          _writeln "Out of memory!!!"
         _end
         ld      hl, segment
         ld      bc, SEGMENT_SIZE
         call    Writer.Dump
 
-        WriteString "Current block: "
+        _write "Current block: "
         ld      hl, (currentBlock)
         call    Writer.Hex16
         call    Writer.NewLine

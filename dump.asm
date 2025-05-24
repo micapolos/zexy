@@ -55,7 +55,7 @@ columns  db  16
   _proc DumpLine
     _preserve bc_hl
       call Writer.Hex16
-      WriteString "   "
+      _write "   "
     _end
 
     _preserve hl
@@ -70,13 +70,13 @@ columns  db  16
             or c
             _if z
               _preserve bc
-                WriteString "   "
+                _write "   "
               _end
             _else
               _preserve bc
                 ld a, d
                 call Writer.Hex8
-                WriteString " "
+                _write " "
               _end
               dec c
             _end
@@ -84,7 +84,7 @@ columns  db  16
         _end
       _end
 
-      WriteString "  "
+      _write "  "
     _end
 
     ld a, (Dump.columns)
@@ -97,20 +97,20 @@ columns  db  16
         or c
         _if z
           _preserve bc
-            WriteChar ' '
+            _putc ' '
           _end
         _else
           ld a, d
           cp $20
           _preserve bc
             _if c
-              WriteChar '.'
+              _putc '.'
             _else
               cp $7f
               _if c
                 call Writer.Char
               _else
-                WriteChar '.'
+                _putc '.'
               _end
             _end
           _end
