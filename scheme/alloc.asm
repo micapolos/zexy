@@ -18,6 +18,8 @@
 
         include ../ld.asm
         include ../math.asm
+        include segment.asm
+        include bit-size.asm
 
         module  SchemeAlloc
 
@@ -25,10 +27,6 @@ ALLOCATED_BIT   equ     7
 ALLOCATED_MASK  equ     $80
 DATA_MASK       equ     $70
 SIZE_MASK       equ     $0f
-
-segment
-.addrMask       dw      0
-.bitSize        db      0
 
 ; =========================================================
 ; Input:
@@ -85,7 +83,7 @@ GetMetadata
         ld      a, (hl)         ; A - block header
         push    af              ; stack = [block address, block header]
         and     SIZE_MASK       ; A - block bit size
-        call    GetSize         ; DE - block size
+        call    BitSize.GetSize ; DE - block size
         pop     bc              ; B - block header
         pop     hl              ; HL - block address
         ret
@@ -95,7 +93,7 @@ GetMetadata
 ;   HL - segment address
 ; =========================================================
 InitSegment
-        ld      a, (segment.bitSize)
+        ld      a, (Segment.bitSize)
         ld      (hl), a
         ret
 
@@ -137,7 +135,7 @@ Alloc
 .applySegmentMask
         push    af, de, hl
         ex      de, hl
-        ld      hl, (segment.addrMask)
+        ld      hl, (Segment.addrMask)
         and_hl_rr de
 
 .checkBlockFull
@@ -185,7 +183,7 @@ Free
 
 .coalesce
         ; return if block is top-level (size >= segment.bitSize)
-        ld      a, (segment.bitSize)
+        ld      a, (Segment.bitSize)
         cp      b
         ret     z
 
@@ -213,40 +211,6 @@ Free
 
         ; bubble up
         jp      .coalesce
-
-; ------------------------------------------------------
-; Input:
-;   A - bit size, 0..15
-; Output:
-;   DE - size
-; =========================================================
-GetSize
-        ld      h, high .table
-        ld      l, low .table
-        rlca
-        or      l
-        ld      l, a
-        ldi     de, (hl)
-        ret
-
-        align   16 * 2
-.table
-        dw      %0000000000000010
-        dw      %0000000000000100
-        dw      %0000000000001000
-        dw      %0000000000010000
-        dw      %0000000000100000
-        dw      %0000000001000000
-        dw      %0000000010000000
-        dw      %0000000100000000
-        dw      %0000001000000000
-        dw      %0000010000000000
-        dw      %0000100000000000
-        dw      %0001000000000000
-        dw      %0010000000000000
-        dw      %0100000000000000
-        dw      %1000000000000000
-        dw      %0000000000000000
 
         endmodule
 
