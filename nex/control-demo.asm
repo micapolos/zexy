@@ -99,6 +99,18 @@ Main
     WritelnString "ERROR"
   _end
 
+  WriteString "Testing _do / _end... "
+  ld a, 0
+  _do
+    inc a
+  _end
+  xor 1
+  _if z
+    WritelnString "OK"
+  _else
+    WritelnString "ERROR"
+  _end
+
   WriteString "Testing _do / _while... "
   ld a, 0
   ld b, 12
