@@ -100,7 +100,7 @@ InitSegment
 
 ; =========================================================
 ; Input:
-;   C - block header
+;   A - block header
 ;     - bit 7: zero
 ;     - bits 6..4: user data
 ;     - bits 3..0: requested size, actual size = 1 << bitSize
@@ -110,7 +110,9 @@ InitSegment
 ;   HL - allocated block address
 ; =========================================================
 Alloc
+        push    af
         call    GetMetadata
+        pop     af
 
         ; check if block is free
         bit     ALLOCATED_BIT, b
@@ -118,13 +120,14 @@ Alloc
 
 .checkSize
         ; check if the size is equal or larger than requested
-        ld      a, b
-        cp      c
-        jp      c, .nextBlock
-        jp      nz, .split
+        cp      b
+        jp      z, .allocate
+        jp      nc, .nextBlock
+        jp      .split
 
 .allocate
-        ld      (hl), c  ; carry is already zero
+        set     ALLOCATED_BIT, a
+        ld      (hl), a  ; carry is already zero
         ret
 
 .nextBlock
@@ -149,7 +152,6 @@ Alloc
         jp      nz, .notFull
 .full
 
-
 .notFull
         exx
 
@@ -159,10 +161,13 @@ Alloc
         rrc     d
         rr      e
 
-        ; mark sibling block as free
+        ; mark both blocks as free
+        push    af
         _GetSiblingBlock
         ld      (hl), b
         _GetSiblingBlock
+        ld      (hl), b
+        pop     af
 
         ; repeat search
         jp      .checkSize
@@ -175,6 +180,10 @@ Alloc
 ; =========================================================
 Free
         call    GetMetadata
+
+.clearAllocatedBit
+        res     ALLOCATED_BIT, b
+        ld      (hl), b
 
 .coalesce
         ; return if block is top-level (size >= segment.bitSize)

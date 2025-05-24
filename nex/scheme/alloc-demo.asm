@@ -6,11 +6,20 @@
         include writer.asm
         include ld.asm
         include dump.asm
+        include control.asm
         include scheme/alloc.asm
 
 SEGMENT_BIT_SIZE  equ     4
 SEGMENT_SIZE      equ     1 << (SEGMENT_BIT_SIZE + 1)
 SEGMENT_ADDR_MASK equ     SEGMENT_SIZE - 1
+
+        macro   PressSpaceTo msg
+        WriteString "<- Press SPACE to "
+        WriteString msg
+        WritelnString " ->"
+        call    Debug.WaitSpace
+        call    Writer.NewLine
+        endm
 
 Main
         call    Terminal.Init
@@ -30,21 +39,57 @@ Main
         call    Writer.Hex16
         call    Writer.NewLine
 
+        call    Writer.NewLine
+
+        ; Initialize segment config
         ld      hl, SchemeAlloc.segment
         ldi_ihl_u16 SEGMENT_ADDR_MASK
         ldi_ihl_u8  SEGMENT_BIT_SIZE
 
+        ; Initialize empty segment
         ld      hl, segment
         call    SchemeAlloc.InitSegment
+        call    DumpSegment
 
+        PressSpaceTo "allocate full segment"
+        call    Debug.WaitSpace
+        ld      hl, (currentBlock)
+        ld      a, 4
+        call    SchemeAlloc.Alloc
+        ld      (currentBlock), hl
+        call    DumpSegment
+
+        PressSpaceTo "free full segment"
+        call    Debug.WaitSpace
+        ld      hl, (currentBlock)
+        call    SchemeAlloc.Free
+        ld      (currentBlock), hl
+        call    DumpSegment
+
+        PressSpaceTo "allocate half segment"
+        call    Debug.WaitSpace
+        ld      hl, (currentBlock)
+        ld      a, 3
+        break
+        call    SchemeAlloc.Alloc
+        ld      (currentBlock), hl
+        call    DumpSegment
+
+.end    jp      .end
+
+DumpSegment
         ld      hl, segment
         ld      bc, SEGMENT_SIZE
         call    Writer.Dump
 
-        ld      hl, segment
-        call    SchemeAlloc.GetMetadata
+        WriteString "Current block: "
+        ld      hl, (currentBlock)
+        call    Writer.Hex16
+        call    Writer.NewLine
 
-.end    jp      .end
+        call    Writer.NewLine
+
+        ret
 
         org     $c000
 segment         ds      SEGMENT_SIZE, 0
