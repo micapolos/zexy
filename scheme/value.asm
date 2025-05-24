@@ -22,11 +22,15 @@
 
         include ../reg.asm
 
-        module  SchemeValue
+        module  Value
 
-ALLOCATED       equ %10000000
-REFERENCE       equ %01000000
-MARK            equ %00100000
+ALLOCATED_BIT   equ 7
+REFERENCE_BIT   equ 6
+MARK_BIT        equ 5
+
+ALLOCATED       equ 1 << ALLOCATED_BIT
+REFERENCE       equ 1 << REFERENCE_BIT
+MARK            equ 1 << MARK_BIT
 
 FALSE_TAG       equ 0
 TRUE_TAG        equ 1
