@@ -14,11 +14,11 @@
       _const ADDR_MASK, .SIZE - 1
       _const BASE_MASK, ~.ADDR_MASK & $ffff
 
-      DISPLAY "Segment"
-      DISPLAY ".BIT_SIZE:  ", .BIT_SIZE
-      DISPLAY ".SIZE:      ", .SIZE
-      DISPLAY ".ADDR_MASK: ", .ADDR_MASK
-      DISPLAY ".BASE_MASK: ", .BASE_MASK
+;      DISPLAY "Segment"
+;      DISPLAY ".BIT_SIZE:  ", .BIT_SIZE
+;      DISPLAY ".SIZE:      ", .SIZE
+;      DISPLAY ".ADDR_MASK: ", .ADDR_MASK
+;      DISPLAY ".BASE_MASK: ", .BASE_MASK
     _end
 
     _module Segment
