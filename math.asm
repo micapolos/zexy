@@ -29,6 +29,20 @@ IncHLWrapDE
         add     hl, de
         ret
 
+; =========================================================
+; hl = hl and rr
+; af = corrupt
+; =========================================================
+and_hl_rr       macro   rr
+        ld      a, l
+        and     high rr
+        ld      l, a
+        ld      a, h
+        and     low rr
+        ld      h, a
+        endm
+
+
         endmodule
 
         endif

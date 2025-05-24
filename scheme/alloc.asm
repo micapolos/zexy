@@ -17,6 +17,7 @@
         define  SchemeAlloc_asm
 
         include ../ld.asm
+        include ../math.asm
 
         module  SchemeAlloc
 
@@ -137,19 +138,11 @@ Alloc
         push    af, de, hl
         ex      de, hl
         ld      hl, (segment.addrMask)
-        ld      a, h
-        and     d
-        ld      h, a
-        ld      a, l
-        and     e
-        ld      l, a
+        and_hl_rr de
 
 .checkBlockFull
         ld      a, h
-        cp      0
-        jp      nz, .notFull
-        ld      a, e
-        cp      0
+        or      l
         jp      nz, .notFull
 .full
         pop     hl, de, af
