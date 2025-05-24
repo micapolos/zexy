@@ -3,6 +3,7 @@
     include zexy.asm
     include math.asm
 
+    ; Allow configuring different value for tests.
     ifndef SEGMENT_BIT_SIZE
     define SEGMENT_BIT_SIZE 12
     endif
@@ -11,7 +12,13 @@
       _const BIT_SIZE,  SEGMENT_BIT_SIZE
       _const SIZE,      1 << (.BIT_SIZE + 1)
       _const ADDR_MASK, .SIZE - 1
-      _const BASE_MASK, ~.ADDR_MASK
+      _const BASE_MASK, ~.ADDR_MASK & $ffff
+
+      DISPLAY "Segment"
+      DISPLAY ".BIT_SIZE:  ", .BIT_SIZE
+      DISPLAY ".SIZE:      ", .SIZE
+      DISPLAY ".ADDR_MASK: ", .ADDR_MASK
+      DISPLAY ".BASE_MASK: ", .BASE_MASK
 
       _var addrMask, dw, 0
       _var bitSize,  db, 0
