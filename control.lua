@@ -203,3 +203,18 @@ function control_var(name, type, value)
   local label = name_label(name)
   _pl(label .. " " .. type .. " " .. value)
 end
+
+function block_nex(name)
+  _pc("device zxspectrumnext")
+  _pc("org $8000")
+  block_begin(
+    "nex",
+    nil,
+    nil,
+    function()
+      _pc("savenex open \"built/" .. name .. ".nex\", Main, $bfe0")
+      _pc("savenex auto")
+      _pc("savenex close")
+      _pc("cspectmap \"built/" .. name .. ".map\"")
+    end)
+end

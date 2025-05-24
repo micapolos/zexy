@@ -83,4 +83,9 @@
       endlua
     endm
 
+    macro _nex name
+      lua allpass
+        block_nex(sj.get_define("name", true))
+      endlua
+    endm
   endif
