@@ -1,12 +1,12 @@
   ; =================================================================
   ; A page with fixed-size values
   ; =================================================================
-  ifndef FxPg_asm
-  define FxPg_asm
+  ifndef FxPage_asm
+  define FxPage_asm
 
   include ../control.asm
 
-  module FxPg
+  module FxPage
 
   ; -----------------------------------------------------------------
   ; Input:
