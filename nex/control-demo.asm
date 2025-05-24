@@ -111,10 +111,27 @@ Main
     WritelnString "ERROR"
   _end
 
-  WriteString "Testing _do / _while... "
+  WriteString "Testing _loop / _end... "
   ld a, 0
   ld b, 12
-  _do
+  _loop
+    inc a
+    inc a
+    dec b
+    jp z, .exit
+  _end
+.exit
+  xor 24
+  _if z
+    WritelnString "OK"
+  _else
+    WritelnString "ERROR"
+  _end
+
+  WriteString "Testing _loop / _while... "
+  ld a, 0
+  ld b, 12
+  _loop
     inc a
     inc a
     dec b
@@ -126,10 +143,10 @@ Main
     WritelnString "ERROR"
   _end
 
-  WriteString "Testing _do / _until... "
+  WriteString "Testing _loop / _until... "
   ld a, 0
   ld b, 12
-  _do
+  _loop
     inc a
     inc a
     dec b

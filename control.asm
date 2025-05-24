@@ -107,6 +107,12 @@
       endlua
     endm
 
+    macro _loop
+      lua allpass
+        block_loop()
+      endlua
+    endm
+
     macro _while cond
       lua allpass
         control_while(sj.get_define("cond", true))

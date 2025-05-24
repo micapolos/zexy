@@ -254,8 +254,20 @@ function block_do()
     end)
 end
 
+function block_loop()
+  local label = gen_label("loop")
+  _pl(label)
+  block_begin(
+    "loop",
+    label,
+    nil,
+    function()
+      _pc("jp " .. label)
+    end)
+end
+
 function control_while(cond)
-  local block = block_pop_of("do")
+  local block = block_pop_of("loop")
   _pc("jp " .. cond .. ", " .. block.name)
 end
 
