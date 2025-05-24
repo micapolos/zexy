@@ -19,7 +19,7 @@ NewLine
 .char+* ld      a, $0a
         jp      Char
 
-        macro   Writeln
+        macro   _newline
         call    Writer.NewLine
         endm
 

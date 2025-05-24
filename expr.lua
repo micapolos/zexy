@@ -119,7 +119,7 @@ function writeln(a)
     type = "void",
     gen = function(size)
       size = gen(size)
-      _pc("Writeln")
+      _pc("_newline")
       return size
     end
   }
