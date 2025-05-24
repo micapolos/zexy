@@ -1,6 +1,6 @@
   include zexy.asm
 
-  _nex fx-page-demo
+  _nex scheme/fx-page-demo
     define SEGMENT_BIT_SIZE 3
 
     include terminal.asm

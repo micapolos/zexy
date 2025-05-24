@@ -1,5 +1,5 @@
   ifndef Zexy_asm
-    define Zexy_asm
+  define Zexy_asm
 
     lua allpass
       require("zexy")

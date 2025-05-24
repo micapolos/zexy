@@ -1,19 +1,14 @@
-        device  zxspectrumnext
+  include zexy.asm
 
-        org     $8000
+  _nex test-demo
+    include test.asm
 
-        include test.asm
+    _suite
+      _test passing
+      _end
 
-Main
-        suite
-
-        test   "Load into register"
-        fail
-        endtest
-
-        endsuite
-
-        savenex open "built/test-demo.nex", Main, $bfe0
-        savenex auto
-        savenex close
-        cspectmap    "built/test-demo.map"
+      _test failing
+        _error
+      _end
+    _end
+  _end
