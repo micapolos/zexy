@@ -72,7 +72,8 @@ WriteChar
         pop     ix
         endm
 
-        macro   _test name
+        ; TODO: Move them out of here
+        macro   _testing name
         _write "Testing "
         TerminalInk %110
         _write name

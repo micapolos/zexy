@@ -20,13 +20,13 @@
     _main
       call    Terminal.Init
 
-      _test "_skip"
+      _testing "_skip"
       _skip
         _error
       _end
       _ok
 
-      _test "_block"
+      _testing "_block"
       jp .okBlock
       _block errorBlock
         _error
@@ -35,32 +35,32 @@
         _ok
       _end
 
-      _test "_if z, positive"
+      _testing "_if z, positive"
       xor     a
       _if z
         _ok
       _end
 
-      _test "_if nz, positive"
+      _testing "_if nz, positive"
       ld a, 1
       or a
       _if nz
         _ok
       _end
 
-      _test "_if c, positive"
+      _testing "_if c, positive"
       scf
       _if c
         _ok
       _end
 
-      _test "_if nc, positive"
+      _testing "_if nc, positive"
       or a
       _if nc
         _ok
       _end
 
-      _test "_if / _else, positive"
+      _testing "_if / _else, positive"
       xor a
       _if z
         _ok
@@ -68,7 +68,7 @@
         _error
       _end
 
-      _test "_if / _else, negative"
+      _testing "_if / _else, negative"
       ld a, 1
       or a
       _if z
@@ -77,7 +77,7 @@
         _ok
       _end
 
-      _test "_preserve hl"
+      _testing "_preserve hl"
       ld hl, $1234
       _preserve hl
         ld hl, $5678
@@ -87,12 +87,12 @@
       _okif z
 
       ; TODO: Implement real checks, not only syntax
-      _test "_preserve bc_de_hl_af"
+      _testing "_preserve bc_de_hl_af"
       _preserve bc_de_hl_af
       _end
       _ok
 
-      _test "_djnz"
+      _testing "_djnz"
       ld a, 0
       ld b, 45
       _djnz
@@ -102,7 +102,7 @@
       xor 90
       _okif z
 
-      _test "_do / _end"
+      _testing "_do / _end"
       ld a, 0
       _do
         inc a
@@ -110,7 +110,7 @@
       xor 1
       _okif z
 
-      _test "_loop / _end"
+      _testing "_loop / _end"
       ld a, 0
       ld b, 12
       _loop
@@ -123,7 +123,7 @@
       xor 24
       _okif z
 
-      _test "_loop / _while"
+      _testing "_loop / _while"
       ld a, 0
       ld b, 12
       _loop
@@ -134,7 +134,7 @@
       xor 24
       _okif z
 
-      _test "_loop / _until"
+      _testing "_loop / _until"
       ld a, 0
       ld b, 12
       _loop
@@ -145,7 +145,7 @@
       xor 24
       _okif z
 
-      _test "_proc"
+      _testing "_proc"
       _skip
         _proc Increment
           inc a
@@ -157,21 +157,21 @@
       xor 1
       _okif z
 
-      _test "_const / _var outside _data"
+      _testing "_const / _var outside _data"
       ld a, const8
       ld hl, const16
       ld a, (var8)
       ld hl, (var16)
       _ok
 
-      _test "_const / _var inside _data_"
+      _testing "_const / _var inside _data_"
       ld a, Segment.const8
       ld hl, Segment.const16
       ld a, (Segment.var8)
       ld hl, (Segment.var16)
       _ok
 
-      _test "_module"
+      _testing "_module"
       _module Foo
         _const FOO, 10
       _end
