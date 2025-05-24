@@ -94,4 +94,11 @@
         control_freeze()
       endlua
     endm
+
+    macro _main
+      lua allpass
+        block_proc("Main")
+      endlua
+    endm
+
   endif

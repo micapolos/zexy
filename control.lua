@@ -224,5 +224,3 @@ function control_freeze()
   _pl(label)
   _pc("jp " .. label)
 end
-
-
