@@ -42,4 +42,27 @@
     endlua
   endm
 
+  macro _data name
+    lua allpass
+      block_data(sj.get_define("name", true))
+    endlua
+  endm
+
+  macro _const name, value
+    lua allpass
+      control_const(
+        sj.get_define("name", true),
+        sj.get_define("value", true))
+    endlua
+  endm
+
+  macro _var name, type, value
+    lua allpass
+      control_var(
+        sj.get_define("name", true),
+        sj.get_define("type", true),
+        sj.get_define("value", true))
+    endlua
+  endm
+
   endif

@@ -94,11 +94,37 @@ Main
     WritelnString "ERROR"
   _end
 
+  WriteString "Testing _const / _var outside _data... OK"
+  ld a, const8
+  ld hl, const16
+  ld a, (var8)
+  ld hl, (var16)
+  WritelnString "OK"
+
+  WriteString "Testing _const / _var inside _data_... OK"
+  ld a, Segment.const8
+  ld hl, Segment.const16
+  ld a, (Segment.var8)
+  ld hl, (Segment.var16)
+  WritelnString "OK"
+
 .end
   jp      .end
 
   _proc Increment
     inc a
+  _end
+
+  _const const8, $ff
+  _const const16, $ffff
+  _var   var8, db, 0
+  _var   var16, dw, 0
+
+  _data Segment
+    _const const8, $ff
+    _const const16, $ffff
+    _var   var8, db, 0
+    _var   var16, dw, 0
   _end
 
   savenex open "built/control-demo.nex", Main, $bfe0
