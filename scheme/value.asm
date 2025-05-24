@@ -17,24 +17,21 @@
 ;     - 001 = ???
 ; ===============================================================
 
-        ifndef  SchemeValue_asm
-        define  SchemeValue_asm
+  ifndef  SchemeValue_asm
+  define  SchemeValue_asm
+    include zexy.asm
+    include ../reg.asm
 
-        include ../reg.asm
+    _module  Value
+      _const ALLOCATED_BIT, 7
+      _const REFERENCE_BIT, 6
+      _const MARK_BIT, 5
 
-        module  Value
+      _const ALLOCATED, 1 << ALLOCATED_BIT
+      _const REFERENCE, 1 << REFERENCE_BIT
+      _const MARK, 1 << MARK_BIT
 
-ALLOCATED_BIT   equ 7
-REFERENCE_BIT   equ 6
-MARK_BIT        equ 5
-
-ALLOCATED       equ 1 << ALLOCATED_BIT
-REFERENCE       equ 1 << REFERENCE_BIT
-MARK            equ 1 << MARK_BIT
-
-FALSE_TAG       equ 0
-TRUE_TAG        equ 1
-
-        endmodule
-
-        endif
+      _const FALSE_TAG, 0
+      _const TRUE_TAG, 1
+    _end
+  endif

@@ -1,7 +1,7 @@
   ifndef Segment_asm
   define Segment_asm
-    include ../zexy.asm
-    include ../math.asm
+    include zexy.asm
+    include math.asm
 
     _data Segment
       _var addrMask, dw, 0
