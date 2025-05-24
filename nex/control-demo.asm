@@ -91,6 +91,12 @@ Main
   _end
 
   WriteString "Testing _proc... "
+  _skip
+    _proc Increment
+      inc a
+    _end
+  _end
+
   ld a, 0
   call Increment
   xor 1
@@ -100,14 +106,28 @@ Main
     WritelnString "ERROR"
   _end
 
-  WriteString "Testing _const / _var outside _data... OK"
+  WriteString "Testing _const / _var outside _data... "
+  _skip
+    _const const8, $ff
+    _const const16, $ffff
+    _var   var8, db, 0
+    _var   var16, dw, 0
+  _end
   ld a, const8
   ld hl, const16
   ld a, (var8)
   ld hl, (var16)
   WritelnString "OK"
 
-  WriteString "Testing _const / _var inside _data_... OK"
+  WriteString "Testing _const / _var inside _data_... "
+  _skip
+    _data Segment
+      _const const8, $ff
+      _const const16, $ffff
+      _var   var8, db, 0
+      _var   var16, dw, 0
+    _end
+  _end
   ld a, Segment.const8
   ld hl, Segment.const16
   ld a, (Segment.var8)
@@ -116,22 +136,6 @@ Main
 
 .end
   jp      .end
-
-  _proc Increment
-    inc a
-  _end
-
-  _const const8, $ff
-  _const const16, $ffff
-  _var   var8, db, 0
-  _var   var16, dw, 0
-
-  _data Segment
-    _const const8, $ff
-    _const const16, $ffff
-    _var   var8, db, 0
-    _var   var16, dw, 0
-  _end
 
   savenex open "built/control-demo.nex", Main, $bfe0
   savenex auto

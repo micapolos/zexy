@@ -18,7 +18,7 @@
     endlua
   endm
 
-  macro _skip cond
+  macro _skip
     lua allpass
       block_skip(sj.get_define("cond", true))
     endlua
