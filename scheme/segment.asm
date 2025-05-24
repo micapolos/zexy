@@ -19,9 +19,6 @@
       DISPLAY ".SIZE:      ", .SIZE
       DISPLAY ".ADDR_MASK: ", .ADDR_MASK
       DISPLAY ".BASE_MASK: ", .BASE_MASK
-
-      _var addrMask, dw, 0
-      _var bitSize,  db, 0
     _end
 
     _module Segment
@@ -33,7 +30,7 @@
       ; ---------------------------------------------------
       _proc IsZero
         ex      de, hl
-        ld      hl, (Segment.addrMask)
+        ld      hl, Segment.ADDR_MASK
         and_hl_rr de
         ld      a, h
         or      l

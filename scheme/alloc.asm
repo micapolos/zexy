@@ -93,8 +93,7 @@ GetMetadata
 ;   HL - segment address
 ; =========================================================
 InitSegment
-        ld      a, (Segment.bitSize)
-        ld      (hl), a
+        ld      (hl), Segment.BIT_SIZE
         ret
 
 ; =========================================================
@@ -135,7 +134,7 @@ Alloc
 .applySegmentMask
         push    af, de, hl
         ex      de, hl
-        ld      hl, (Segment.addrMask)
+        ld      hl, Segment.ADDR_MASK
         and_hl_rr de
 
 .checkBlockFull
@@ -183,7 +182,7 @@ Free
 
 .coalesce
         ; return if block is top-level (size >= segment.bitSize)
-        ld      a, (Segment.bitSize)
+        ld      a, Segment.BIT_SIZE
         cp      b
         ret     z
 
