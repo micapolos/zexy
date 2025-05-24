@@ -9,7 +9,7 @@
         include control.asm
         include scheme/alloc.asm
 
-SEGMENT_BIT_SIZE  equ     4
+SEGMENT_BIT_SIZE  equ     3
 SEGMENT_SIZE      equ     1 << (SEGMENT_BIT_SIZE + 1)
 SEGMENT_ADDR_MASK equ     SEGMENT_SIZE - 1
 
@@ -54,7 +54,7 @@ Main
         PressSpaceTo "allocate full segment"
         call    Debug.WaitSpace
         ld      hl, (currentBlock)
-        ld      a, 4
+        ld      a, SEGMENT_BIT_SIZE
         call    SchemeAlloc.Alloc
         ld      (currentBlock), hl
         call    DumpSegment
@@ -66,11 +66,26 @@ Main
         ld      (currentBlock), hl
         call    DumpSegment
 
-        PressSpaceTo "allocate half segment"
+        PressSpaceTo "allocate first half segment"
         call    Debug.WaitSpace
         ld      hl, (currentBlock)
-        ld      a, 3
-        break
+        ld      a, SEGMENT_BIT_SIZE - 1
+        call    SchemeAlloc.Alloc
+        ld      (currentBlock), hl
+        call    DumpSegment
+
+        PressSpaceTo "allocate second half segment"
+        call    Debug.WaitSpace
+        ld      hl, (currentBlock)
+        ld      a, SEGMENT_BIT_SIZE - 1
+        call    SchemeAlloc.Alloc
+        ld      (currentBlock), hl
+        call    DumpSegment
+
+        PressSpaceTo "allocate 1/8 segment"
+        call    Debug.WaitSpace
+        ld      hl, (currentBlock)
+        ld      a, SEGMENT_BIT_SIZE - 3
         call    SchemeAlloc.Alloc
         ld      (currentBlock), hl
         call    DumpSegment
@@ -78,6 +93,9 @@ Main
 .end    jp      .end
 
 DumpSegment
+        _if c
+          WritelnString "Out of memory!!!"
+        _end
         ld      hl, segment
         ld      bc, SEGMENT_SIZE
         call    Writer.Dump

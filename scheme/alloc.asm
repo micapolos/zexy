@@ -134,26 +134,31 @@ Alloc
         add     hl, de
 
 .applySegmentMask
-        dec     de
+        push    af, de, hl
+        ex      de, hl
+        ld      hl, (segment.addrMask)
         ld      a, h
         and     d
         ld      h, a
         ld      a, l
         and     e
         ld      l, a
-        inc     de
 
 .checkBlockFull
         ld      a, h
         cp      0
         jp      nz, .notFull
         ld      a, e
-        cp      l
+        cp      0
         jp      nz, .notFull
 .full
+        pop     hl, de, af
+        break
 
 .notFull
-        exx
+        pop     hl, de, af
+        ld      b, (hl)
+        jp      .checkSize
 
 .split
         ; divide block size by 2
