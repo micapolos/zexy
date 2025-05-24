@@ -12,15 +12,21 @@
     endlua
   endm
 
-  macro _if cond
+  macro _skip
     lua allpass
-      block_if(sj.get_define("cond", true))
+      block_skip()
     endlua
   endm
 
-  macro _skip
+  macro _block name
     lua allpass
-      block_skip(sj.get_define("cond", true))
+      block_block(sj.get_define("name", true))
+    endlua
+  endm
+
+  macro _if cond
+    lua allpass
+      block_if(sj.get_define("cond", true))
     endlua
   endm
 

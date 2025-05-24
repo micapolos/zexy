@@ -63,7 +63,7 @@ end
 
 -- Custom blocks
 
-function block_skip(cond)
+function block_skip()
   local end_label = gen_label("skip")
   _pc("jp " .. end_label)
   block_begin(
@@ -72,6 +72,17 @@ function block_skip(cond)
     end_label,
     function(end_label)
       _pl("@" .. end_label)
+    end)
+end
+
+function block_block(name)
+  local label = name_label(name)
+  _pl(label)
+  block_begin(
+    "proc",
+    name,
+    nil,
+    function()
     end)
 end
 

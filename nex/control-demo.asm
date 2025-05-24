@@ -15,6 +15,15 @@ Main
   _end
   WritelnString "OK"
 
+  WriteString "Testing _block... "
+  jp okBlock
+  _block errorBlock
+    WritelnString "ERROR"
+  _end
+  _block okBlock
+    WritelnString "OK"
+  _end
+
   WriteString "Testing _if z, positive... "
   xor     a
   _if z
