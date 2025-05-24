@@ -1,3 +1,7 @@
+function arg(name)
+  return sj.get_define(name, true)
+end
+
 function inverted_cond(cond)
   if cond == "z" then
     return "nz"

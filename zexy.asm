@@ -14,7 +14,7 @@
 
     macro _module name
       lua allpass
-        block_module(sj.get_define("name", true))
+        block_module(arg("name"))
       endlua
     endm
 
@@ -26,13 +26,13 @@
 
     macro _block name
       lua allpass
-        block_block(sj.get_define("name", true))
+        block_block(arg("name"))
       endlua
     endm
 
     macro _if cond
       lua allpass
-        block_if(sj.get_define("cond", true))
+        block_if(arg("cond"))
       endlua
     endm
 
@@ -44,7 +44,7 @@
 
     macro _preserve regs
       lua allpass
-        block_preserve(sj.get_define("regs", true))
+        block_preserve(arg("regs"))
       endlua
     endm
 
@@ -56,36 +56,36 @@
 
     macro _proc name
       lua allpass
-        block_proc(sj.get_define("name", true))
+        block_proc(arg("name"))
       endlua
     endm
 
     macro _data name
       lua allpass
-        block_data(sj.get_define("name", true))
+        block_data(arg("name"))
       endlua
     endm
 
     macro _const name, value
       lua allpass
         control_const(
-          sj.get_define("name", true),
-          sj.get_define("value", true))
+          arg("name"),
+          arg("value"))
       endlua
     endm
 
     macro _var name, type, value
       lua allpass
         control_var(
-          sj.get_define("name", true),
-          sj.get_define("type", true),
-          sj.get_define("value", true))
+          arg("name"),
+          arg("type"),
+          arg("value"))
       endlua
     endm
 
     macro _nex name
       lua allpass
-        block_nex(sj.get_define("name", true))
+        block_nex(arg("name"))
       endlua
     endm
 
@@ -115,19 +115,19 @@
 
     macro _while cond
       lua allpass
-        control_while(sj.get_define("cond", true))
+        control_while(arg("cond"))
       endlua
     endm
 
     macro _until cond
       lua allpass
-        control_until(sj.get_define("cond", true))
+        control_until(arg("cond"))
       endlua
     endm
 
     macro _label name
       lua allpass
-        control_label(sj.get_define("name", true))
+        control_label(arg("name"))
       endlua
     endm
 
