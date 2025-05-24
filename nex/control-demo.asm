@@ -118,9 +118,9 @@ Main
     inc a
     inc a
     dec b
-    jp z, exit
+    jp z, exit    ;  TODO: Implement break | continue, which will pop from the stack if necessary.
   _end
-  _label !exit
+  _label !exit    ;  TODO: How to make it local to block?
   xor 24
   _if z
     WritelnString "OK"
