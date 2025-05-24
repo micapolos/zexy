@@ -101,4 +101,22 @@
       endlua
     endm
 
+    macro _do
+      lua allpass
+        block_do()
+      endlua
+    endm
+
+    macro _while cond
+      lua allpass
+        control_while(sj.get_define("cond", true))
+      endlua
+    endm
+
+    macro _until cond
+      lua allpass
+        control_until(sj.get_define("cond", true))
+      endlua
+    endm
+
   endif

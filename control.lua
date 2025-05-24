@@ -34,9 +34,27 @@ function block_top()
   return block_stack[#block_stack]
 end
 
+function block_pop()
+  local block = table.remove(block_stack)
+  if block == nil then
+    sj.error("not inside block")
+  else
+    return block
+  end
+end
+
 function block_top_of(expected_type)
   local block = block_top()
   if block == nil or block.type ~= expected_type then
+    sj.error("not inside " .. expected_type)
+  else
+    return block
+  end
+end
+
+function block_pop_of(expected_type)
+  local block = block_pop()
+  if block.type ~= expected_type then
     sj.error("not inside " .. expected_type)
   else
     return block
@@ -224,3 +242,24 @@ function control_freeze()
   _pl(label)
   _pc("jp " .. label)
 end
+
+function block_do()
+  local label = gen_label("do")
+  _pl(label)
+  block_begin(
+    "do",
+    label,
+    nil,
+    function()
+    end)
+end
+
+function control_while(cond)
+  local block = block_pop_of("do")
+  _pc("jp " .. cond .. ", " .. block.name)
+end
+
+function control_until(cond)
+  control_while(inverted_cond(cond))
+end
+

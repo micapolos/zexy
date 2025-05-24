@@ -26,5 +26,16 @@
           jp nz, .loop
         _end
       _end
+
+      ; -----------------------------------------------------------------
+      ; Input:
+      ;   HL - cursor
+      ;   A - element bit size
+      ; Output
+      ;   FC: 0 = OK, 1 = out of memory
+      ; -----------------------------------------------------------------
+      _proc Alloc
+      _end
+
     _end
   endif
