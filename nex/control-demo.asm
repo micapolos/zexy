@@ -143,6 +143,13 @@ Main
   ld hl, (Segment.var16)
   WritelnString "OK"
 
+  WriteString "Testing _module... "
+  _module Foo
+    _const x, 10
+  _end
+  ld a, Foo.x
+  WritelnString "OK"
+
 .end
   jp      .end
 

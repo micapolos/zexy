@@ -63,6 +63,17 @@ end
 
 -- Custom blocks
 
+function block_module(name)
+  _pc("module " .. name)
+  block_begin(
+    "module",
+    nil,
+    nul,
+    function()
+      _pc("endmodule")
+    end)
+end
+
 function block_skip()
   local end_label = gen_label("skip")
   _pc("jp " .. end_label)

@@ -12,6 +12,12 @@
       endlua
     endm
 
+    macro _module name
+      lua allpass
+        block_module(sj.get_define("name", true))
+      endlua
+    endm
+
     macro _skip
       lua allpass
         block_skip()
