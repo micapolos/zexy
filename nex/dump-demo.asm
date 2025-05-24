@@ -15,11 +15,17 @@ Main
         call    Writer.DumpLine
         ld      c, 8
         call    Writer.DumpLine
-
         call    Writer.NewLine
 
         ld      hl, 0
         ld      bc, $93
+        call    Writer.Dump
+        call    Writer.NewLine
+
+        ld      hl, Dump.columns
+        ld      (hl), 8
+        ld      hl, 0
+        ld      bc, $43
         call    Writer.Dump
 
 .end    jp      .end
