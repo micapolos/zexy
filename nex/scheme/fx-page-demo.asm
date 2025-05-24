@@ -1,6 +1,8 @@
   include zexy.asm
 
   _nex fx-page-demo
+    define SEGMENT_BIT_SIZE 3
+
     include terminal.asm
     include writer.asm
     include ld.asm
@@ -9,7 +11,7 @@
     include scheme/fx-page.asm
     include mem.asm
 
-    _const SEGMENT_BIT_SIZE, 3
+    ;_const SEGMENT_BIT_SIZE, 3
     _const SEGMENT_SIZE, 1 << (SEGMENT_BIT_SIZE + 1)
     _const SEGMENT_ADDR_MASK, SEGMENT_SIZE - 1
 

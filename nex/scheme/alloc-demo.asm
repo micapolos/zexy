@@ -2,6 +2,8 @@
 
         org     $8000
 
+        define  SEGMENT_BIT_SIZE 3
+
         include terminal.asm
         include writer.asm
         include ld.asm
@@ -9,7 +11,6 @@
         include zexy.asm
         include scheme/alloc.asm
 
-SEGMENT_BIT_SIZE  equ     3
 SEGMENT_SIZE      equ     1 << (SEGMENT_BIT_SIZE + 1)
 SEGMENT_ADDR_MASK equ     SEGMENT_SIZE - 1
 
