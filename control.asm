@@ -88,4 +88,10 @@
         block_nex(sj.get_define("name", true))
       endlua
     endm
+
+    macro _freeze
+      lua allpass
+        control_freeze()
+      endlua
+    endm
   endif

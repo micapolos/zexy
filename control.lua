@@ -218,3 +218,11 @@ function block_nex(name)
       _pc("cspectmap \"built/" .. name .. ".map\"")
     end)
 end
+
+function control_freeze()
+  local label = gen_label("freeze")
+  _pl(label)
+  _pc("jp " .. label)
+end
+
+

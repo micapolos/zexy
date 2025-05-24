@@ -4,8 +4,6 @@
     _proc Main
       call Terminal.Init
       WritelnString "Hello, NEX!!!"
-      _block loop
-        jp .loop
-      _end
+      _freeze
     _end
   _end
