@@ -10,15 +10,12 @@
       ;   DE - size
       ; =========================================================
       _proc GetSize
-        ld      h, high table
-        ld      l, low table
+        ld      hl, table
         rlca
-        or      l
-        ld      l, a
+        add     hl, a
         ldi     de, (hl)
       _end
 
-      align     16 * 2
       _data table
         dw      %0000000000000010
         dw      %0000000000000100
