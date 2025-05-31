@@ -19,4 +19,10 @@
         _error
       _end
     endm
+
+    macro _calltest name
+      lua allpass
+        call_test(arg("name"))
+      endlua
+    endm
   endif

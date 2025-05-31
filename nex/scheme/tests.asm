@@ -7,13 +7,8 @@
 
     _main
       call Terminal.Init
-
-      _writeln "=== BitSizeTest ==="
-      call BitSizeTest
-
-      _writeln "=== SegmentTest ==="
-      call SegmentTest
-
+      _calltest BitSize
+      _calltest Segment
       _freeze
     _end
   _end
