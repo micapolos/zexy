@@ -90,7 +90,7 @@ function block_module(name)
   block_begin(
     "module",
     nil,
-    nul,
+    nil,
     function()
       _pc("endmodule")
     end)

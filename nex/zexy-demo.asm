@@ -1,6 +1,6 @@
   include zexy.asm
 
-  _nex control-demo
+  _nex zexy-demo
     include terminal.asm
     include writer.asm
     include zexy.asm
