@@ -25,4 +25,10 @@
         call_test(arg("name"))
       endlua
     endm
+
+    macro _asserteq reg, value
+      lua allpass
+        assert_eq(arg("reg"), value)
+      endlua
+    endm
   endif

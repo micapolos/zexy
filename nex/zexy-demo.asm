@@ -17,6 +17,10 @@
       _var   var16, dw, 0
     _end
 
+    _proc Increment
+      inc a
+    _end
+
     _main
       call    Terminal.Init
 
@@ -144,13 +148,6 @@
       _until z
       xor 24
       _okif z
-
-      _testing "_proc"
-      _skip
-        _proc Increment
-          inc a
-        _end
-      _end
 
       ld a, 0
       call Increment

@@ -31,7 +31,24 @@ end
 
 function gen_label(prefix)
   label_count = label_count + 1
-  return prefix .. "_" .. label_count
+  local label = prefix .. label_count
+  if is_local() then
+    label = "." .. label
+  end
+  return label
+end
+
+function is_local_at(index)
+  if index == 0 then
+    return false
+  else
+    local block = block_stack[index]
+    return block.starts_local == true or is_local_at(index - 1)
+  end
+end
+
+function is_local()
+  return is_local_at(#block_stack)
 end
 
 function block_top()
@@ -65,8 +82,8 @@ function block_pop_of(expected_type)
   end
 end
 
-function block_begin(type, name, value, end_fn)
-  table.insert(block_stack, { type = type, name = name, value = value, end_fn = end_fn })
+function block_push(block)
+  table.insert(block_stack, block)
 end
 
 function block_update(expected_type, fn)
@@ -87,48 +104,48 @@ end
 
 function block_module(name)
   _pc("module " .. name)
-  block_begin(
-    "module",
-    nil,
-    nil,
-    function()
+  block_push({
+    type = "module",
+    end_fn = function()
       _pc("endmodule")
-    end)
+    end
+  })
 end
 
 function block_skip()
   local end_label = gen_label("skip")
   _pc("jp " .. end_label)
-  block_begin(
-    "skip",
-    nil,
-    end_label,
-    function(end_label)
+  block_push({
+    type = "skip",
+    value = end_label,
+    end_fn = function(end_label)
       _pl("@" .. end_label)
-    end)
+    end
+  })
 end
 
 function block_block(name)
   local label = name_label(name)
   _pl(label)
-  block_begin(
-    "proc",
-    name,
-    nil,
-    function()
-    end)
+  block_push({
+    type = "block",
+    name = name,
+    starts_local = true,
+    end_fn = function()
+    end
+  })
 end
 
 function block_if(cond)
   local end_label = gen_label("if")
   _pc("jp " .. inverted_cond(cond) .. ", " .. end_label)
-  block_begin(
-    "if",
-    nil,
-    end_label,
-    function(end_label)
+  block_push({
+    type = "if",
+    value = end_label,
+    end_fn = function(end_label)
       _pl("@" .. end_label)
-    end)
+    end
+  })
 end
 
 function block_else()
@@ -147,39 +164,38 @@ function block_preserve(regs_def)
   for i = 1, #regs do
     _pc("push " .. regs[i])
   end
-  block_begin(
-    "push",
-    nil,
-    nil,
-    function()
+  block_push({
+    type = "push",
+    end_fn = function()
       for i = #regs, 1, -1 do
         _pc("pop " .. regs[i])
       end
-    end)
+    end
+  })
 end
 
 function block_djnz()
   local label = gen_label("djnz")
   _pl("@" .. label)
-  block_begin(
-    "djnz",
-    nil,
-    nil,
-    function()
+  block_push({
+    type = "djnz",
+    end_fn = function()
       _pc("djnz " .. label)
-    end)
+    end
+  })
 end
 
 
 function block_proc(name)
   _pl(name)
-  block_begin(
-    "proc",
-    name,
-    nil,
-    function()
+  block_push({
+    type = "proc",
+    name = name,
+    starts_local = true,
+    end_fn = function()
       _pc("ret")
-    end)
+    end
+  })
 end
 
 function has_label_at(index)
@@ -196,7 +212,7 @@ function has_label()
 end
 
 function name_label(name)
-  if has_label() then
+  if is_local() then
     return "@." .. name
   else
     return name
@@ -206,14 +222,15 @@ end
 function block_data(name)
   local label = name_label(name)
   _pl(label)
-  block_begin(
-    "data",
-    name,
-    nil,
-    function()
+  block_push({
+    type = "data",
+    name = name,
+    starts_local = true,
+    end_fn = function()
       _pl("._end")
       _pl("._size equ ._end - " .. label)
-    end)
+    end
+  })
 end
 
 function control_const(name, value)
@@ -229,45 +246,44 @@ end
 function block_nex(name)
   _pc("device zxspectrumnext")
   _pc("org $8000")
-  block_begin(
-    "nex",
-    nil,
-    nil,
-    function()
+  block_push({
+    type = "nex",
+    end_fn = function()
       _pc("savenex open \"built/" .. name .. ".nex\", Main, $bfe0")
       _pc("savenex auto")
       _pc("savenex close")
       _pc("cspectmap \"built/" .. name .. ".map\"")
-    end)
+    end
+  })
 end
 
 function control_freeze()
   local label = gen_label("freeze")
-  _pl(label)
+  _pl("@" .. label)
   _pc("jp " .. label)
 end
 
 function block_do()
   local label = gen_label("do")
-  _pl(label)
-  block_begin(
-    "do",
-    label,
-    nil,
-    function()
-    end)
+  _pl("@" .. label)
+  block_push({
+    type = "do",
+    name = label,
+    end_fn = function()
+    end
+  })
 end
 
 function block_loop()
   local label = gen_label("loop")
-  _pl("!" .. label)
-  block_begin(
-    "loop",
-    label,
-    nil,
-    function()
+  _pl("@" .. label)
+  block_push({
+    type = "loop",
+    name = label,
+    end_fn = function()
       _pc("jp " .. label)
-    end)
+    end
+  })
 end
 
 function control_while(cond)
